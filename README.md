@@ -103,5 +103,6 @@ _Ainda não aplicável. O projeto em fase de especificação. Esta seção será
 Consulte o guia de contribuição do grupo (em construção) antes de abrir uma Pull Request. Issues e o quadro de tarefas do projeto refletem o progresso das sprints.
  
 ## Licença
- 
-_A definir._
+
+Este projeto está licenciado sob os termos da licença MIT.
+- [`LICENSE`](LICENSE) Veja este arquivo para o texto completo.
