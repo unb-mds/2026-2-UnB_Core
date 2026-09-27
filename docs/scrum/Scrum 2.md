@@ -1,4 +1,4 @@
-# Modelo Scrum 
+# Scrum 2 
 
 ## No que consiste um Scrum
 
