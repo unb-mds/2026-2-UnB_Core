@@ -85,7 +85,7 @@ function ContribuicaoPage({ courses = [], disciplines = [], onNavigate }) {
 
   if (!isAuthenticated) {
     return (
-      <div className="contribution-shell">
+      <div className="contribution-shell page-shell">
         <SiteHeader active="conhecimento" onNavigate={onNavigate} />
         <main className="contribution-page">
           <EmptyState title="Entre para contribuir">
@@ -100,7 +100,7 @@ function ContribuicaoPage({ courses = [], disciplines = [], onNavigate }) {
 
   if (submitted) {
     return (
-      <div className="contribution-shell">
+      <div className="contribution-shell page-shell">
         <SiteHeader active="conhecimento" onNavigate={onNavigate} />
         <main className="contribution-page">
           <EmptyState title="Contribuição enviada">
@@ -114,7 +114,7 @@ function ContribuicaoPage({ courses = [], disciplines = [], onNavigate }) {
   }
 
   return (
-    <div className="contribution-shell">
+    <div className="contribution-shell page-shell">
       <SiteHeader active="conhecimento" onNavigate={onNavigate} />
       <main className="contribution-page">
         <header className="contribution-page__header">

@@ -17,15 +17,21 @@ const initialFilters = {
   prazo: '',
 }
 
-function formatDate(value) {
+function formatRelativeTime(value) {
   if (!value) {
     return null
   }
 
   const date = new Date(value)
-  return Number.isNaN(date.getTime())
-    ? value
-    : new Intl.DateTimeFormat('pt-BR', { dateStyle: 'medium' }).format(date)
+  if (Number.isNaN(date.getTime())) {
+    return null
+  }
+
+  const diffDays = Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24))
+
+  if (diffDays <= 0) return 'Publicado hoje'
+  if (diffDays === 1) return 'Publicado há 1 dia'
+  return `Publicado há ${diffDays} dias`
 }
 
 function getPublicationWarning(publicacao) {
@@ -42,6 +48,7 @@ function getPublicationWarning(publicacao) {
 
 function PublicationCard({ publicacao, onSelect }) {
   const warning = getPublicationWarning(publicacao)
+  const publishedLabel = formatRelativeTime(publicacao.data_publicacao)
 
   return (
     <article className={`publication-card publication-card--${publicacao.estado || 'unknown'}`}>
@@ -51,21 +58,13 @@ function PublicationCard({ publicacao, onSelect }) {
       </div>
       <h2>{publicacao.titulo}</h2>
       <p>{publicacao.resumo}</p>
-      <dl className="publication-card__metadata">
-        <div>
-          <dt>Unidade responsável</dt>
-          <dd>{publicacao.unidade_responsavel}</dd>
-        </div>
-        <div>
-          <dt>Verificado em</dt>
-          <dd>{formatDate(publicacao.ultima_verificacao) || 'Não informado'}</dd>
-        </div>
-        <div>
-          <dt>Prazo</dt>
-          <dd>{formatDate(publicacao.prazo) || 'Não informado'}</dd>
-        </div>
-      </dl>
       {warning && <p className="publication-card__warning">{warning}</p>}
+      <div className="publication-card__footer">
+        {publicacao.unidade_responsavel && (
+          <span className="tag tag-outline">{publicacao.unidade_responsavel}</span>
+        )}
+        {publishedLabel && <span className="publication-card__published">{publishedLabel}</span>}
+      </div>
       <Button onClick={() => onSelect(publicacao)}>
         Ver detalhes
       </Button>
@@ -122,7 +121,7 @@ function PublicacoesPage({ onSelectPublication = () => {}, onNavigate }) {
   }
 
   return (
-    <div className="publications-shell">
+    <div className="publications-shell page-shell">
       <SiteHeader active="editais" onNavigate={onNavigate} />
 
       <main className="publications-page">

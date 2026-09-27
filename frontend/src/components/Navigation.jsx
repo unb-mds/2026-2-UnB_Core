@@ -13,7 +13,7 @@ function Navigation({ active = 'editais', onNavigate }) {
   return (
     <nav className="topbar" aria-label="Navegação principal">
       <a className="topbar__logo" href="/" onClick={(event) => handleNavigate(event, '/')}>
-        unbcore
+        unb<span className="topbar__logo-accent">core</span>
       </a>
       <div className="topbar__links">
         <a
