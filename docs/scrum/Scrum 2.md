@@ -23,7 +23,7 @@
   * 
 
 - Daniel Almeida:
-  * 
+  * Implementei algumas coisas, arrumei o README, marquei issues já completadas e me comuniquei com os integrantes sobre a situação atual do projeto e entrega eminente.
 
 - Daniel Paz:
   * 
@@ -45,7 +45,7 @@
   * 
 
 - Daniel Almeida:
-  * 
+  * Complementar o que eu posso de acordo com o que foi desenvolvido no backend e até onde eu puder ir sem essa implementação.
 
 - Daniel Paz:
   * 
@@ -67,7 +67,7 @@
   * 
 
 - Daniel Almeida:
-  * 
+  * Fiquei doente nos últimos dias e ainda estou me recuperando, e então não consegui ficar sentado pra poder trabalhar no projeto. Outro fator foi a dissincronia com o outro lado do projeto, por não ter andado tanto quanto o front andou. 
 
 - Daniel Paz:
   * 
