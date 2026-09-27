@@ -32,7 +32,7 @@
   *
  
 - João Vithor : 
-  *
+  * Tou tentando resolvir a Issues de um colega ja que ele trancou a disciplina
   
 ---
 
@@ -54,7 +54,7 @@
   *
  
 - João Vithor : 
-  * 
+  * Resolver a issues do outro colega, mais algumas do sprint 3
   
 ---
 
@@ -76,6 +76,6 @@
   *
  
 - João Vithor: 
-  * 
+  * Arguadando a remessa do grupo das issues antigas.
 
  
