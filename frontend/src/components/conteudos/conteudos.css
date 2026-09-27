@@ -1,0 +1,22 @@
+.knowledge-card { display: grid; gap: var(--spacing-md); padding: var(--spacing-md); border: 1px solid var(--color-border); border-left: 3px solid var(--color-primary); border-radius: var(--radius-sm); background: var(--color-surface); box-shadow: var(--shadow-sm); }
+.knowledge-card__topline,
+.knowledge-card__footer { display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-sm); color: var(--color-text-muted); font-size: 12px; }
+.knowledge-card h2 { margin: 0; color: var(--color-text); font-size: 18px; }
+.knowledge-card > p { margin: 0; color: var(--color-text-muted); font-size: 14px; line-height: 1.6; }
+.knowledge-card__footer { padding-top: var(--spacing-sm); border-top: 1px solid var(--color-border); }
+
+.content-detail { display: grid; gap: var(--spacing-lg); padding: var(--spacing-lg); border: 1px solid var(--color-border); border-top: 3px solid var(--color-primary); border-radius: var(--radius-sm); background: var(--color-surface); box-shadow: var(--shadow-md); }
+.content-detail__heading { display: flex; justify-content: space-between; gap: var(--spacing-md); }
+.content-detail__heading h2 { margin: var(--spacing-sm) 0 0; color: var(--color-text); font-size: 20px; }
+.content-detail__close { width: 32px; height: 32px; border: 0; border-radius: var(--radius-sm); color: var(--color-text-muted); background: var(--color-neutral-10); cursor: pointer; font-size: 24px; line-height: 1; }
+.content-detail__metadata { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-md); margin: 0; padding-bottom: var(--spacing-md); border-bottom: 1px solid var(--color-border); }
+.content-detail__metadata div { display: grid; gap: 4px; }
+.content-detail__metadata dt { color: var(--color-text-muted); font-size: 12px; }
+.content-detail__metadata dd { margin: 0; color: var(--color-text); font-size: 13px; font-weight: 600; }
+.content-detail__body { max-width: 72ch; color: var(--color-text-muted); font-size: 15px; line-height: 1.7; white-space: pre-wrap; }
+.content-detail__body p { margin: 0; }
+.content-detail > a { color: var(--color-primary); font-size: 13px; font-weight: 600; }
+
+@media (max-width: 700px) {
+  .content-detail__metadata { grid-template-columns: 1fr; }
+}

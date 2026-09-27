@@ -1,0 +1,53 @@
+/* ---------- Layout da página ---------- */
+.publications-page {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 48px;
+  width: min(1200px, 100%);
+  margin: 0 auto;
+  padding: var(--spacing-2xl) var(--spacing-3xl) var(--spacing-3xl);
+}
+
+.publications-content { min-width: 0; }
+.publications-page__header { margin-bottom: var(--spacing-lg); }
+.publications-page__eyebrow { margin: 0 0 var(--spacing-sm); color: var(--color-primary); font-size: 12px; font-weight: 600; }
+.publications-page__header h1 { margin: 0 0 var(--spacing-sm); color: var(--color-text); font-family: var(--font-body); font-size: 28px; font-weight: 700; line-height: 1.25; }
+.publications-page__header p:last-child { color: var(--color-text-muted); font-size: 14px; }
+
+/* ---------- Filtros ---------- */
+.filter-sidebar { display: grid; align-content: start; gap: 28px; padding-top: var(--spacing-sm); }
+.filter-sidebar__heading { display: flex; align-items: center; justify-content: space-between; }
+.filter-sidebar h2,
+.filter-sidebar legend { margin: 0; color: var(--color-text); font-size: 14px; font-weight: 700; }
+.filter-sidebar__heading button { padding: 0; border: 0; color: var(--color-primary); background: transparent; cursor: pointer; font: inherit; font-size: 12px; }
+.filter-sidebar fieldset { display: grid; gap: 12px; padding: 0; border: 0; }
+.filter-sidebar legend { margin-bottom: 4px; }
+.filter-check { display: flex; align-items: center; gap: 10px; color: var(--color-text-muted); font-size: 13px; text-transform: capitalize; }
+.filter-check input { width: 16px; height: 16px; accent-color: var(--color-primary); }
+.filter-sidebar__field { display: grid; gap: var(--spacing-sm); color: var(--color-text-muted); font-size: 12px; font-weight: 600; }
+.filter-sidebar__field input { width: 100%; min-height: 36px; padding: 8px 10px; border: 1px solid var(--color-border); border-radius: var(--radius-sm); color: var(--color-text); background: var(--color-surface); font: inherit; }
+
+/* ---------- Resultados ---------- */
+.publications-results { display: grid; gap: var(--spacing-md); }
+.publications-results__status { padding: 48px 24px; border: 1px dashed var(--color-border); border-radius: var(--radius-sm); color: var(--color-text-muted); text-align: center; }
+.publications-grid { display: grid; gap: var(--spacing-md); }
+.publication-card { display: grid; gap: 12px; padding: var(--spacing-md) 20px; border: 1px solid var(--color-border); border-left: 3px solid var(--color-primary); border-radius: var(--radius-sm); background: var(--color-surface); box-shadow: var(--shadow-sm); }
+.publication-card--ativa { border-left-color: var(--color-success); }
+.publication-card--encerrada,
+.publication-card--arquivada { border-left-color: var(--color-neutral-50); }
+.publication-card--unknown { border-left-color: var(--color-warning); }
+.publication-card__heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.publication-card h2 { margin: 0; color: var(--color-text); font-family: var(--font-body); font-size: 16px; font-weight: 600; }
+.publication-card > p { max-width: 72ch; color: var(--color-text-muted); font-size: 14px; line-height: 1.6; }
+.publication-card__metadata { display: flex; flex-wrap: wrap; gap: 8px 24px; margin: 0; color: var(--color-text-muted); font-size: 12px; }
+.publication-card__metadata div { display: flex; gap: 5px; }
+.publication-card__metadata dt::after { content: ':'; }
+.publication-card__metadata dd { margin: 0; color: var(--color-text); font-weight: 600; }
+.publication-card__warning { padding: 8px 10px; border-left: 3px solid var(--color-warning); color: var(--color-warning-text) !important; background: var(--color-warning-bg); font-size: 12px !important; }
+
+@media (max-width: 768px) {
+  .publications-page { grid-template-columns: 1fr; gap: var(--spacing-lg); padding: var(--spacing-xl) var(--spacing-md) var(--spacing-2xl); }
+  .filter-sidebar { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--spacing-md); }
+  .filter-sidebar__heading { grid-column: 1 / -1; }
+  .filter-sidebar fieldset { gap: var(--spacing-sm); }
+}

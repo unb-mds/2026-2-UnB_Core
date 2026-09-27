@@ -1,0 +1,5 @@
+.auth-form { display: grid; gap: var(--spacing-md); }
+.auth-form label { display: grid; gap: var(--spacing-sm); color: var(--color-text); font-size: 13px; font-weight: 600; }
+.auth-form input { min-height: 44px; padding: 10px 12px; border: 1px solid var(--color-border); border-radius: var(--radius-sm); color: var(--color-text); background: var(--color-surface); font-size: 14px; }
+.auth-form input:focus { border-color: var(--color-accent); box-shadow: 0 0 0 3px rgba(51, 214, 246, 0.22); outline: 0; }
+.auth-form button:disabled { cursor: wait; opacity: 0.7; }
