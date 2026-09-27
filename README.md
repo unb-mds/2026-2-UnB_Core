@@ -46,15 +46,6 @@ Projeto desenvolvido para a disciplina de **Métodos de Desenvolvimento de Softw
   </tr>
 
   <tr>
-    <td align="center">
-      <a href="https://github.com/DanKallaharii">
-        <img style="border-radius: 50%;" src="https://github.com/DanKallaharii.png" width="150px" alt="Daniel Paz Dos Passos"/><br />
-        <sub><b>Daniel Paz Dos Passos</b></sub>
-      </a>
-      <br />
-      <sub>Matrícula: 222021862</sub><br />
-      <sub>Função: <i>Backend Dev</i></sub>
-    </td>
 
    <td align="center">
       <a href="https://github.com/DéboraSilvaa">
