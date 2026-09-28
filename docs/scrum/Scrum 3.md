@@ -23,7 +23,7 @@
   * Atualização na issue T004 e terminei a t011.
 
 - Daniel Almeida:
-  * 
+  * arrumei o repositório e reformulei alguns docs
 
 - Daniel Paz:
   * 
@@ -45,7 +45,7 @@
   * Fazer o PR e começar outras issues da fundação.
 
 - Daniel Almeida:
-  * 
+  * não posso fazer nada pois estou me recuperando ainda
 
 - Daniel Paz:
   * 
@@ -67,7 +67,7 @@
   * Ainda na reforma da casa.
 
 - Daniel Almeida:
-  * 
+  * acompanhamento do grupo ruim 
 
 - Daniel Paz:
   * 
