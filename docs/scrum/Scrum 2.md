@@ -20,7 +20,7 @@
   * Comecei a trabalhar nas nas issues T025 e T017.
   
 - Breno : 
-  * 
+  * Fazer algumas pequenas alterações no miro.
 
 - Daniel Almeida:
   * Implementei algumas coisas, arrumei o README, marquei issues já completadas e me comuniquei com os integrantes sobre a situação atual do projeto e entrega eminente.
@@ -42,7 +42,7 @@
   * Continuar trabalhando nas issues.
   
 - Breno : 
-  * 
+  * Trabalhar nas issues T011 e T004.
 
 - Daniel Almeida:
   * Complementar o que eu posso de acordo com o que foi desenvolvido no backend e até onde eu puder ir sem essa implementação.
@@ -64,7 +64,7 @@
   * Não sou muito experiente em Python e tenho outros projetos para terminar neste final de semana.
   
 - Breno : 
-  * 
+  * Reforma em casa e trabalhos de outras matérias.
 
 - Daniel Almeida:
   * Fiquei doente nos últimos dias e ainda estou me recuperando, e então não consegui ficar sentado pra poder trabalhar no projeto. Outro fator foi a dissincronia com o outro lado do projeto, por não ter andado tanto quanto o front andou. 
