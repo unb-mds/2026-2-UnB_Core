@@ -17,7 +17,7 @@
 ## O que fiz ontem/desde o último Scrum
 
 - Arthur Vinícius: 
-  * 
+  * Comecei a trabalhar nas nas issues T025 e T017.
   
 - Breno : 
   * 
@@ -39,7 +39,7 @@
 ## O que farei hoje 
 
 - Arthur Vinícius: 
-  *
+  * Continuar trabalhando nas issues.
   
 - Breno : 
   * 
@@ -61,7 +61,7 @@
 ## Há algum impedimento?
 
 - Arthur Vinícius: 
-  *
+  * Não sou muito experiente em Python e tenho outros projetos para terminar neste final de semana.
   
 - Breno : 
   * 
