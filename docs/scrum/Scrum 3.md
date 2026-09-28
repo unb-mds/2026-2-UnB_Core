@@ -17,7 +17,7 @@
 ## O que fiz ontem/desde o último Scrum
 
 - Arthur Vinícius: 
-  * 
+  * Terminei a issue T025, embora ainda não fiz o PR.
   
 - Breno : 
   * 
@@ -39,7 +39,7 @@
 ## O que farei hoje 
 
 - Arthur Vinícius: 
-  *
+  * Terminar as outras issues e dar o PR.
   
 - Breno : 
   * 
@@ -61,7 +61,7 @@
 ## Há algum impedimento?
 
 - Arthur Vinícius: 
-  *
+  * Consegui terminar meus projetos paralelos, mas ainda preciso resolver as issues e continuar me familiarizando com o pydanthic.
   
 - Breno : 
   * 
