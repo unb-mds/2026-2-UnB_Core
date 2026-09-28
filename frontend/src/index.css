@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap');
+
+:root {
+  --color-primary: #1B3A8F;
+  --color-primary-dark: #0B1638;
+  --color-accent: #33D6F6;
+  --color-warning: #EFB43A;
+  --color-warning-bg: #FDF0DA;
+  --color-warning-text: #8A5A12;
+  --color-error: #B42318;
+  --color-error-bg: #FEF3F2;
+  --color-error-text: #7A271A;
+  --color-success: #1F7A3D;
+  --color-success-bg: #EAF6E8;
+  --color-bg: #F4F5F7;
+  --color-bg-soft: #EAF0FD;
+  --color-surface: #FFFFFF;
+  --color-text: #1B1F2A;
+  --color-text-muted: #5A5F6E;
+  --color-border: #E2E4EA;
+  --color-neutral-10: #F0F1F4;
+  --color-neutral-50: #9AA0AE;
+  --font-display: 'JetBrains Mono', monospace;
+  --font-body: 'IBM Plex Sans', sans-serif;
+  --radius-sm: 6px;
+  --radius-full: 9999px;
+  --shadow-sm: 0 1px 2px rgba(11, 22, 56, 0.06);
+  --shadow-md: 0 4px 12px rgba(27, 58, 143, 0.18);
+  --transition-fast: 150ms ease;
+  --transition-base: 300ms ease;
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
+  font-family: var(--font-body);
+  color: var(--color-text);
+  background: var(--color-bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; }
+button, input { font-family: inherit; }

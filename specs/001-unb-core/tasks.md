@@ -37,8 +37,8 @@ description: "Tasks de implementação do UNB CORE"
 - [ ] T012 Criar `backend/app/services/auth_service.py` com cadastro, login, hash de senha e emissão/validação de sessão ou token, sem retornar senha.
 - [ ] T013 Criar `backend/app/api/dependencies.py` com identificação do usuário atual e verificadores de perfil `moderador` e `administrador`.
 - [ ] T014 Criar `backend/app/api/router.py` para registrar as rotas sob `/api/v1` e conectar o router à aplicação em `backend/app/main.py`.
-- [ ] T015 [P] Criar `frontend/src/services/api.js` com cliente HTTP, tratamento do formato de erro e armazenamento da sessão de acesso.
-- [ ] T016 [P] Criar `frontend/src/state/auth.js` e componentes base em `frontend/src/components/` para estado de autenticação, mensagens de erro e foco visível.
+- [X] T015 [P] Criar `frontend/src/services/api.js` com cliente HTTP, tratamento do formato de erro e armazenamento da sessão de acesso.
+- [X] T016 [P] Criar `frontend/src/state/auth.js` e componentes base em `frontend/src/components/` para estado de autenticação, mensagens de erro e foco visível.
 
 ---
 
@@ -52,9 +52,9 @@ description: "Tasks de implementação do UNB CORE"
 - [ ] T018 [P] [US1] Criar schemas de entrada e saída em `backend/app/api/schemas/publicacao.py`, exigindo título, resumo, categoria, unidade responsável e fonte oficial para escrita administrativa.
 - [ ] T019 [US1] Implementar `GET /api/v1/publicacoes` e `GET /api/v1/publicacoes/{id}` em `backend/app/api/publicacoes.py`, com consulta pública e aviso de prevalência da fonte oficial.
 - [ ] T020 [US1] Implementar `GET /api/v1/search` em `backend/app/api/search.py`, separando resultados acadêmicos e institucionais.
-- [ ] T021 [US1] Implementar a página `frontend/src/pages/PublicacoesPage.jsx` com filtros, estado vazio e mensagens para publicação não verificada ou sem prazo.
-- [ ] T022 [US1] Implementar `frontend/src/pages/PublicacaoDetalhePage.jsx` e componentes de origem, estado, datas e link oficial em `frontend/src/components/publicacoes/`.
-- [ ] T023 [US1] Integrar navegação principal entre os dois espaços em `frontend/src/App.jsx` e `frontend/src/components/Navigation.jsx`.
+- [X] T021 [US1] Implementar a página `frontend/src/pages/PublicacoesPage.jsx` com filtros, estado vazio e mensagens para publicação não verificada ou sem prazo.
+- [X] T022 [US1] Implementar `frontend/src/pages/PublicacaoDetalhePage.jsx` e componentes de origem, estado, datas e link oficial em `frontend/src/components/publicacoes/`.
+- [X] T023 [US1] Integrar navegação principal entre os dois espaços em `frontend/src/App.jsx` e `frontend/src/components/Navigation.jsx`.
 
 **Checkpoint**: A consulta institucional pública e a busca unificada devem funcionar sem login.
 
@@ -71,8 +71,8 @@ description: "Tasks de implementação do UNB CORE"
 - [ ] T026 [US2] Implementar `GET /api/v1/cursos/{curso_id}/disciplinas` em `backend/app/api/disciplinas.py`.
 - [ ] T027 [US2] Implementar `GET /api/v1/disciplinas/{disciplina_id}/conteudos` em `backend/app/api/conteudos.py`, incluindo filtro opcional por tipo.
 - [ ] T028 [US2] Integrar conteúdos acadêmicos ao resultado separado de `GET /api/v1/search` em `backend/app/api/search.py`.
-- [ ] T029 [US2] Implementar `frontend/src/pages/ConhecimentoPage.jsx` com seleção de curso, disciplina e tipo, estado vazio e possibilidade de contribuição.
-- [ ] T030 [US2] Criar `frontend/src/components/conteudos/ConteudoCard.jsx` e `frontend/src/components/conteudos/ConteudoDetalhe.jsx` com autoria/origem e data de atualização.
+- [X] T029 [US2] Implementar `frontend/src/pages/ConhecimentoPage.jsx` com seleção de curso, disciplina e tipo, estado vazio e possibilidade de contribuição.
+- [X] T030 [US2] Criar `frontend/src/components/conteudos/ConteudoCard.jsx` e `frontend/src/components/conteudos/ConteudoDetalhe.jsx` com autoria/origem e data de atualização.
 
 **Checkpoint**: A Base de Conhecimento deve ser consultável independentemente da implementação das contribuições.
 
@@ -84,13 +84,13 @@ description: "Tasks de implementação do UNB CORE"
 
 **Independent Test**: Criar uma conta, entrar, enviar uma contribuição válida, consultar seu estado e receber mensagens para campos ausentes ou acesso não autenticado.
 
-- [ ] T031 [P] [US3] Criar `frontend/src/pages/CadastroPage.jsx` e `frontend/src/pages/LoginPage.jsx` para cadastro com nome, e-mail único e senha.
+- [X] T031 [P] [US3] Criar `frontend/src/pages/CadastroPage.jsx` e `frontend/src/pages/LoginPage.jsx` para cadastro com nome, e-mail único e senha.
 - [ ] T032 [P] [US3] Criar schemas de autenticação em `backend/app/api/schemas/auth.py` e rotas `POST /api/v1/auth/cadastro` e `POST /api/v1/auth/login` em `backend/app/api/auth.py`.
 - [ ] T033 [US3] Criar `backend/app/services/contribuicao_service.py` para validar campos obrigatórios e iniciar contribuições no estado `pendente`.
 - [ ] T034 [P] [US3] Criar schemas em `backend/app/api/schemas/contribuicao.py` para diferenciar criação sem `conteudo_id` e alteração com `conteudo_id`.
 - [ ] T035 [US3] Implementar `POST /api/v1/contribuicoes` e `GET /api/v1/contribuicoes/minhas` em `backend/app/api/contribuicoes.py`, exigindo usuário autenticado.
-- [ ] T036 [US3] Implementar `frontend/src/pages/ContribuicaoPage.jsx` com formulário, validação de campos, estado pendente e mensagem de erro orientativa.
-- [ ] T037 [US3] Implementar `frontend/src/pages/MinhasContribuicoesPage.jsx` para acompanhar estado e justificativa de moderação.
+- [X] T036 [US3] Implementar `frontend/src/pages/ContribuicaoPage.jsx` com formulário, validação de campos, estado pendente e mensagem de erro orientativa.
+- [X] T037 [US3] Implementar `frontend/src/pages/MinhasContribuicoesPage.jsx` para acompanhar estado e justificativa de moderação.
 
 **Checkpoint**: Um usuário autenticado deve conseguir criar e acompanhar contribuição; usuário anônimo deve ser bloqueado.
 
