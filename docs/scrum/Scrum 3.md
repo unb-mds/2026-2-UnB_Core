@@ -20,7 +20,7 @@
   * Terminei a issue T025, embora ainda não fiz o PR.
   
 - Breno : 
-  * 
+  * Atualização na issue T004 e terminei a t011.
 
 - Daniel Almeida:
   * 
@@ -42,7 +42,7 @@
   * Terminar as outras issues e dar o PR.
   
 - Breno : 
-  * 
+  * Fazer o PR e começar outras issues da fundação.
 
 - Daniel Almeida:
   * 
@@ -64,7 +64,7 @@
   * Consegui terminar meus projetos paralelos, mas ainda preciso resolver as issues e continuar me familiarizando com o pydanthic.
   
 - Breno : 
-  * 
+  * Ainda na reforma da casa.
 
 - Daniel Almeida:
   * 
