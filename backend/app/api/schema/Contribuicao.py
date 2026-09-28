@@ -20,7 +20,8 @@ class ContribuicaoBase(SubmissaoBase):
 
 class Contribuicao(ContribuicaoBase,Submissao,table=True):
     justificativa_moderacao: str | None = None
-    pass
+
+
 
 class ContribuicaoCreate(ContribuicaoBase):
     pass

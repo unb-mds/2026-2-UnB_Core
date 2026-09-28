@@ -1,17 +1,15 @@
 from datetime import datetime
-
-from pydantic import field_validator,HttpUrl
-from sqlmodel import SQLModel, Field
+from typing import Annotated
+from pydantic import field_validator, HttpUrl, AfterValidator
+from sqlmodel import SQLModel, Field, AutoString
 
 
 class FonteInstitucionalBase(SQLModel):
     nome: str
     unidade_responsavel: str
-    url_base: HttpUrl
-    url_base : str = str(url_base)
+    url_oficial: HttpUrl  =   Field(default = None,unique=True, index=True, sa_type=AutoString)
     frequencia_verificacao: str #para que isso serve?
     estado: str | None
-    ultima_verificacao: datetime | None = None #Vai sempre deixar a verificação como None
 
     @field_validator("estado")
     @classmethod
@@ -28,10 +26,19 @@ class FonteInstitucionalBase(SQLModel):
             )
 
         return valor
+def verificar_fonte_oficial(value : HttpUrl) -> str:
+    if not value or  value == "/":
+        return "sem fonte"
+    else :
+        return str(value)
 
 
 class FonteInstitucional(FonteInstitucionalBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
+    ultima_verificacao : datetime | None
+    url_oficial : Annotated[str, AfterValidator(verificar_fonte_oficial)]
+
+
 
 
 class FonteInstitucionalCreate(FonteInstitucionalBase):
