@@ -33,7 +33,8 @@ Projeto desenvolvido para a disciplina de **Métodos de Desenvolvimento de Softw
       <sub>Matrícula: 222006599</sub><br />
       <sub>Função: <i>Backend Dev</i></sub>
     </td>
-
+    
+</tr>
    <td align="center">
       <a href="https://github.com/DanielAlmeidaFrota">
         <img style="border-radius: 50%;" src="https://github.com/DanielAlmeidaFrota.png" width="150px" alt="Daniel Almeida Frota"/><br />
@@ -43,20 +44,7 @@ Projeto desenvolvido para a disciplina de **Métodos de Desenvolvimento de Softw
       <sub>Matrícula: 251041010</sub><br />
       <sub>Função: <i>Frontend Dev</i></sub>
     </td>
-  </tr>
-
-  <tr>
-
-   <td align="center">
-      <a href="https://github.com/DéboraSilvaa">
-        <img style="border-radius: 50%;" src="https://github.com/DéboraSilvaa.png" width="150px" alt="Deboráh Fragoso da Silva"/><br />
-        <sub><b>Deboráh Fragoso da Silva</b></sub>
-      </a>
-      <br />
-      <sub>Matrícula: 251036333</sub><br />
-      <sub>Função: <i>Frontend Dev</i></sub>
-    </td>
-
+ 
    <td align="center">
       <a href="https://github.com/Joao-vithor-1">
         <img style="border-radius: 50%;" src="https://github.com/Joao-vithor-1.png" width="150px" alt="João Vithor Camargo Emidio"/><br />
@@ -68,6 +56,7 @@ Projeto desenvolvido para a disciplina de **Métodos de Desenvolvimento de Softw
     </td>
   </tr>
 </table>
+
 
 ## Documentação
  
