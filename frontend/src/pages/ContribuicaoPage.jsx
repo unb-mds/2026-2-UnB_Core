@@ -9,11 +9,9 @@ import SiteFooter from '../components/SiteFooter'
 import './ContribuicaoPage.css'
 
 const contentTypes = [
-  { value: '', label: 'Selecione um tipo' },
   { value: 'resumo', label: 'Resumo' },
-  { value: 'dica', label: 'Dica' },
+  { value: 'dica', label: 'Dica de estudo' },
   { value: 'dificuldade', label: 'Dificuldade comum' },
-  { value: 'prova', label: 'Prova' },
   { value: 'implementacao', label: 'Implementação' },
   { value: 'link', label: 'Link útil' },
 ]
@@ -56,6 +54,12 @@ function ContribuicaoPage({ courses = [], disciplines = [], onNavigate }) {
 
   async function submitContribution(event) {
     event.preventDefault()
+
+    if (!isAuthenticated) {
+      setError('Entre na sua conta para enviar uma contribuição.')
+      return
+    }
+
     const validationError = validateForm()
 
     if (validationError) {
@@ -83,21 +87,6 @@ function ContribuicaoPage({ courses = [], disciplines = [], onNavigate }) {
     }
   }
 
-  if (!isAuthenticated) {
-    return (
-      <div className="contribution-shell page-shell">
-        <SiteHeader active="conhecimento" onNavigate={onNavigate} />
-        <main className="contribution-page">
-          <EmptyState title="Entre para contribuir">
-            É necessário estar autenticado para enviar uma contribuição.
-            <span className="contribution-page__action"><Button onClick={() => onNavigate('/login')}>Entrar</Button></span>
-          </EmptyState>
-        </main>
-        <SiteFooter />
-      </div>
-    )
-  }
-
   if (submitted) {
     return (
       <div className="contribution-shell page-shell">
@@ -122,6 +111,15 @@ function ContribuicaoPage({ courses = [], disciplines = [], onNavigate }) {
           <h1>Envie uma contribuição</h1>
           <p>Compartilhe um material útil. A publicação acontece somente após a revisão da equipe.</p>
         </header>
+        {!isAuthenticated && (
+          <div className="contribution-page__tip">
+            <p>Você pode preencher e conhecer o fluxo sem login. Para enviar, <a href="/login" onClick={(event) => { event.preventDefault(); onNavigate?.('/login') }}>entre na sua conta</a>.</p>
+          </div>
+        )}
+        <div className="contribution-page__tip">
+          <span aria-hidden="true">💡</span>
+          <p>Primeira vez por aqui? <a href="/guia-de-contribuicao" onClick={(event) => { event.preventDefault(); onNavigate?.('/guia-de-contribuicao') }}>Veja o guia de primeira contribuição</a> antes de enviar.</p>
+        </div>
         <form className="contribution-form" onSubmit={submitContribution} noValidate>
           <div className="contribution-form__grid">
             <label>
@@ -143,25 +141,32 @@ function ContribuicaoPage({ courses = [], disciplines = [], onNavigate }) {
               ) : <input name="disciplina_id" value={form.disciplina_id} onChange={updateField} placeholder="Código da disciplina" />}
             </label>
           </div>
-          <div className="contribution-form__grid">
-            <label>
-              Tipo de conteúdo <span aria-hidden="true">*</span>
-              <select name="tipo" value={form.tipo} onChange={updateField}>
-                {contentTypes.map((type) => <option key={type.value} value={type.value}>{type.label}</option>)}
-              </select>
-            </label>
-            <label>
-              Título <span aria-hidden="true">*</span>
-              <input name="titulo" value={form.titulo} onChange={updateField} placeholder="Ex.: Resumo da unidade 1" />
-            </label>
-          </div>
+          <fieldset className="contribution-form__type">
+            <legend>Tipo de conteúdo <span aria-hidden="true">*</span></legend>
+            <div className="contribution-form__type-options">
+              {contentTypes.map((type) => (
+                <button
+                  key={type.value}
+                  type="button"
+                  className={`tag-toggle ${form.tipo === type.value ? 'tag-toggle--active' : ''}`}
+                  onClick={() => updateField({ target: { name: 'tipo', value: type.value } })}
+                >
+                  {type.label}
+                </button>
+              ))}
+            </div>
+          </fieldset>
           <label>
-            Conteúdo
-            <textarea name="conteudo" value={form.conteudo} onChange={updateField} rows="8" placeholder="Escreva o conteúdo da contribuição" />
+            Título <span aria-hidden="true">*</span>
+            <input name="titulo" value={form.titulo} onChange={updateField} placeholder="Ex.: Resumo da unidade 1" />
           </label>
           <label>
-            URL do material <span className="contribution-form__hint">(preencha o conteúdo ou a URL)</span>
-            <input name="url" type="url" value={form.url} onChange={updateField} placeholder="https://..." />
+            Conteúdo
+            <textarea name="conteudo" value={form.conteudo} onChange={updateField} rows="8" placeholder="Escreva ou cole o conteúdo aqui..." />
+          </label>
+          <label>
+            Fonte / referência <span className="contribution-form__hint">(opcional, ou preencha a URL do material)</span>
+            <input name="url" type="url" value={form.url} onChange={updateField} placeholder="Link ou nome da referência usada" />
           </label>
           {error && <ErrorMessage>{error}</ErrorMessage>}
           <div className="contribution-form__footer">

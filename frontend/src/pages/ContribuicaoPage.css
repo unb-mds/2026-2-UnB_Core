@@ -5,6 +5,14 @@
 .contribution-page__header h1 { margin: 0 0 var(--spacing-sm); color: var(--color-text); font-family: var(--font-display); font-size: 30px; line-height: 1.25; }
 .contribution-page__header p:last-child { color: var(--color-text-muted); font-size: 15px; line-height: 1.6; }
 .contribution-page__action { display: block; margin-top: var(--spacing-md); }
+.contribution-page__tip { display: flex; align-items: flex-start; gap: 8px; margin-bottom: var(--spacing-lg); padding: 12px 14px; border-radius: var(--radius-sm); background: var(--color-bg-soft); }
+.contribution-page__tip p { margin: 0; color: var(--color-primary); font-size: 12px; line-height: 1.5; }
+.contribution-page__tip a { color: var(--color-primary); font-weight: 600; text-decoration: underline; }
+.contribution-form__type { margin: 0; padding: 0; border: 0; }
+.contribution-form__type legend { padding: 0; margin: 0 0 var(--spacing-sm); color: var(--color-text); font-size: 13px; font-weight: 600; }
+.contribution-form__type-options { display: flex; flex-wrap: wrap; gap: 8px; }
+.tag-toggle { padding: 6px 12px; border: 1px solid var(--color-border); border-radius: var(--radius-full); color: var(--color-text-muted); background: var(--color-surface); font: inherit; font-size: 12px; font-weight: 500; cursor: pointer; }
+.tag-toggle--active { border-color: var(--color-primary); color: #fff; background: var(--color-primary); }
 .contribution-form { display: grid; gap: var(--spacing-lg); padding: var(--spacing-xl); border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-surface); box-shadow: var(--shadow-sm); }
 .contribution-form__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--spacing-md); }
 .contribution-form label { display: grid; gap: var(--spacing-sm); color: var(--color-text); font-size: 13px; font-weight: 600; }

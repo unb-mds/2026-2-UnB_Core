@@ -1,6 +1,9 @@
 import './ui/ui.css'
+import { logout, useAuth } from '../state/auth'
 
 function Navigation({ active = 'editais', onNavigate }) {
+  const { isAuthenticated } = useAuth()
+
   function handleNavigate(event, path) {
     if (!onNavigate) {
       return
@@ -31,9 +34,36 @@ function Navigation({ active = 'editais', onNavigate }) {
         >
           Editais
         </a>
-        <a className="topbar__login" href="/login" onClick={(event) => handleNavigate(event, '/login')}>
-          Entrar
+        <a href="/contribuicao" onClick={(event) => handleNavigate(event, '/contribuicao')}>
+          Contribuir
         </a>
+        <a href="/minhas-contribuicoes" onClick={(event) => handleNavigate(event, '/minhas-contribuicoes')}>
+          Minhas contribuições
+        </a>
+        {isAuthenticated ? (
+          <>
+            <a
+              className="topbar__login"
+              href="/login"
+              onClick={(event) => {
+                event.preventDefault()
+                logout()
+                onNavigate?.('/login')
+              }}
+            >
+              Sair
+            </a>
+          </>
+        ) : (
+          <>
+            <a className="topbar__login" href="/login" onClick={(event) => handleNavigate(event, '/login')}>
+              Entrar
+            </a>
+            <a className="topbar__login" href="/cadastro" onClick={(event) => handleNavigate(event, '/cadastro')}>
+              Criar conta
+            </a>
+          </>
+        )}
       </div>
     </nav>
   )

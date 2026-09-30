@@ -8,10 +8,9 @@ function PublicacaoLinkOficial({ url }) {
   }
 
   return (
-    <div className="publication-detail__disclaimer">
-      <span aria-hidden="true">i</span>
-      <p>Em caso de divergência, a informação do canal oficial prevalece.</p>
-    </div>
+    <p className="publication-detail__disclaimer">
+      <span aria-hidden="true">ⓘ</span> O UNB CORE é um agregador e não substitui o canal oficial da UnB. Em caso de divergência, a fonte oficial sempre prevalece.
+    </p>
   )
 }
 

@@ -34,6 +34,17 @@ function formatRelativeTime(value) {
   return `Publicado há ${diffDays} dias`
 }
 
+function formatDate(value) {
+  if (!value) {
+    return null
+  }
+
+  const date = new Date(value)
+  return Number.isNaN(date.getTime())
+    ? value
+    : new Intl.DateTimeFormat('pt-BR', { dateStyle: 'medium' }).format(date)
+}
+
 function getPublicationWarning(publicacao) {
   if (!publicacao.ultima_verificacao) {
     return 'Esta publicação ainda não foi verificada. Consulte a fonte oficial.'
