@@ -68,7 +68,7 @@ function MinhasContribuicoesPage({ onNavigate }) {
   }, [isAuthenticated])
 
   return (
-    <div className="my-contributions-shell">
+    <div className="my-contributions-shell page-shell">
       <SiteHeader active="conhecimento" onNavigate={onNavigate} />
       <main className="my-contributions-page">
         <header className="my-contributions-page__header">

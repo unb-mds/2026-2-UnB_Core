@@ -96,7 +96,7 @@ function ConhecimentoPage({ courses = [{ id: '1', nome: 'Engenharia de Software'
   }
 
   return (
-    <div className="knowledge-shell">
+    <div className="knowledge-shell page-shell">
       <SiteHeader active="conhecimento" onNavigate={onNavigate} />
       <main className="knowledge-page">
         <header className="knowledge-page__header">

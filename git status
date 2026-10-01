@@ -1,0 +1,242 @@
+[33mcommit 0a89fdba11bd2cb7f55211203d040309b7aa7951[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfrontend[m[33m)[m
+Author: Daniel Almeida <daniel.alfro@hotmail.com>
+Date:   Tue Sep 22 21:37:51 2026 -0300
+
+    Implementa cliente HTTP e estado de autenticação
+
+[33mcommit b2f05bf74a14eb2231bd653492e6485259b22dfe[m[33m ([m[1;31morigin/frontend[m[33m)[m
+Author: Daniel Almeida <daniel.alfro@hotmail.com>
+Date:   Tue Sep 22 18:15:43 2026 -0300
+
+    chore: configura arquivos gitignore do frontend
+
+[33mcommit 8ff07aa1dadb4f1a7b4cd618a962062b9005c37c[m
+Author: Daniel Almeida <daniel.alfro@hotmail.com>
+Date:   Tue Sep 22 18:11:37 2026 -0300
+
+    chore(frontend): atualiza dependências
+
+[33mcommit 70af940ab098097da2fda1ba5e56bda90a8197f7[m
+Author: Daniel Almeida <daniel.alfro@hotmail.com>
+Date:   Tue Sep 22 18:06:45 2026 -0300
+
+    feat(frontend): configura projeto React com Vite e Axios
+
+[33mcommit d7833a0c845c8686d499778e5b1dc4af6dda4a8a[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m
+Author: Daniel Almeida <daniel.alfro@hotmail.com>
+Date:   Tue Sep 22 17:00:47 2026 -0300
+
+    Update README.md
+
+[33mcommit 935d632e668310b7a84564feb705ccee70ccb6b8[m
+Author: Daniel Almeida <daniel.alfro@hotmail.com>
+Date:   Mon Sep 21 19:24:30 2026 -0300
+
+    Update design-system.md
+
+[33mcommit 26c53c7b81cebb176a514bff137889fe61e4b471[m
+Author: Daniel Almeida <daniel.alfro@hotmail.com>
+Date:   Mon Sep 21 19:08:51 2026 -0300
+
+    Add files via upload
+
+[33mcommit 7770d8468c2d928fefff2c52e25a1b7ca94176d6[m
+Author: Daniel Almeida <daniel.alfro@hotmail.com>
+Date:   Sat Sep 19 20:32:51 2026 -0300
+
+    Update README.md
+
+[33mcommit 0934d09507a581a891683dec60ab9b932f5b25bc[m
+Author: Daniel Almeida <daniel.alfro@hotmail.com>
+Date:   Wed Sep 16 12:32:49 2026 -0300
+
+    Update team roles in README.md
+
+[33mcommit 5ea9b36a999edbcb81b9a4f7dd7b9a1b705dca32[m
+Author: Daniel Almeida <daniel.alfro@hotmail.com>
+Date:   Wed Sep 16 12:30:41 2026 -0300
+
+    Update README.md
+
+[33mcommit d2cb3a1c5d83c8817805d11af7182e7ac7fcacbb[m
+Author: Brenohrr <brenohrr@gmail.com>
+Date:   Wed Sep 16 11:05:10 2026 -0300
+
+    Adicionei o link do Figma
+    
+    Corrected the link to the frontend documentation and added a Figma project link.
+
+[33mcommit 6956fef890bccc4d9a365dc19caf7f7acd12dad5[m
+Author: Daniel Almeida <daniel.alfro@hotmail.com>
+Date:   Wed Sep 16 10:38:37 2026 -0300
+
+    docs: Criação do .md do Documento de Visão
+    
+    Added the Vision Document for the UNB CORE project, detailing the project's purpose, stakeholders, product overview, features, quality ranges, and other requirements.
+
+[33mcommit 912f9cb300b38672f670a4d52b38e40ed72d630f[m
+Author: Daniel Almeida <daniel.alfro@hotmail.com>
+Date:   Mon Sep 14 20:41:18 2026 -0300
+
+    chore: Criação de alguns diretórios novos
+
+[33mcommit d073ada9113a003436aa6ca3736e396aed3147e5[m
+Author: Daniel Almeida <daniel.alfro@hotmail.com>
+Date:   Mon Sep 14 20:29:48 2026 -0300
+
+    Delete backend/app/main.py
+
+[33mcommit 0d567d5ea91ea13268df01fcfbb90ffb2d954550[m
+Author: Daniel Almeida <daniel.alfro@hotmail.com>
+Date:   Mon Sep 14 20:29:42 2026 -0300
+
+    Delete backend/app/domain directory
+
+[33mcommit e72714023339a34ca933e7ce7d6623c6544e80f7[m
+Author: Daniel Almeida <daniel.alfro@hotmail.com>
+Date:   Mon Sep 14 20:29:29 2026 -0300
+
+    Delete backend/app/services
+
+[33mcommit 4dcaf08a612e85a06fb9c78e3e854639bb3af5c0[m
+Author: Daniel Almeida <daniel.alfro@hotmail.com>
+Date:   Mon Sep 14 20:29:22 2026 -0300
+
+    Delete backend/app/api
+
+[33mcommit cf3b4d67c24f70fe0ae715d6ce53a90ce64dbb9c[m
+Author: Daniel Almeida <daniel.alfro@hotmail.com>
+Date:   Mon Sep 14 20:28:34 2026 -0300
+
+    Create services
+
+[33mcommit c4841211c9753d4c444ac4f7418d20fdec75f43c[m
+Author: Daniel Almeida <daniel.alfro@hotmail.com>
+Date:   Mon Sep 14 20:27:53 2026 -0300
+
+    Create api
+
+[33mcommit 9ac8cae435f32b91c24e77ff4c95f424bd33b980[m
+Author: Daniel Almeida <daniel.alfro@hotmail.com>
+Date:   Mon Sep 14 20:23:36 2026 -0300
+
+    Refactor README formatting and bullet points
+    
+    Removed some bullet points and adjusted formatting for clarity.
+
+[33mcommit 2acac22fd6c4537afd8bf4751e80fee8d9768976[m
+Author: Daniel Almeida <daniel.alfro@hotmail.com>
+Date:   Mon Sep 14 20:18:53 2026 -0300
+
+    Create João Vithor Camargo Emidio.md
+
+[33mcommit ebbfaafd6bbcb846e41b98cb6d4c1582625ed2d2[m
+Author: Daniel Almeida <daniel.alfro@hotmail.com>
+Date:   Mon Sep 14 20:18:34 2026 -0300
+
+    Add logbook entry for Deboráh Fragoso da Silva
+
+[33mcommit d9d3eb4c286473cbb08c3efc350e5d1f05205438[m
+Author: Daniel Almeida <daniel.alfro@hotmail.com>
+Date:   Mon Sep 14 20:18:12 2026 -0300
+
+    Add logbook entry for Daniel Paz Dos Passos
+
+[33mcommit 2ed4e065894a4e8f2c11004b23c9f89f92b0b8ea[m
+Author: Daniel Almeida <daniel.alfro@hotmail.com>
+Date:   Mon Sep 14 20:17:38 2026 -0300
+
+    Add logbook entry for Daniel Almeida Frota
+
+[33mcommit e48d726b8d65612652a75f6d627fb2c1aee45cc1[m
+Author: Daniel Almeida <daniel.alfro@hotmail.com>
+Date:   Mon Sep 14 20:16:23 2026 -0300
+
+    Add logbook entry for Breno Henrique da Rocha Rodrigues
+
+[33mcommit f3a082239ac33a5268749c4d20f6e874dac09d26[m
+Author: Daniel Almeida <daniel.alfro@hotmail.com>
+Date:   Mon Sep 14 20:15:33 2026 -0300
+
+    Add logbook entry for Arthur Vinicius Morais de Lima
+
+[33mcommit a704550aba02cf9501abb68855025a1de7cce9bd[m
+Author: Daniel Almeida <daniel.alfro@hotmail.com>
+Date:   Mon Sep 14 20:13:04 2026 -0300
+
+    Scrum 0 Review
+
+[33mcommit 1d7087e3355d69cf64f57b74304cbbb818c3978e[m
+Author: Daniel Almeida <daniel.alfro@hotmail.com>
+Date:   Mon Sep 14 19:47:17 2026 -0300
+
+    Criação de um template de Scrum
+    
+    Added a Scrum model document outlining daily meeting structure and participant responsibilities.
+
+[33mcommit 62b186b30049d8b233f28b0972fd39819311dffd[m
+Author: Daniel Almeida <daniel.alfro@hotmail.com>
+Date:   Mon Sep 14 19:17:24 2026 -0300
+
+    Rename Scrum 0 to Scrum 0.md
+
+[33mcommit 805eaa461b41440ce045ce6ad8c8c53db47c91b9[m
+Author: Daniel Almeida <daniel.alfro@hotmail.com>
+Date:   Mon Sep 14 13:49:18 2026 -0300
+
+    Add Scrum documentation for team progress
+    
+    Document progress and tasks completed by team members in Scrum.
+
+[33mcommit 960f431d6f64971d9a84bc65655d5b1d10d577b5[m
+Merge: a61b76a 2ca9c7c
+Author: Joao-vithor-1 <133594979+Joao-vithor-1@users.noreply.github.com>
+Date:   Sat Sep 12 14:18:48 2026 -0300
+
+    Merge pull request #105 from DanKallaharii/feature/classes-restantes
+    
+    excluindo arquivo  -pycache_
+
+[33mcommit 2ca9c7cf966713b0d0f4f6bf2cdeb8c91f49bb6a[m
+Author: Dankallahari <222021862@aluno.unb.br>
+Date:   Fri Sep 11 19:31:29 2026 -0300
+
+    excluindo arquivo  -pycache_
+
+[33mcommit a61b76a5e8ad2139f406c43a1e6ab6f32247f293[m
+Merge: 5af2196 9da502e
+Author: Joao-vithor-1 <133594979+Joao-vithor-1@users.noreply.github.com>
+Date:   Fri Sep 11 10:15:49 2026 -0300
+
+    Merge pull request #104 from unb-mds/fork/DanKallaharii/feature/classes-restantes
+    
+    -Alterção no model_usuario.py e model_publicacao_institucional.py
+
+[33mcommit 9da502e0aaa9aa8aaaabf5c38c729fb9d2512f7e[m[33m ([m[1;31morigin/fork/DanKallaharii/feature/classes-restantes[m[33m)[m
+Author: Joao-vithor-1 <joaopvp7778@gmail.com>
+Date:   Fri Sep 11 10:11:25 2026 -0300
+
+    -Alterção no model_usuario.py e model_publicacao_institucional.py
+    - No usuario coloquei o email como unico
+    -no publicacao_institucional coloquei o tipo de URlbase de str para HTTPURL
+
+[33mcommit 5af2196cf7aa1084d2aad0b22bdede3db0c84767[m
+Merge: 1f8d0d1 0024fab
+Author: Joao-vithor-1 <133594979+Joao-vithor-1@users.noreply.github.com>
+Date:   Fri Sep 11 09:55:44 2026 -0300
+
+    Merge pull request #50 from DanKallaharii/feature/classes-restantes
+    
+    Adiciona classes restantes do domínio
+
+[33mcommit 1f8d0d1705105959a75bbbf50febed4bc9c10d76[m
+Author: Daniel Almeida <daniel.alfro@hotmail.com>
+Date:   Fri Sep 11 01:00:01 2026 -0300
+
+    feat: Reformulando Milestones e Issues
+
+[33mcommit b88bb9f21795f012b7af39a2d45bfb59d10571ab[m
+Author: Daniel Almeida <daniel.alfro@hotmail.com>
+Date:   Thu Sep 10 21:10:08 2026 -0300
+
+    fix: corrigindo o

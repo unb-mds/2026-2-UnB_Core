@@ -25,7 +25,7 @@ function LoginPage({ onNavigate }) {
   }
 
   return (
-    <div className="auth-page-shell">
+    <div className="auth-page-shell page-shell">
       <a className="auth-brand" href="/" onClick={(event) => { event.preventDefault(); onNavigate('/') }}>
         unb<span>core</span>
       </a>

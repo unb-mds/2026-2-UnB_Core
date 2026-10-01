@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import ConhecimentoPage from './pages/ConhecimentoPage'
 import CadastroPage from './pages/CadastroPage'
 import ContribuicaoPage from './pages/ContribuicaoPage'
+import GuiaContribuicaoPage from './pages/GuiaContribuicaoPage'
 import MinhasContribuicoesPage from './pages/MinhasContribuicoesPage'
 import LoginPage from './pages/LoginPage'
 import PublicacaoDetalhePage from './pages/PublicacaoDetalhePage'
@@ -29,6 +30,10 @@ function getRoute() {
 
   if (path === '/contribuicao') {
     return { name: 'contribution' }
+  }
+
+  if (path === '/guia-de-contribuicao') {
+    return { name: 'contribution-guide' }
   }
 
   if (path === '/minhas-contribuicoes') {
@@ -60,7 +65,7 @@ function App() {
   }
 
   if (route.name === 'knowledge') {
-    return <ConhecimentoPage onNavigate={navigate} />
+    return <ConhecimentoPage onNavigate={navigate} onContribute={() => navigate('/contribuicao')} />
   }
 
   if (route.name === 'signup') {
@@ -73,6 +78,10 @@ function App() {
 
   if (route.name === 'contribution') {
     return <ContribuicaoPage onNavigate={navigate} />
+  }
+
+  if (route.name === 'contribution-guide') {
+    return <GuiaContribuicaoPage onNavigate={navigate} />
   }
 
   if (route.name === 'my-contributions') {
