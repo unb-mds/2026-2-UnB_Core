@@ -24,11 +24,7 @@ class PublicacaoInstitucionalBase(SQLModel):
     unidade_responsavel: str
     curso_id: int | None = None
     url_oficial: HttpUrl  =   Field(default = None,unique=True, index=True, sa_type=AutoString)
-    publicado_em: datetime | None = None #Vai sempre deixar a verificação como None
-    prazo_inicio: datetime | None = None # mesmo problema do de cima
-    prazo_fim: datetime | None = None # mesmo problema
-    estado: str = "nao_verificada"
-    ultima_verificacao: datetime | None = None #mesmo problama
+
 
     @field_validator("estado")
     @classmethod
@@ -48,17 +44,14 @@ class PublicacaoInstitucionalBase(SQLModel):
             )
 
         return valor
-    @field_validator("url_oficial")
-    @classmethod
-    def validar_url(cls,valor : HttpUrl):
-        if(valor == None):
-            return "/"
-        return valor
+
+
 
 
 def get_session():
     with Session(engine) as session:
         yield session
+
 
 class PublicacaoInstitucional(
     PublicacaoInstitucionalBase,
@@ -66,6 +59,9 @@ class PublicacaoInstitucional(
 ):
     publicacao_id: int | None = Field(default=None, primary_key=True)
     url_oficial : Annotated[str, AfterValidator(verificar_fonte_oficial)]
+    publicado_em: datetime = Field(default_factory=datetime.now)
+    ultima_verificacao: datetime | None
+
 
 
 class PublicacaoInstitucionalCreate(PublicacaoInstitucionalBase):
