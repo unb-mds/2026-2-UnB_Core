@@ -1,0 +1,87 @@
+site_name: Unb Core — Documentação
+site_description: Todas as informações da UnB em um unico lugar.
+site_author: Unb Core — MDS 2026/2 (UnB)
+site_url: https://unb-mds.github.io/2026-2-UnB_Core/
+
+repo_name: unb-mds/2026-2-UnB_Core
+repo_url: https://github.com/unb-mds/2026-2-UnB_Core/tree/main/docs
+
+theme:
+  name: material
+  language: pt
+  palette:
+    - scheme: slate
+      primary: teal
+      accent: teal
+      toggle:
+        icon: material/weather-sunny
+        name: Mudar para modo claro
+    - scheme: default
+      primary: teal
+      accent: teal
+      toggle:
+        icon: material/weather-night
+        name: Mudar para modo escuro
+  font:
+    text: Inter
+    code: JetBrains Mono
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - navigation.footer
+    - search.highlight
+    - search.suggest
+    - content.code.copy
+    - content.tabs.link
+  icon:
+    repo: fontawesome/brands/github
+
+plugins:
+  - search:
+      lang: pt
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - tables
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+
+nav:
+  - Início: index.md
+  - Documento de Visão: documento_de_visao.md
+  #- Releases:
+     # - Release 1 (R1): releases/release1.md
+      #- Release 2 (R2): releases/release2.md
+  - Scrum:
+      - Scrum 0: scrum/Scrum 0.md
+      - Scrum 1: scrum/Scrum 1.md
+      - Scrum 2: scrum/Scrum 2.md
+      - Scrum 3: scrum/Scrum 3.md
+
+
+
+  - Requisitos:
+
+      - Requisitos Gerais Oficiais: requisitos.md
+
+
+  - Frontend:
+      - Design system : frontend/design-system.md
+
+
+  #- Backend:
+
+
