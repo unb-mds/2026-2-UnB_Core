@@ -16,6 +16,7 @@ class ContribuicaoBase(SubmissaoBase):
 
 class Contribuicao(ContribuicaoBase, Submissao, table=True):
     justificativa_moderacao: str | None = None
+    
 
 
 class ContribuicaoCreate(ContribuicaoBase):
@@ -24,6 +25,10 @@ class ContribuicaoCreate(ContribuicaoBase):
 
 class ContribuicaoRead(ContribuicaoBase):
     pass
+
+class ContribuicaoModeracao(ContribuicaoBase):
+    id : int
+    justificativa_moderacao: str | None = None
 
 
 # Configuração do banco local
