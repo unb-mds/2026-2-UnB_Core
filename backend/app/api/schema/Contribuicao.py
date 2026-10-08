@@ -1,11 +1,13 @@
 from datetime import datetime
 from pydantic import field_validator
-from sqlmodel import Field, SQLModel, create_engine, select, col, Session
+from sqlmodel import Field, SQLModel, select, col, Session
 from fastapi import APIRouter, HTTPException, Depends
 
 # schemas
 from SubmissaoBase import Submissao, SubmissaoBase
 from usuario import get_current_user, Usuario
+#session
+from backend.app.db import get_session
 
 
 class ContribuicaoBase(SubmissaoBase):
@@ -31,17 +33,8 @@ class ContribuicaoModeracao(ContribuicaoBase):
     justificativa_moderacao: str | None = None
 
 
-# Configuração do banco local
-sqlite_file_name = "Contribuicao.db"
-sqlite_url = f"sqlite:///{sqlite_file_name}"
-engine = create_engine(sqlite_url)
-
-# Garante que as tabelas sejam criadas no SQLite local
 
 
-def get_session():
-    with Session(engine) as session:
-        yield session
 
 
 routerContribuicao = APIRouter(prefix="/api/v1/contribuicoes", tags=["contribuições"])

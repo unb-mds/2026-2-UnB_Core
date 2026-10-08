@@ -1,24 +1,29 @@
 from datetime import datetime
 
-from pydantic import EmailStr, field_validator, ValidationError
-from sqlalchemy import true
+from pydantic import EmailStr, field_validator, ValidationError,AfterValidator
+from passlib.context import CryptContext
 from sqlmodel import SQLModel, Field
-from fastapi import HTTPException,Depends
-from sqlmodel import SQLModel, Field, Session, create_engine, select,select, col
+from fastapi import HTTPException,Depends, APIRouter
+from sqlmodel import SQLModel, Field, Session,select, col
+from typing import  Annotated
+#session
+from backend.app.db import get_session
 
-engine = create_engine()
-def get_session():
-    with Session(engine) as session:
-        yield session
+#senhas hash
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+def hash_senha(senha: str) -> str:
+    return pwd_context.hash(senha)
+
+def verificar_senha(plain_password: str, hashed_password: str) -> bool:
+    return pwd_context.verify(plain_password, hashed_password)
 class UsuarioBase(SQLModel):
 
     email : EmailStr = Field(unique=True, index=True)
     nome : str
     #perfil : str  movi para a classe Usuario
     status : str #troquei o literal pois SQLModel não aceita literal
-    #senha_hash colocar depois
-    ativo : bool # defini se o usuario é frequente ao site
-
+    ativo : bool = Field(default = False)
     @field_validator("status")
     def validate_status(cls,v):
         permitido = ["Online","Offline","Aparecer Offline","Ausente"]
@@ -34,6 +39,7 @@ class Usuario(UsuarioBase,table = True):
     criado_em: datetime = Field(default_factory=datetime.now)
     atualizado_em: datetime = Field(default_factory=datetime.now)
     perfil : str = Field(default= "usuario")
+    senha : str
 
     @field_validator("perfil")
     def validate_perfil(cls,v):
@@ -43,13 +49,19 @@ class Usuario(UsuarioBase,table = True):
             return v
 
 class UsuarioCreate(UsuarioBase):
-    pass
+    senha : str 
+    
+
+class UsuarioLogin(SQLModel):
+    email : EmailStr
+    senha : str 
 
 class get_current_user(UsuarioBase):
     id : int
     perfil : str
 
-def get_usuario(id_usuario : int, session : get_session):
+#pesquisa no database e retorna usuario
+def get_usuario(id_usuario : int, session : Session = Depends(get_session)):
     get_user = session.get(Usuario,id_usuario)
     if get_user:
         usuario = get_current_user.model_validate(get_user)
@@ -58,10 +70,47 @@ def get_usuario(id_usuario : int, session : get_session):
     raise HTTPException(status_code=401,
                         detail="Usuario sem cadastro")
 
+#router
+router_usuario = APIRouter(prefix="/usuario")
 
+#nome autoexplicatorio
 def verificar_admin_moderador(usuario : get_current_user,session : get_session):
     if usuario.perfil == "administrador" or usuario.perfil == "moderador":
         return usuario
     
     raise HTTPException(status_code=403,
                         detail=f"{usuario.nome} não tem permição para acessar essa pagina")
+
+
+@router_usuario.post("/login")
+def get_login_usuario(dadosLogin : UsuarioLogin, session : Session = Depends(get_session)):
+    procurar_usuario = select(Usuario).where(Usuario.email == dadosLogin.email)
+    usuario = session.exec(procurar_usuario).first()
+    if usuario:
+            senha_valida = verificar_senha(dadosLogin.senha,usuario.senha)
+            if not senha_valida:
+                raise HTTPException(status_code=400, detail="E-mail ou senha incorretos")
+    else:
+        raise HTTPException(status_code=400, detail="E-mail ou senha incorretos")
+
+    return {"message" : "Login realizado com sucesso" }
+
+@router_usuario.post("/criar", response_model=get_current_user)
+def criar_usuario(usuario : UsuarioCreate, session : Session = Depends(get_session)):
+    procurar_usuario = select(Usuario).where(Usuario.email == usuario.email)
+    usuarioExistente = session.exec(procurar_usuario).first()
+    if usuarioExistente:
+        raise HTTPException(
+            status_code= 409,
+            detail = "Ja existe usuario com esse e-mail cadastrado"
+        )
+
+    dados = usuario.model_dump()
+    dados["senha"] = hash_senha(dados["senha"])
+
+    db_usuario = Usuario.model_validate(dados)
+    session.add(db_usuario)
+    session.commit()
+    session.refresh(db_usuario)
+
+    return get_current_user.model_validate(db_usuario)

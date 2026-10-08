@@ -3,6 +3,8 @@ from fastapi import APIRouter, HTTPException, Depends
 from pydantic import field_validator, HttpUrl,AfterValidator
 from sqlmodel import SQLModel, Field, AutoString,Session, create_engine,select,Relationship
 from typing import Annotated
+#session
+from backend.app.db import get_session
 
 publicacao_router = APIRouter()
 def verificar_fonte_oficial(value : HttpUrl) -> str:
@@ -48,9 +50,7 @@ class PublicacaoInstitucionalBase(SQLModel):
 
 
 
-def get_session():
-    with Session(engine) as session:
-        yield session
+
 
 
 class PublicacaoInstitucional(

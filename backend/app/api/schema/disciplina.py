@@ -8,10 +8,8 @@ from datetime import datetime
 
 from backend.app.api.schema.curso import Curso,CursoGet
 from sqlalchemy import Column, JSON
+from backend.app.db import get_session
 
-def get_session():
-    with Session(engine) as session:
-        yield session
 
 def codigoDisciplina(value: str) ->str:
     upper = value.upper()
@@ -58,10 +56,7 @@ class DisciplinaGet(DisciplinaBase):
 disciplina_router = APIRouter()
 crud_disciplina_router = APIRouter()
 
-#databae
-sqlite_file_name = "Disciplinas.db"
-sqlite_url = f"sqlite:///{sqlite_file_name}"
-engine = create_engine(sqlite_url)
+
 
 @disciplina_router.get("/{curso_id}/disciplina",response_model=list[Disciplina])
 async def GetListaCurso(curso_id : int,session : Session = Depends(get_session)):
@@ -101,8 +96,6 @@ async def get_disciplina(id_disciplina : int,session : Session = Depends(get_ses
                             detail=f"publicação com Id {id_disciplina} não existe")
     disciplina = DisciplinaGet.model_validate(disciplinaProcurar)
     return disciplina
-
-
 
 
 
