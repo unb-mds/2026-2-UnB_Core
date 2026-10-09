@@ -1,11 +1,14 @@
 from datetime import datetime
 
-from pydantic import EmailStr, field_validator, ValidationError,AfterValidator
+from pydantic import BaseModel, EmailStr, field_validator
 from passlib.context import CryptContext
 from sqlmodel import SQLModel, Field
-from fastapi import HTTPException,Depends, APIRouter
+from fastapi import HTTPException,Depends, APIRouter,FastAPI
 from sqlmodel import SQLModel, Field, Session,select, col
-from typing import  Annotated
+
+
+from backend.app.api.security import criar_access_token, obter_usuario_token
+from backend.app.api.schemas.auth import LoginResponse, UsuarioResponse
 #session
 from backend.app.db import get_session
 
@@ -56,19 +59,28 @@ class UsuarioLogin(SQLModel):
     email : EmailStr
     senha : str 
 
-class get_current_user(UsuarioBase):
+class get_current_user(BaseModel):
+    email: EmailStr
+    nome: str
+    status: str
+    ativo: bool
     id : int
     perfil : str
 
 #pesquisa no database e retorna usuario
-def get_usuario(id_usuario : int, session : Session = Depends(get_session)):
-    get_user = session.get(Usuario,id_usuario)
-    if get_user:
-        usuario = get_current_user.model_validate(get_user)
-        return usuario
-        
-    raise HTTPException(status_code=401,
-                        detail="Usuario sem cadastro")
+def get_usuario(
+    payload: dict = Depends(obter_usuario_token),
+    session: Session = Depends(get_session),
+):
+    usuario = session.get(Usuario, int(payload["sub"]))
+
+    if not usuario or not usuario.ativo:
+        raise HTTPException(
+            status_code=401,
+            detail="Usuário inválido ou inativo",
+        )
+
+    return usuario
 
 #router
 router_usuario = APIRouter(prefix="/usuario")
@@ -91,11 +103,20 @@ def get_login_usuario(dadosLogin : UsuarioLogin, session : Session = Depends(get
             if not senha_valida:
                 raise HTTPException(status_code=400, detail="E-mail ou senha incorretos")
     else:
-        raise HTTPException(status_code=400, detail="E-mail ou senha incorretos")
+        raise HTTPException(status_code=401, detail="E-mail ou senha incorretos")
 
-    return {"message" : "Login realizado com sucesso" }
+    token = criar_access_token(
+        usuario_id=usuario.id,
+        perfil=usuario.perfil,
+    )
 
-@router_usuario.post("/criar", response_model=get_current_user)
+    return LoginResponse(
+        access_token=token,
+        token_type="bearer",
+        usuario=UsuarioResponse.model_validate(usuario),
+    )
+
+@router_usuario.post("/cadastro", response_model=get_current_user)
 def criar_usuario(usuario : UsuarioCreate, session : Session = Depends(get_session)):
     procurar_usuario = select(Usuario).where(Usuario.email == usuario.email)
     usuarioExistente = session.exec(procurar_usuario).first()
@@ -114,3 +135,9 @@ def criar_usuario(usuario : UsuarioCreate, session : Session = Depends(get_sessi
     session.refresh(db_usuario)
 
     return get_current_user.model_validate(db_usuario)
+
+
+@router_usuario.get("/me", response_model=get_current_user)
+def usuario_atual(usuario: Usuario = Depends(get_usuario)):
+    return get_current_user.model_validate(usuario)
+

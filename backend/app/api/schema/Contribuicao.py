@@ -4,8 +4,8 @@ from sqlmodel import Field, SQLModel, select, col, Session
 from fastapi import APIRouter, HTTPException, Depends
 
 # schemas
-from SubmissaoBase import Submissao, SubmissaoBase
-from usuario import get_current_user, Usuario
+from backend.app.api.schema.SubmissaoBase import Submissao, SubmissaoBase
+from backend.app.api.schema.usuario import get_current_user, Usuario
 #session
 from backend.app.db import get_session
 

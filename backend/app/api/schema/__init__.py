@@ -9,5 +9,5 @@ app = FastAPI()
 app.include_router(router=publicacao_router,prefix="/publicacao")
 app.include_router(router = disciplina_router,prefix="/cursos")
 app.include_router(router = crud_disciplina_router,prefix ="/link_temporario") # para debug
-app.include(router = routerContribuicao,prefix = "/api/v1/contribuicoes")
-app.include(router = router_usuario)
+app.include_router(router = routerContribuicao,prefix = "/api/v1/contribuicoes")
+app.include_router(router = router_usuario)

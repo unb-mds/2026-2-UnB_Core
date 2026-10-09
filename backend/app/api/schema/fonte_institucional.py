@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Annotated
+
 from pydantic import field_validator, HttpUrl, AfterValidator
 from sqlmodel import SQLModel, Field, AutoString
 
@@ -36,7 +36,6 @@ def verificar_fonte_oficial(value : HttpUrl) -> str:
 class FonteInstitucional(FonteInstitucionalBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
     ultima_verificacao : datetime | None
-    url_oficial : Annotated[str, AfterValidator(verificar_fonte_oficial)]
 
 
 

@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from app.api.errors import configurar_tratamento_de_erros
+from backend.app.api.errors import configurar_tratamento_de_erros
 
 
 def criar_aplicacao() -> FastAPI:

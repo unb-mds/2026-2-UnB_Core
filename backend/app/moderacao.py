@@ -1,11 +1,16 @@
-from backend.app.api.schema.Contribuicao import Contribuicao, ContribuicaoModeracao, ContribuicaoRead
-from backend.app.api.schema.usuario import Usuario,get_current_user, verificar_admin_moderador
+from backend.app.api.schema.Contribuicao import (
+    Contribuicao,
+    ContribuicaoModeracao,
+    ContribuicaoRead,
+)
+from backend.app.api.schema.usuario import get_current_user
+from backend.app.api.schema.usuario import Usuario, verificar_admin_moderador
 
-from pydantic import model_validator,field_validator
-from sqlmodel import Session, create_engine,select,select,SQLModel
-from fastapi import FastAPI,HTTPException,APIRouter,Depends
-
-engine = create_engine()
+from pydantic import field_validator
+from sqlmodel import SQLModel
+from fastapi import APIRouter, Depends, HTTPException
+#session
+from backend.app.db import get_session
 routerModeracao = APIRouter(prefix="/api/v1/moderacao", tags=["contribuições"])
 
 class Decisao(SQLModel):
@@ -49,9 +54,7 @@ def get_contribuicao(id_contribuicao : int, session : get_session):
                         detail=f"Contribuição {id_contribuicao} não existe")
 
 
-def get_session():
-    with Session(engine) as session:
-        yield session
+
 
 @routerModeracao.post("/{id}/decisao",response_model=[Contribuicao])
 def get_decisao(decisao : Decisao, session : get_session,

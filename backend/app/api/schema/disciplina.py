@@ -1,9 +1,9 @@
 import re
 
 from fastapi import APIRouter,HTTPException,Depends
-from pydantic import AfterValidator, validator
+from pydantic import field_validator
 from sqlmodel import SQLModel, Field, Session, create_engine, select,select, col
-from typing import  Annotated,List
+from typing import List
 from datetime import datetime
 
 from backend.app.api.schema.curso import Curso,CursoGet
@@ -31,10 +31,15 @@ def codigoDisciplina(value: str) ->str:
         raise ValueError("codigo não valido")
 
 class DisciplinaBase(SQLModel):
-    codigo: Annotated[str, AfterValidator(codigoDisciplina)]
+    codigo: str
     nome: str
     periodo: datetime
     ativo : bool
+
+    @field_validator("codigo")
+    @classmethod
+    def validar_codigo(cls, value: str) -> str:
+        return codigoDisciplina(value)
 
 
 
@@ -96,6 +101,5 @@ async def get_disciplina(id_disciplina : int,session : Session = Depends(get_ses
                             detail=f"publicação com Id {id_disciplina} não existe")
     disciplina = DisciplinaGet.model_validate(disciplinaProcurar)
     return disciplina
-
 
 
