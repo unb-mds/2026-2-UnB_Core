@@ -83,7 +83,6 @@ Os comandos abaixo devem ser executados no terminal integrado do VS Code ou no
 PowerShell, a partir da raiz do repositório:
 
 ```powershell
-cd C:\Users\Pichau\PycharmProjects\G1-2026-2
 
 # Execute uma vez, caso o ambiente virtual ainda não exista
 py -m venv .venv
