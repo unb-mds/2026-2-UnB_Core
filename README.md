@@ -10,6 +10,7 @@ Projeto desenvolvido para a disciplina de **Métodos de Desenvolvimento de Softw
 
 **Fase atual: documentação e planejamento.** Ainda não há implementação. O repositório contém a especificação de requisitos, a organização do backend (spec-kit) e os documentos de sprint.
  
+
 ## Integrantes
 
 <table>
@@ -75,8 +76,58 @@ Projeto desenvolvido para a disciplina de **Métodos de Desenvolvimento de Softw
 - **Banco de dados**: SQLite 
  
 ## Como rodar localmente
- 
-_Ainda não aplicável. O projeto em fase de especificação. Esta seção será atualizada assim que a implementação do MVP começar._
+
+### Backend
+
+Os comandos abaixo devem ser executados no terminal integrado do VS Code ou no
+PowerShell, a partir da raiz do repositório:
+
+```powershell
+cd C:\Users\Pichau\PycharmProjects\G1-2026-2
+
+# Execute uma vez, caso o ambiente virtual ainda não exista
+py -m venv .venv
+
+# Ative o ambiente virtual nesta janela
+.\.venv\Scripts\Activate.ps1
+
+# Instale as dependências disponíveis no projeto
+python -m pip install -r backend\requirements.txt
+```
+
+Usando PostgreSQL. Configure as variáveis obrigatórias na mesma janela do PowerShell:
+
+```powershell
+$env:DATABASE_URL = "postgresql+psycopg2://USUARIO:SENHA@localhost:5432/NOME_DO_BANCO"
+$env:JWT_SECRET_KEY = "dev-only-change-this-secret"
+```
+
+
+
+Inicie a API usando o objeto `app` definido em
+[`backend/app/api/schema/__init__.py`](backend/app/api/schema/__init__.py):
+
+```powershell
+python -m uvicorn backend.app.api.schema:app --reload
+```
+
+Abra a documentação interativa do FastAPI no navegador:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+No Swagger UI:
+
+1. Execute `POST /usuario/cadastro` para criar um usuário.
+2. Execute `POST /usuario/login` com o mesmo e-mail e senha.
+3. Copie o valor de `access_token` da resposta.
+4. Clique em **Authorize**, informe `Bearer <access_token>` e confirme.
+5. Execute `GET /usuario/me` para testar uma rota autenticada.
+
+O usuário precisa estar ativo para acessar `/usuario/me`. No cadastro atual,
+envie `"ativo": true` no corpo da requisição. Para parar o servidor, pressione
+`Ctrl+C` no terminal.
  
 ## Contribuindo
  

@@ -33,7 +33,7 @@ class DenunciaBase(SQLModel):
 class Denuncia(DenunciaBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
     criada_em: datetime = Field(default_factory=datetime.now)
-    atualizada_em: datetime = Field(default_factory=datetime.now
+    atualizada_em: datetime = Field(default_factory=datetime.now)
 
 class DenunciaCreate(DenunciaBase):
     pass

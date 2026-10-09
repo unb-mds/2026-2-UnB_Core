@@ -1,8 +1,9 @@
 from datetime import datetime
 from fastapi import APIRouter, HTTPException, Depends
-from pydantic import field_validator, HttpUrl,AfterValidator
+from pydantic import field_validator, HttpUrl
 from sqlmodel import SQLModel, Field, AutoString,Session, create_engine,select,Relationship
-from typing import Annotated
+#session
+from backend.app.db import get_session
 
 publicacao_router = APIRouter()
 def verificar_fonte_oficial(value : HttpUrl) -> str:
@@ -13,9 +14,7 @@ def verificar_fonte_oficial(value : HttpUrl) -> str:
 
 
 
-sqlite_file_name = "database_publicaco_institucional.db"
-sqlite_url = f"sqlite:///{sqlite_file_name}"
-engine = create_engine(sqlite_url)
+
 class PublicacaoInstitucionalBase(SQLModel):
     fonte_id: int
     titulo: str
@@ -24,6 +23,7 @@ class PublicacaoInstitucionalBase(SQLModel):
     unidade_responsavel: str
     curso_id: int | None = None
     url_oficial: HttpUrl  =   Field(default = None,unique=True, index=True, sa_type=AutoString)
+    estado : str
 
 
     @field_validator("estado")
@@ -48,9 +48,7 @@ class PublicacaoInstitucionalBase(SQLModel):
 
 
 
-def get_session():
-    with Session(engine) as session:
-        yield session
+
 
 
 class PublicacaoInstitucional(
@@ -58,14 +56,12 @@ class PublicacaoInstitucional(
     table=True,
 ):
     publicacao_id: int | None = Field(default=None, primary_key=True)
-    url_oficial : Annotated[str, AfterValidator(verificar_fonte_oficial)]
     publicado_em: datetime = Field(default_factory=datetime.now)
     ultima_verificacao: datetime | None
 
 
-
 class PublicacaoInstitucionalCreate(PublicacaoInstitucionalBase):
-    url_oficial: Annotated[str, AfterValidator(verificar_fonte_oficial)]
+    pass
 
 
 
