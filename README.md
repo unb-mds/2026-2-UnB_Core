@@ -104,8 +104,7 @@ $env:JWT_SECRET_KEY = "dev-only-change-this-secret"
 
 
 
-Inicie a API usando o objeto `app` definido em
-[`backend/app/api/schema/__init__.py`](backend/app/api/schema/__init__.py):
+
 
 ```powershell
 python -m uvicorn backend.app.api.schema:app --reload
