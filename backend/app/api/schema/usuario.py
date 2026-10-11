@@ -16,6 +16,8 @@ from backend.app.db import get_session
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def hash_senha(senha: str) -> str:
+    if len(senha.encode("utf-8")) > 72:
+        senha = senha[:72]
     return pwd_context.hash(senha)
 
 def verificar_senha(plain_password: str, hashed_password: str) -> bool:
@@ -113,7 +115,7 @@ def get_login_usuario(dadosLogin : UsuarioLogin, session : Session = Depends(get
     return LoginResponse(
         access_token=token,
         token_type="bearer",
-        usuario=UsuarioResponse.model_validate(usuario),
+        usuario=UsuarioResponse.model_validate(usuario.model_dump()),
     )
 
 @router_usuario.post("/cadastro", response_model=get_current_user)
