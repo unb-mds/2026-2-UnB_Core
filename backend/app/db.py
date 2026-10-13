@@ -16,4 +16,11 @@ def get_session() -> Generator[Session, None, None]:
 
 
 def create_db_and_tables() -> None:
+    from backend.app.api.schema import (
+        PublicacaoInstitucional,
+        Disciplina,
+        Usuario,
+        Contribuicao,
+    )
     SQLModel.metadata.create_all(engine)
+

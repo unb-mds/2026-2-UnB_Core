@@ -22,7 +22,6 @@ class PublicacaoInstitucionalBase(SQLModel):
     categoria: str
     unidade_responsavel: str
     curso_id: int | None = None
-    url_oficial: HttpUrl  =   Field(default = None,unique=True, index=True, sa_type=AutoString)
     estado : str
 
 
@@ -57,11 +56,14 @@ class PublicacaoInstitucional(
 ):
     publicacao_id: int | None = Field(default=None, primary_key=True)
     publicado_em: datetime = Field(default_factory=datetime.now)
-    ultima_verificacao: datetime | None
+    ultima_verificacao: datetime = Field(default_factory=datetime.now)
+    url_oficial : str
 
 
 class PublicacaoInstitucionalCreate(PublicacaoInstitucionalBase):
-    pass
+    url_oficial: HttpUrl  =   Field(default = None,unique=True, index=True, sa_type=AutoString)
+
+    
 
 
 
@@ -93,6 +95,8 @@ async def get_lista_publicacao(session : Session = Depends(get_session)):
 
 @publicacao_router.post("/criar")
 async def post_publicacao(publicacao: PublicacaoInstitucionalCreate,session : Session = Depends(get_session)):
+    publicacao = publicacao.model_dump()
+    publicacao["url_oficial"] = str(publicacao["url_oficial"])
     if not publicacao:
         raise HTTPException(status_code=422,
                             detail="Erro de entrada, faltou parametro ou tipo errado")# colocar mais detalhes depois

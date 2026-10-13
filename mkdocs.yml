@@ -62,26 +62,9 @@ markdown_extensions:
 nav:
   - Início: index.md
   - Documento de Visão: documento_de_visao.md
-  #- Releases:
-     # - Release 1 (R1): releases/release1.md
-      #- Release 2 (R2): releases/release2.md
-  - Scrum:
-      - Scrum 0: scrum/Scrum 0.md
-      - Scrum 1: scrum/Scrum 1.md
-      - Scrum 2: scrum/Scrum 2.md
-      - Scrum 3: scrum/Scrum 3.md
-
-
-
+  - Sprint:
+      - Sprint 5 : Sprint/Sprint05
   - Requisitos:
-
       - Requisitos Gerais Oficiais: requisitos.md
-
-
   - Frontend:
       - Design system : frontend/design-system.md
-
-
-  #- Backend:
-
-

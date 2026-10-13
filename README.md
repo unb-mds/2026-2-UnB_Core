@@ -8,7 +8,7 @@ Projeto desenvolvido para a disciplina de **Métodos de Desenvolvimento de Softw
 
 ## Status do projeto
 
-**Fase atual: documentação e planejamento.** Ainda não há implementação. O repositório contém a especificação de requisitos, a organização do backend (spec-kit) e os documentos de sprint.
+**Fase atual: desenvolvimento e integração.** O backend possui uma API funcional construída com FastAPI, incluindo autenticação de usuários, cadastro, login e acesso a rotas protegidas. O projeto continua em evolução, com novas funcionalidades, testes, integração com o frontend e melhorias de documentação sendo desenvolvidos nas sprints.
  
 
 ## Integrantes
@@ -62,7 +62,7 @@ Projeto desenvolvido para a disciplina de **Métodos de Desenvolvimento de Softw
  
 - **Back-end**: Python (FastAPI)
 - **Front-end**: JavaScript (React)
-- **Banco de dados**: SQLite 
+- **Banco de dados**: PostgreSQL 
  
 ## Como rodar localmente
 
@@ -95,7 +95,7 @@ $env:JWT_SECRET_KEY = "dev-only-change-this-secret"
 
 
 ```powershell
-python -m uvicorn backend.app.api.schema:app --reload
+python -m uvicorn backend.app.main:app --reload
 ```
 
 Abra a documentação interativa do FastAPI no navegador:
