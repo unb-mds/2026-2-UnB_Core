@@ -26,17 +26,6 @@ Projeto desenvolvido para a disciplina de **Métodos de Desenvolvimento de Softw
     </td>
 
    <td align="center">
-      <a href="https://github.com/Brenohrr">
-        <img style="border-radius: 50%;" src="https://github.com/Brenohrr.png" width="150px" alt="Breno Henrique da Rocha Rodrigues"/><br />
-        <sub><b>Breno Henrique da Rocha Rodrigues</b></sub>
-      </a>
-      <br />
-      <sub>Matrícula: 222006599</sub><br />
-      <sub>Função: <i>Backend Dev</i></sub>
-    </td>
-    
-</tr>
-   <td align="center">
       <a href="https://github.com/DanielAlmeidaFrota">
         <img style="border-radius: 50%;" src="https://github.com/DanielAlmeidaFrota.png" width="150px" alt="Daniel Almeida Frota"/><br />
         <sub><b>Daniel Almeida Frota</b></sub>
