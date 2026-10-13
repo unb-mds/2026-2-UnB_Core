@@ -17,13 +17,13 @@
 ## O que fiz ontem/desde o último Scrum
 
 - Arthur Vinícius: 
-  * 
+  * Terminei a issue T025, embora ainda não fiz o PR.
   
 - Breno : 
-  * 
+  * Atualização na issue T004 e terminei a t011.
 
 - Daniel Almeida:
-  * 
+  * arrumei o repositório e reformulei alguns docs
 
 - Daniel Paz:
   * 
@@ -39,13 +39,13 @@
 ## O que farei hoje 
 
 - Arthur Vinícius: 
-  *
+  * Terminar as outras issues e dar o PR.
   
 - Breno : 
-  * 
+  * Fazer o PR e começar outras issues da fundação.
 
 - Daniel Almeida:
-  * 
+  * não posso fazer nada pois estou me recuperando ainda
 
 - Daniel Paz:
   * 
@@ -61,13 +61,13 @@
 ## Há algum impedimento?
 
 - Arthur Vinícius: 
-  *
+  * Consegui terminar meus projetos paralelos, mas ainda preciso resolver as issues e continuar me familiarizando com o pydanthic.
   
 - Breno : 
-  * 
+  * Ainda na reforma da casa.
 
 - Daniel Almeida:
-  * 
+  * acompanhamento do grupo ruim 
 
 - Daniel Paz:
   * 
