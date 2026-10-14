@@ -2,7 +2,7 @@ fastapi
 uvicorn[standard]
 sqlmodel
 passlib==1.7.4
-bcrypt==4.3.0
+bcrypt==4.0.1
 PyJWT
 email-validator
 psycopg2-binary

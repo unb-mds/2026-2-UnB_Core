@@ -71,7 +71,7 @@ function ContribuicaoPage({ courses = [], disciplines = [], onNavigate }) {
     setError(null)
 
     try {
-      await api.post('/contribuicoes', {
+      await api.post('/api/v1/contribuicoes', {
         curso_id: form.curso_id,
         disciplina_id: form.disciplina_id,
         tipo: form.tipo,
