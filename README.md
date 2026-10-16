@@ -58,6 +58,7 @@ Projeto desenvolvido para a disciplina de **Métodos de Desenvolvimento de Softw
   </tr>
 </table>
 
+
 ## Documentação
  
 - [`docs/requisitos.md`](docs/requisitos.md) Visão geral, requisitos funcionais e não funcionais, entidades e critérios de sucesso.
@@ -82,7 +83,6 @@ Os comandos abaixo devem ser executados no terminal integrado do VS Code ou no
 PowerShell, a partir da raiz do repositório:
 
 ```powershell
-cd C:\Users\Pichau\PycharmProjects\G1-2026-2
 
 # Execute uma vez, caso o ambiente virtual ainda não exista
 py -m venv .venv
@@ -103,8 +103,7 @@ $env:JWT_SECRET_KEY = "dev-only-change-this-secret"
 
 
 
-Inicie a API usando o objeto `app` definido em
-[`backend/app/main.py`](backend/app/main.py):
+
 
 ```powershell
 python -m uvicorn backend.app.main:app --reload

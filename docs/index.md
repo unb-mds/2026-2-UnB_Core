@@ -8,7 +8,7 @@ Projeto desenvolvido para a disciplina de **Métodos de Desenvolvimento de Softw
 
 ## Status do projeto
 
-**Fase atual: documentação e planejamento.**  O backend possui uma API funcional construída com FastAPI, incluindo autenticação de usuários, cadastro, login e acesso a rotas protegidas. O projeto continua em evolução, com novas funcionalidades, testes, integração com o frontend e melhorias de documentação sendo desenvolvidos nas sprints.
+**Fase atual: desenvolvimento e integração.** O backend possui uma API funcional construída com FastAPI, incluindo autenticação de usuários, cadastro, login e acesso a rotas protegidas. O projeto continua em evolução, com novas funcionalidades, testes, integração com o frontend e melhorias de documentação sendo desenvolvidos nas sprints.
  
 
 ## Integrantes
@@ -59,12 +59,12 @@ Projeto desenvolvido para a disciplina de **Métodos de Desenvolvimento de Softw
 </table>
 
 
-
 ## Stack planejada
  
 - **Back-end**: Python (FastAPI)
 - **Front-end**: JavaScript (React)
 - **Banco de dados**: PostgreSQL 
  
+
  
 

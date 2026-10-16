@@ -12,6 +12,16 @@ import PublicacaoDatas from '../components/publicacoes/PublicacaoDatas'
 import PublicacaoLinkOficial from '../components/publicacoes/PublicacaoLinkOficial'
 import './PublicacaoDetalhePage.css'
 
+function formatRelativeTime(value) {
+  if (!value) return null
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return null
+  const diffDays = Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24))
+  if (diffDays <= 0) return 'Publicado hoje'
+  if (diffDays === 1) return 'Publicado há 1 dia'
+  return `Publicado há ${diffDays} dias`
+}
+
 function PublicacaoDetalhePage({ publicationId, publication: initialPublication, onBack = () => {}, onNavigate }) {
   const [publication, setPublication] = useState(initialPublication || null)
   const [isLoading, setIsLoading] = useState(!initialPublication)
@@ -42,7 +52,7 @@ function PublicacaoDetalhePage({ publicationId, publication: initialPublication,
   }, [initialPublication, publicationId])
 
   return (
-    <div className="publication-detail-shell">
+    <div className="publication-detail-shell page-shell">
       <SiteHeader active="editais" onNavigate={onNavigate} />
       <main className="publication-detail-page">
         <Button variant="outline" onClick={onBack}>← Voltar para editais</Button>
@@ -62,7 +72,10 @@ function PublicacaoDetalhePage({ publicationId, publication: initialPublication,
                 <StatusBadge status={publication.estado} />
               </div>
               <h1>{publication.titulo}</h1>
-              <p className="publication-detail__unit">{publication.unidade_responsavel}</p>
+              <p className="publication-detail__unit">
+                {formatRelativeTime(publication.data_publicacao) || 'Data de publicação não informada'}
+                {publication.unidade_responsavel ? ` · Fonte: ${publication.unidade_responsavel}` : ''}
+              </p>
             </header>
 
             <div className="publication-detail__content">
@@ -74,6 +87,19 @@ function PublicacaoDetalhePage({ publicationId, publication: initialPublication,
                 <PublicacaoFonte publicacao={publication} />
                 <PublicacaoStatus publicacao={publication} />
                 <PublicacaoDatas publicacao={publication} />
+              </div>
+              <div className="publication-detail__actions">
+                {publication.url_oficial && (
+                  <Button variant="primary" onClick={() => window.open(publication.url_oficial, '_blank', 'noopener,noreferrer')}>
+                    Acessar fonte oficial
+                  </Button>
+                )}
+                <Button
+                  variant="outline"
+                  onClick={() => window.open(`mailto:unb.core@gmail.com?subject=${encodeURIComponent(`Problema na publicação: ${publication.titulo}`)}`)}
+                >
+                  Relatar problema
+                </Button>
               </div>
               <PublicacaoLinkOficial url={publication.url_oficial} />
             </div>

@@ -3,6 +3,7 @@ import { clearSession, getSession, setSession } from '../services/api'
 
 const listeners = new Set()
 let session = getSession()
+const authBypassEnabled = import.meta.env.DEV && (import.meta.env.VITE_SKIP_AUTH === 'true' || import.meta.env.VITE_ALLOW_NO_LOGIN === 'true')
 
 function emitChange() {
   listeners.forEach((listener) => listener())
@@ -23,11 +24,12 @@ function getServerSnapshot() {
 
 export function useAuth() {
   const currentSession = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
+  const devUser = authBypassEnabled ? { nome: 'Usuário local', perfil: 'admin' } : null
 
   return {
-    session: currentSession,
-    user: currentSession?.usuario || currentSession?.user || null,
-    isAuthenticated: Boolean(currentSession),
+    session: currentSession || (authBypassEnabled ? { usuario: devUser, access_token: 'dev-bypass' } : null),
+    user: currentSession?.usuario || currentSession?.user || devUser,
+    isAuthenticated: authBypassEnabled || Boolean(currentSession),
   }
 }
 
