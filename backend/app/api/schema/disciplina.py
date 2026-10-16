@@ -2,7 +2,7 @@ import re
 
 from fastapi import APIRouter,HTTPException,Depends
 from pydantic import field_validator
-from sqlmodel import SQLModel, Field, Session, create_engine, select,select, col
+from sqlmodel import SQLModel, Field, Session, create_engine, select,select, col,ARRAY,INTEGER
 from typing import List
 from datetime import datetime
 
@@ -46,8 +46,7 @@ class DisciplinaBase(SQLModel):
 class Disciplina(DisciplinaBase,table = True):
     id: int | None = Field(default=None,
                            primary_key=True)
-    curso_id : List[int] = Field(default_factory=list, sa_column=Column(JSON))
-    #curso_id : list[int]  = Field(default=[], sa_column=Column(ARRAY(Integer)))  #removi temporarimente,pois usa postgresql
+    curso_id : list[int]  = Field(default=[], sa_column=Column(ARRAY(INTEGER)))  
     #obs tambem da para colocar o curso_id como uma string,so tem que criar uma função que faz isso automaticamente
 
 class DisciplinaCreate(DisciplinaBase):

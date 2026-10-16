@@ -4,8 +4,9 @@ from pydantic import BaseModel, EmailStr, field_validator
 from passlib.context import CryptContext
 from sqlmodel import SQLModel, Field
 from fastapi import HTTPException,Depends, APIRouter,FastAPI
+from fastapi.security import  OAuth2PasswordRequestForm
 from sqlmodel import SQLModel, Field, Session,select, col
-
+from typing import Annotated
 
 from backend.app.api.security import criar_access_token, obter_usuario_token
 from backend.app.api.schemas.auth import LoginResponse, UsuarioResponse
@@ -80,7 +81,7 @@ def get_usuario(
         raise HTTPException(
             status_code=401,
             detail="Usuário inválido ou inativo",
-        )
+        ) 
 
     return usuario
 
@@ -97,7 +98,11 @@ def verificar_admin_moderador(usuario : get_current_user,session : get_session):
 
 
 @router_usuario.post("/login")
-def get_login_usuario(dadosLogin : UsuarioLogin, session : Session = Depends(get_session)):
+def get_login_usuario(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], session : Session = Depends(get_session)):
+    dadosLogin = UsuarioLogin.model_validate({
+        "email": form_data.username,
+        "senha": form_data.password
+    })
     procurar_usuario = select(Usuario).where(Usuario.email == dadosLogin.email)
     usuario = session.exec(procurar_usuario).first()
     if usuario:
@@ -141,5 +146,10 @@ def criar_usuario(usuario : UsuarioCreate, session : Session = Depends(get_sessi
 
 @router_usuario.get("/me", response_model=get_current_user)
 def usuario_atual(usuario: Usuario = Depends(get_usuario)):
-    return get_current_user.model_validate(usuario)
+    return get_current_user.model_validate(usuario.model_dump())
 
+@router_usuario.delete("/remover")
+def usuario_delete(usuario : Usuario = Depends(get_usuario), session : Session = Depends(get_session)):
+    session.delete(usuario)
+    session.commit()
+    return usuario

@@ -35,9 +35,9 @@ def criar_aplicacao() -> FastAPI:
 
 app = criar_aplicacao()
 
-app.include_router(router=publicacao_router,prefix="/publicacao")
-app.include_router(router = disciplina_router,prefix="/cursos")
-app.include_router(router = crud_disciplina_router,prefix ="/link_temporario") # para debug
-app.include_router(router = routerContribuicao,prefix = "/api/v1/contribuicoes")
-app.include_router(router = router_usuario)
+app.include_router(router=publicacao_router,prefix="/publicacao",tags = ["publicacao"])
+app.include_router(router = disciplina_router,prefix="/cursos",tags = ["cursos"])
+app.include_router(router = crud_disciplina_router,prefix ="/link_temporario",tags = ["CRUD disciplina"]) # para debug
+app.include_router(router = routerContribuicao,prefix = "/api/v1/contribuicoes",tags = ["Contribuicao"])
+app.include_router(router = router_usuario,tags = ["Usuario"])
 

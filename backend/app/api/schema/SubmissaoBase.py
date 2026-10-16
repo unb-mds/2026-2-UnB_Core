@@ -5,8 +5,8 @@ from sqlmodel import SQLModel, Field
 
 
 class SubmissaoBase(SQLModel):
-    disciplina_id : int #colocar validação depois
-    tipo : str # COLOCAR VERIFICAÇÃO DEPOIS
+    disciplina_id : int  = Field(foreign_key="disciplina.id")
+    tipo : str 
     origem : str
 
 class Submissao():
