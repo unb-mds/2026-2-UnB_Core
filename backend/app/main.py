@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager  
-from fastapi.middleware.cors import CORSMiddleware
 
 from backend.app.api.errors import configurar_tratamento_de_erros
 from backend.app.api.schema import (
@@ -32,13 +31,6 @@ def criar_aplicacao() -> FastAPI:
     )
 
     configurar_tratamento_de_erros(aplicacao)
-    aplicacao.add_middleware(
-        CORSMiddleware,
-        allow_origins=["http://127.0.0.1:5173", "http://localhost:5173"],
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
 
     return aplicacao
 
