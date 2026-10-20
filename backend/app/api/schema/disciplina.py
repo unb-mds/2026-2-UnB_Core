@@ -33,8 +33,8 @@ def codigoDisciplina(value: str) ->str:
 class DisciplinaBase(SQLModel):
     codigo: str
     nome: str
-    periodo: datetime
-    ativo : bool
+    periodo: datetime | None = Field(default=None)
+    ativo : bool = Field(default=True)
 
     @field_validator("codigo")
     @classmethod
