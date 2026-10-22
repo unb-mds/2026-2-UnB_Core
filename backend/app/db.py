@@ -21,6 +21,9 @@ def create_db_and_tables() -> None:
         Disciplina,
         Usuario,
         Contribuicao,
+        ConteudoAcademico,
+        FonteInstitucional,
+        Categoria,
     )
     SQLModel.metadata.create_all(engine)
 

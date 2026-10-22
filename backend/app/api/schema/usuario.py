@@ -1,6 +1,6 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
-from pydantic import BaseModel, EmailStr, field_validator
+from pydantic import BaseModel, ConfigDict, EmailStr, field_validator
 from passlib.context import CryptContext
 from sqlmodel import SQLModel, Field
 from fastapi import HTTPException,Depends, APIRouter,FastAPI
@@ -42,8 +42,8 @@ class UsuarioBase(SQLModel):
 class Usuario(UsuarioBase,table = True):
     id: int | None = Field(default=None,
                            primary_key=True)
-    criado_em: datetime = Field(default_factory=datetime.now)
-    atualizado_em: datetime = Field(default_factory=datetime.now)
+    criado_em: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    atualizado_em: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     perfil : str = Field(default= "usuario")
     senha : str
 
@@ -63,6 +63,8 @@ class UsuarioLogin(SQLModel):
     senha : str 
 
 class get_current_user(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     email: EmailStr
     nome: str
     status: str

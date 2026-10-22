@@ -1,5 +1,4 @@
-from email.policy import default
-from datetime import datetime
+from datetime import datetime, timezone
 from pydantic import field_validator
 from sqlmodel import SQLModel, Field
 
@@ -12,8 +11,8 @@ class SubmissaoBase(SQLModel):
 class Submissao():
     id : int |None = Field(default=None,primary_key=True)
     autor_id : int
-    criado_em: datetime = Field(default_factory=datetime.now)
-    atualizado_em: datetime = Field(default_factory=datetime.now)
+    criado_em: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    atualizado_em: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     estado: str = Field(default = "pendente")
 
     @field_validator("estado")

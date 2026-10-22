@@ -7,13 +7,15 @@ from sqlmodel import SQLModel, Field, AutoString
 class FonteInstitucionalBase(SQLModel):
     nome: str
     unidade_responsavel: str
-    url_oficial: HttpUrl  =   Field(default = None,unique=True, index=True, sa_type=AutoString)
-    frequencia_verificacao: str #para que isso serve?
-    estado: str | None
+    url_oficial: str = Field(unique=True, index=True)
+    frequencia_verificacao: str | None = Field(default="diaria") #para que isso serve?
+    estado: str | None = Field(default="ativa")
 
     @field_validator("estado")
     @classmethod
-    def validar_estado(cls, valor: str) -> str:
+    def validar_estado(cls, valor: str | None) -> str | None:
+        if valor is None:
+            return "ativa"
         estados_permitidos = [
             "ativa",
             "pausada",
@@ -26,18 +28,22 @@ class FonteInstitucionalBase(SQLModel):
             )
 
         return valor
-def verificar_fonte_oficial(value : HttpUrl) -> str:
-    if not value or  value == "/":
+
+
+def verificar_fonte_oficial(value: str) -> str:
+    if not value or value == "/":
         return "sem fonte"
-    else :
+    else:
         return str(value)
 
 
 class FonteInstitucional(FonteInstitucionalBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
-    ultima_verificacao : datetime | None
+    ultima_verificacao: datetime | None = Field(default=None)
 
-
+    @property
+    def url_base(self) -> str:
+        return str(self.url_oficial)
 
 
 class FonteInstitucionalCreate(FonteInstitucionalBase):

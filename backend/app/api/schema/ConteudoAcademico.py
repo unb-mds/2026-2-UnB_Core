@@ -3,7 +3,7 @@ from pydantic import HttpUrl, field_validator
 from sqlmodel import SQLModel, Field, AutoString
 from fastapi import APIRouter
 
-from SubmissaoBase import SubmissaoBase,Submissao
+from backend.app.api.schema.SubmissaoBase import SubmissaoBase, Submissao
 
 class ConteudoAcademicoBase(SubmissaoBase):
     pass    
