@@ -29,7 +29,7 @@ class UsuarioBase(SQLModel):
     nome : str
     #perfil : str  movi para a classe Usuario
     status : str #troquei o literal pois SQLModel não aceita literal
-    ativo : bool = Field(default = False)
+    ativo : bool = Field(default = True)
     @field_validator("status")
     def validate_status(cls,v):
         permitido = ["Online","Offline","Aparecer Offline","Ausente"]
@@ -77,7 +77,7 @@ def get_usuario(
 ):
     usuario = session.get(Usuario, int(payload["sub"]))
 
-    if not usuario or not usuario.ativo:
+    if not usuario or not usuario.ativo:    
         raise HTTPException(
             status_code=401,
             detail="Usuário inválido ou inativo",
@@ -89,11 +89,11 @@ def get_usuario(
 router_usuario = APIRouter(prefix="/usuario")
 
 #nome autoexplicatorio
-def verificar_admin_moderador(usuario : get_current_user,session : get_session):
+def verificar_admin_moderador(usuario : get_current_user = Depends(get_usuario),session : Session = Depends(get_session)):
     if usuario.perfil == "administrador" or usuario.perfil == "moderador":
         return usuario
-    
-    raise HTTPException(status_code=403,
+    else:
+        raise HTTPException(status_code=403,
                         detail=f"{usuario.nome} não tem permição para acessar essa pagina")
 
 

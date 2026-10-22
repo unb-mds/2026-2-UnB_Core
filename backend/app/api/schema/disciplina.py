@@ -63,7 +63,7 @@ crud_disciplina_router = APIRouter()
 
 
 @disciplina_router.get("/{curso_id}/disciplina",response_model=list[Disciplina])
-async def GetListaCurso(curso_id : int,session : Session = Depends(get_session)):
+def GetListaCurso(curso_id : int,session : Session = Depends(get_session)):
     cursoProcurado =  session.get(Curso,curso_id)
     if not cursoProcurado:
         raise HTTPException(status_code=404,
@@ -81,7 +81,7 @@ async def GetListaCurso(curso_id : int,session : Session = Depends(get_session))
 
 
 @crud_disciplina_router.post("/criar", response_model=Disciplina)
-async def post_disciplina(disciplina : DisciplinaCreate, session : Session = Depends(get_session)):
+def post_disciplina(disciplina : DisciplinaCreate, session : Session = Depends(get_session)):
     if not disciplina:
         raise HTTPException(status_code=422,
                             detail = "Erro de entrada ou faltou parametro ou tipo errado")
@@ -93,12 +93,10 @@ async def post_disciplina(disciplina : DisciplinaCreate, session : Session = Dep
     return disciplina_db
 
 @crud_disciplina_router.get("/{id_disciplina}",response_model=DisciplinaGet)
-async def get_disciplina(id_disciplina : int,session : Session = Depends(get_session)):
+def get_disciplina(id_disciplina : int,session : Session = Depends(get_session)):
     disciplinaProcurar = session.get(Disciplina, id_disciplina)
     if not disciplinaProcurar:
         raise HTTPException(status_code=404,
                             detail=f"publicação com Id {id_disciplina} não existe")
     disciplina = DisciplinaGet.model_validate(disciplinaProcurar)
     return disciplina
-
-

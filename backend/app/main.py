@@ -9,6 +9,7 @@ from backend.app.api.schema import (
     routerContribuicao,
     router_usuario,
 )
+from backend.app.moderacao import routerModeracao
 from backend.app.db import create_db_and_tables
 
 @asynccontextmanager
@@ -40,4 +41,5 @@ app.include_router(router = disciplina_router,prefix="/cursos",tags = ["cursos"]
 app.include_router(router = crud_disciplina_router,prefix ="/link_temporario",tags = ["CRUD disciplina"]) # para debug
 app.include_router(router = routerContribuicao,prefix = "/api/v1/contribuicoes",tags = ["Contribuicao"])
 app.include_router(router = router_usuario,tags = ["Usuario"])
+app.include_router(router = routerModeracao)
 
