@@ -28,8 +28,8 @@ class UsuarioBase(SQLModel):
     email : EmailStr = Field(unique=True, index=True)
     nome : str
     #perfil : str  movi para a classe Usuario
-    status : str #troquei o literal pois SQLModel não aceita literal
-    ativo : bool = Field(default = True)
+    status : str = Field(default="Offline")
+    ativo : bool = Field(default = False)
     @field_validator("status")
     def validate_status(cls,v):
         permitido = ["Online","Offline","Aparecer Offline","Ausente"]
