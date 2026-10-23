@@ -2,7 +2,7 @@ import re
 
 from fastapi import APIRouter,HTTPException,Depends
 from pydantic import field_validator
-from sqlmodel import SQLModel, Field, Session, create_engine, select,select, col
+from sqlmodel import SQLModel, Field, Session, create_engine, select,select, col,ARRAY,INTEGER
 from typing import List
 from datetime import datetime
 
@@ -33,8 +33,8 @@ def codigoDisciplina(value: str) ->str:
 class DisciplinaBase(SQLModel):
     codigo: str
     nome: str
-    periodo: datetime
-    ativo : bool
+    periodo: datetime | None = Field(default=None)
+    ativo : bool = Field(default=True)
 
     @field_validator("codigo")
     @classmethod
@@ -46,8 +46,7 @@ class DisciplinaBase(SQLModel):
 class Disciplina(DisciplinaBase,table = True):
     id: int | None = Field(default=None,
                            primary_key=True)
-    curso_id : List[int] = Field(default_factory=list, sa_column=Column(JSON))
-    #curso_id : list[int]  = Field(default=[], sa_column=Column(ARRAY(Integer)))  #removi temporarimente,pois usa postgresql
+    curso_id : list[int]  = Field(default=[], sa_column=Column(ARRAY(INTEGER)))  
     #obs tambem da para colocar o curso_id como uma string,so tem que criar uma função que faz isso automaticamente
 
 class DisciplinaCreate(DisciplinaBase):
@@ -64,7 +63,7 @@ crud_disciplina_router = APIRouter()
 
 
 @disciplina_router.get("/{curso_id}/disciplina",response_model=list[Disciplina])
-async def GetListaCurso(curso_id : int,session : Session = Depends(get_session)):
+def GetListaCurso(curso_id : int,session : Session = Depends(get_session)):
     cursoProcurado =  session.get(Curso,curso_id)
     if not cursoProcurado:
         raise HTTPException(status_code=404,
@@ -82,7 +81,7 @@ async def GetListaCurso(curso_id : int,session : Session = Depends(get_session))
 
 
 @crud_disciplina_router.post("/criar", response_model=Disciplina)
-async def post_disciplina(disciplina : DisciplinaCreate, session : Session = Depends(get_session)):
+def post_disciplina(disciplina : DisciplinaCreate, session : Session = Depends(get_session)):
     if not disciplina:
         raise HTTPException(status_code=422,
                             detail = "Erro de entrada ou faltou parametro ou tipo errado")
@@ -94,12 +93,10 @@ async def post_disciplina(disciplina : DisciplinaCreate, session : Session = Dep
     return disciplina_db
 
 @crud_disciplina_router.get("/{id_disciplina}",response_model=DisciplinaGet)
-async def get_disciplina(id_disciplina : int,session : Session = Depends(get_session)):
+def get_disciplina(id_disciplina : int,session : Session = Depends(get_session)):
     disciplinaProcurar = session.get(Disciplina, id_disciplina)
     if not disciplinaProcurar:
         raise HTTPException(status_code=404,
                             detail=f"publicação com Id {id_disciplina} não existe")
     disciplina = DisciplinaGet.model_validate(disciplinaProcurar)
     return disciplina
-
-

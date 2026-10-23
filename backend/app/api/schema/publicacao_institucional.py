@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from fastapi import APIRouter, HTTPException, Depends
 from pydantic import field_validator, HttpUrl
 from sqlmodel import SQLModel, Field, AutoString,Session, create_engine,select,Relationship
@@ -22,12 +22,16 @@ class PublicacaoInstitucionalBase(SQLModel):
     categoria: str
     unidade_responsavel: str
     curso_id: int | None = None
-    estado : str
+    estado: str = Field(default="ativa")
+    prazo_inicio: datetime | None = Field(default=None)
+    prazo_fim: datetime | None = Field(default=None)
 
 
     @field_validator("estado")
     @classmethod
-    def validar_estado(cls, valor: str) -> str:
+    def validar_estado(cls, valor: str | None) -> str:
+        if valor is None:
+            return "ativa"
         estados_permitidos = [
             "ativa",
             "encerrada",
@@ -55,22 +59,34 @@ class PublicacaoInstitucional(
     table=True,
 ):
     publicacao_id: int | None = Field(default=None, primary_key=True)
-    publicado_em: datetime = Field(default_factory=datetime.now)
-    ultima_verificacao: datetime = Field(default_factory=datetime.now)
-    url_oficial : str
+    publicado_em: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    ultima_verificacao: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    url_oficial: str
 
+    @property
+    def id(self) -> int | None:
+        return self.publicacao_id
 
-class PublicacaoInstitucionalCreate(PublicacaoInstitucionalBase):
-    url_oficial: HttpUrl  =   Field(default = None,unique=True, index=True, sa_type=AutoString)
+    @id.setter
+    def id(self, value: int | None) -> None:
+        self.publicacao_id = value
 
     
 
+class PublicacaoInstitucionalCreate(PublicacaoInstitucionalBase):
+    url_oficial: HttpUrl = Field(default=None, unique=True, index=True, sa_type=AutoString)
 
 
 class PublicacaoInstitucionalGet(PublicacaoInstitucionalBase):
-    publicacao_id : int
-    aviso : str = "Atenção os dados aqui não substituem a fonte oficial"
+    publicacao_id: int
+    url_oficial: str | None = None
+    publicado_em: datetime | None = None
+    ultima_verificacao: datetime | None = None
+    aviso: str = "Atenção os dados aqui não substituem a fonte oficial"
 
+    @property
+    def id(self) -> int:
+        return self.publicacao_id
 
 
 

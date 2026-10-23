@@ -5,9 +5,10 @@ from backend.app.api.schema.Contribuicao import (
 )
 from backend.app.api.schema.usuario import get_current_user
 from backend.app.api.schema.usuario import Usuario, verificar_admin_moderador
+from datetime import datetime
 
 from pydantic import field_validator
-from sqlmodel import SQLModel
+from sqlmodel import SQLModel,Session
 from fastapi import APIRouter, Depends, HTTPException
 #session
 from backend.app.db import get_session
@@ -19,7 +20,7 @@ class Decisao(SQLModel):
     
     @field_validator("estado")
     def validate_estado(cls, v):
-            permitido = ["publicado", "ajustes", "rejeitado", "arquivado"]
+            permitido = ["aprovada", "ajustes", "rejeitado", "arquivado"]
             if v not in permitido:
                 raise ValueError(f"deve ser um dos status a sequir {permitido}")
             return v
@@ -41,35 +42,38 @@ def get_usuario(id_usuario : int, session : get_session):
                         detail="Usuario sem cadastro")
 
 
-def get_contribuicao(id_contribuicao : int, session : get_session):
-
-    get_contribuicao = session.get(Contribuicao,id_contribuicao)
-    if get_contribuicao:
-        usuario = Contribuicao.model_validate(get_contribuicao)
-        return Contribuicao
+def get_contribuicao(id: int, session: Session = Depends(get_session)):
+    contribuicao = session.get(Contribuicao, id)
+    
+    if not contribuicao:
+        raise HTTPException(status_code=404, detail="Contribuição não encontrada")
+        
+    return contribuicao
         
         
         
-    raise HTTPException(status_code=401,
-                        detail=f"Contribuição {id_contribuicao} não existe")
+    
 
 
 
 
-@routerModeracao.post("/{id}/decisao",response_model=[Contribuicao])
-def get_decisao(decisao : Decisao, session : get_session,
+@routerModeracao.post("/{id}/decisao",response_model= Contribuicao)
+def get_decisao(decisao : Decisao, session : Session = Depends(get_session),
                 contribuicao : Contribuicao = Depends(get_contribuicao), admin : Usuario = Depends(verificar_admin_moderador)):
 
-    
-    
-    contribuicao.justificativa_moderacao = Decisao.justificativa_moderacao
-    contribuicao.estado = Decisao.estado
+    #se a decisao for aprovada a contribuição é publicada
+    if decisao.estado == "aprovada":
+        contribuicao.estado = "publicado"
+    else:
+        contribuicao.estado = decisao.estado
 
+    contribuicao.justificativa_moderacao = decisao.justificativa_moderacao
+    contribuicao.atualizado_em = datetime.now()
     session.add(contribuicao)
     session.commit()
     session.refresh(contribuicao)
 
-    return Contribuicao
+    return contribuicao
     
 
 
