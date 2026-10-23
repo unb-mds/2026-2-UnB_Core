@@ -22,7 +22,6 @@ b. Descreva suas alterações.
 
 c. Escreva `closes #XXXX` em seu comentário para fechar automaticamente a issue que seu PR corrige (se houver).
 
-IMPORTANTE: Por favor, revise a paǵina de "COMO CONTRIBUIR?" (https://unb-mds.github.io/2023-2-SuaGradeUnB/contributing/) para obter diretrizes detalhadas sobre contribuições.
 -->
 
 # Descrição
