@@ -1,81 +1,51 @@
 # Implementation Plan: UNB CORE
 
-**Branch**: `001-unb-core` | **Date**: 2026-09-09 | **Spec**: [spec.md](spec.md)
-
-**Input**: Feature specification from `/specs/001-unb-core/spec.md`
-
-**Note**: This template is filled in by the `/speckit-plan` command; its definition describes the execution workflow.
+**Branch**: `feature/corte-escopo-academico` | **Date**: 2026-10-26 | **Spec**: [spec.md](spec.md)
 
 ## Summary
 
-O UNB CORE será uma aplicação web acadêmica com consulta pública da Base de Conhecimento e da Central de Editais e Avisos. O MVP terá uma API FastAPI em Python, persistência local com SQLite via SQLModel e uma interface React. Contribuições exigirão autenticação e permanecerão pendentes até a moderação; publicações institucionais serão cadastradas manualmente por administradores.
+O UNB CORE será uma plataforma acadêmica colaborativa para consulta de conteúdos organizados por curso e disciplina. O MVP terá autenticação local, contribuições submetidas por usuários autenticados e moderação por moderadores e administradores. O módulo institucional de editais, fontes, denúncias e busca unificada foi removido do escopo.
 
 ## Technical Context
 
-<!--
-  ACTION REQUIRED: Replace the content in this section with the technical details
-  for the project. The structure here is presented in advisory capacity to guide
-  the iteration process.
--->
-
 **Language/Version**: Python 3.12+ no backend; JavaScript moderno no frontend
 
-**Primary Dependencies**: FastAPI, Pydantic, SQLModel, Uvicorn, React e um cliente HTTP para a interface
+**Primary Dependencies**: FastAPI, Pydantic, SQLModel, Uvicorn, React, Vite e cliente HTTP
 
-**Storage**: SQLite no desenvolvimento e MVP; PostgreSQL fica previsto apenas para uma migração posterior
+**Storage**: SQLite no desenvolvimento e MVP; migração para PostgreSQL fica fora deste incremento
 
-**Testing**: pytest para regras e API; testes de integração para fluxos principais; testes de interface ficam limitados aos fluxos críticos do MVP
+**Testing**: pytest e httpx para regras e API; testes de integração para os fluxos de autenticação, consulta, contribuição e moderação; testes de interface para os fluxos críticos
 
-**Target Platform**: Navegadores desktop e mobile atuais; servidor local ou ambiente web simples para a API
+**Target Platform**: Navegadores desktop atuais e Chrome/Safari mobile atuais
 
 **Project Type**: Aplicação web com frontend e backend separados
 
-**Performance Goals**: Não há metas específicas de desempenho no escopo acadêmico do MVP
+**Performance Goals**: Sem metas específicas de desempenho para o MVP acadêmico
 
-**Constraints**: Leitura pública sem autenticação; escrita protegida por autenticação e perfil; publicação institucional manual; contribuições sempre passam por moderação
+**Constraints**: Consulta pública; escrita protegida por autenticação e perfil; contribuições sempre começam como pendentes; aprovação cria ou atualiza conteúdo
 
-**Scale/Scope**: MVP acadêmico focado inicialmente em Engenharia de Software, com dois espaços públicos, autenticação, contribuições e administração básica
+**Scale/Scope**: MVP acadêmico inicialmente focado em Engenharia de Software, com cursos, disciplinas, conteúdos, autenticação, contribuições, moderação e administração de usuários
 
 ## Constitution Check
 
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
-
-Não há gates específicos a aplicar: a constituição ainda contém apenas placeholders e não define princípios ratificados. O plano seguirá simplicidade, separação de responsabilidades e testes das regras críticas.
+A constituição do projeto ainda contém apenas placeholders e não define princípios ratificados. Não há gates normativos adicionais. O plano adota simplicidade, separação de responsabilidades, testes dos fluxos críticos e ausência de segredos versionados.
 
 ## Project Structure
-
-### Documentation (this feature)
-
-```text
-specs/[###-feature]/
-├── plan.md              # This file (/speckit-plan command output)
-├── research.md          # Phase 0 output (/speckit-plan command)
-├── data-model.md        # Phase 1 output (/speckit-plan command)
-├── quickstart.md        # Phase 1 output (/speckit-plan command)
-├── contracts/           # Phase 1 output (/speckit-plan command)
-└── tasks.md             # Phase 2 output (/speckit-tasks command - NOT created by /speckit-plan)
-```
-
-### Source Code (repository root)
-<!--
-  ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
-  for this feature. Delete unused options and expand the chosen structure with
-  real paths (e.g., apps/admin, packages/something). The delivered plan must
-  not include Option labels.
--->
 
 ```text
 backend/
 ├── app/
 │   ├── api/
+│   │   ├── schemas/
+│   │   └── routers/
 │   ├── domain/
 │   ├── services/
 │   ├── settings/
 │   └── main.py
 └── tests/
-  ├── contract/
-  ├── integration/
-  └── unit/
+    ├── contract/
+    ├── integration/
+    └── unit/
 
 frontend/
 ├── src/
@@ -84,15 +54,28 @@ frontend/
 │   ├── services/
 │   └── state/
 └── tests/
-  ├── integration/
-  └── unit/
+    ├── integration/
+    └── unit/
 
-docs/
-├── backend_sprint_0.md
-└── requisitos.md
+specs/001-unb-core/
+├── plan.md
+├── research.md
+├── data-model.md
+├── quickstart.md
+├── contracts/
+└── tasks.md
 ```
 
-**Structure Decision**: Aplicação web separada em `backend/` e `frontend/`, com regras e persistência organizadas no backend e páginas/componentes organizados no frontend. Os testes ficam próximos de cada parte e os contratos da feature ficam em `specs/001-unb-core/contracts/`.
+**Structure Decision**: Aplicação separada em backend e frontend. O backend concentra modelos, regras, autenticação, autorização e contratos HTTP. O frontend concentra navegação, formulários, consulta acadêmica e estado de sessão. Os testes ficam separados por camada e os contratos da API ficam versionados em `specs/001-unb-core/contracts/`.
+
+## Delivery Strategy
+
+1. Preparar configuração, banco, erros e autenticação.
+2. Entregar consulta pública de cursos, disciplinas e conteúdos.
+3. Entregar envio e acompanhamento de contribuições.
+4. Entregar moderação e publicação derivada das contribuições.
+5. Entregar administração de usuários e integração frontend/backend.
+6. Validar o quickstart, os fluxos críticos e a documentação.
 
 ## Complexity Tracking
 

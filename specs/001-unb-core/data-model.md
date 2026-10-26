@@ -2,12 +2,12 @@
 
 ## Usuário
 
-Representa uma pessoa que consulta o sistema e, quando autenticada, pode enviar contribuições.
+Representa uma pessoa que consulta conteúdos ou envia contribuições.
 
 - `id`: identificador único.
 - `nome`: nome exibido.
 - `email`: endereço único usado no acesso.
-- `senha_hash`: senha armazenada de forma protegida; nunca deve ser retornada pela API.
+- `senha_hash`: senha armazenada de forma protegida; nunca deve ser retornada.
 - `perfil`: `usuario`, `moderador` ou `administrador`.
 - `ativo`: indica se a conta pode acessar funções autenticadas.
 - `criado_em`, `atualizado_em`: datas de controle.
@@ -15,13 +15,14 @@ Representa uma pessoa que consulta o sistema e, quando autenticada, pode enviar 
 Regras:
 
 - O e-mail deve ser único.
-- Qualquer conta ativa e autenticada pode enviar contribuição.
-- Apenas moderadores podem decidir sobre contribuições.
-- Apenas administradores podem cadastrar ou alterar publicações institucionais.
+- Qualquer usuário ativo e autenticado pode enviar contribuições.
+- Moderadores e administradores podem decidir sobre contribuições.
+- Apenas administradores podem criar usuários com perfil administrativo.
+- Usuários administrativos podem ser preparados por seed ou cadastro inicial no banco.
 
 ## Curso
 
-Agrupa disciplinas e organiza filtros acadêmicos.
+Agrupa disciplinas e organiza a consulta da Base de Conhecimento.
 
 - `id`: identificador único.
 - `nome`: nome do curso.
@@ -30,7 +31,7 @@ Agrupa disciplinas e organiza filtros acadêmicos.
 
 ## Disciplina
 
-Unidade curricular vinculada a um curso.
+Unidade curricular pertencente a um curso.
 
 - `id`: identificador único.
 - `curso_id`: referência ao curso.
@@ -50,10 +51,16 @@ Material publicado na Base de Conhecimento.
 - `tipo`: `resumo`, `dica`, `dificuldade`, `prova`, `implementacao` ou `link`.
 - `titulo`: título do conteúdo.
 - `corpo_ou_url`: texto ou endereço do material.
-- `autor_id`: usuário responsável, quando aplicável.
-- `origem`: fonte ou explicação de autoria.
-- `estado`: conteúdo publicado ou arquivado.
+- `autor_id`: usuário responsável pela publicação.
+- `origem`: fonte ou explicação de autoria, quando informada.
+- `estado`: `publicado` ou `arquivado`.
 - `criado_em`, `atualizado_em`: datas de controle.
+
+Regras:
+
+- Apenas conteúdos publicados aparecem na consulta pública.
+- Usuários não podem publicar ou alterar conteúdos diretamente.
+- A publicação ou atualização ocorre por aprovação de uma contribuição.
 
 ## Contribuição
 
@@ -61,10 +68,12 @@ Proposta de criação ou alteração de conteúdo acadêmico.
 
 - `id`: identificador único.
 - `autor_id`: usuário autenticado que enviou a proposta.
-- `conteudo_id`: conteúdo relacionado quando a proposta for uma alteração.
+- `conteudo_id`: conteúdo relacionado quando a proposta for uma alteração; nulo quando for criação.
 - `disciplina_id`: disciplina da proposta.
 - `tipo`: tipo de conteúdo proposto.
-- `payload`: dados submetidos para análise.
+- `titulo`: título proposto.
+- `corpo_ou_url`: texto ou endereço proposto.
+- `origem`: fonte ou explicação de autoria, quando informada.
 - `estado`: `pendente`, `ajustes`, `rejeitada`, `aprovada` ou `arquivada`.
 - `justificativa_moderacao`: justificativa opcional da decisão.
 - `criado_em`, `atualizado_em`: datas de controle.
@@ -79,64 +88,13 @@ pendente -> arquivada
 ajustes -> pendente
 ```
 
-Uma contribuição aprovada cria ou atualiza o conteúdo acadêmico correspondente.
-
-## Fonte institucional
-
-Canal oficial utilizado pelo administrador como origem de publicações.
-
-- `id`: identificador único.
-- `nome`: nome da fonte.
-- `unidade_responsavel`: órgão ou unidade da UnB.
-- `url_base`: endereço principal.
-- `estado`: `ativa`, `pausada` ou `indisponivel`.
-- `ultima_verificacao`: data da última consulta conhecida.
-
-## Publicação institucional
-
-Edital, aviso ou comunicado cadastrado manualmente por um administrador.
-
-- `id`: identificador único.
-- `fonte_id`: fonte oficial relacionada.
-- `titulo`: título da publicação.
-- `resumo`: resumo apresentado no portal.
-- `categoria`: edital, bolsa, monitoria, auxílio, processo seletivo, evento ou comunicado.
-- `unidade_responsavel`: unidade que publicou a informação.
-- `curso_id`: curso relacionado, quando aplicável.
-- `url_oficial`: endereço da fonte original.
-- `publicado_em`: data de publicação.
-- `prazo_inicio`, `prazo_fim`: datas do prazo, quando informadas.
-- `estado`: `ativa`, `nao_verificada` ou `sem_prazo`.
-- `ultima_verificacao`: data da última consulta da fonte.
-- `criado_em`, `atualizado_em`: datas de controle.
-
-Regras:
-
-- Uma publicação deve manter sua fonte oficial quando disponível.
-- O estado `nao_verificada` deve ser visível para o usuário.
-- O estado `sem_prazo` deve ser visível para o usuário.
-- Apenas administradores podem criar ou alterar registros.
-
-## Denúncia
-
-Relato de problema em uma publicação ou conteúdo.
-
-- `id`: identificador único.
-- `autor_id`: usuário que realizou o relato, quando autenticado.
-- `publicacao_id`: publicação relacionada, quando aplicável.
-- `conteudo_id`: conteúdo relacionado, quando aplicável.
-- `tipo`: erro, duplicidade, link quebrado ou desatualização.
-- `descricao`: explicação do problema.
-- `estado`: `aberta`, `em_analise`, `resolvida` ou `descartada`.
-- `criada_em`, `atualizada_em`: datas de controle.
+Uma contribuição aprovada sem `conteudo_id` cria um conteúdo publicado. Uma contribuição aprovada com `conteudo_id` atualiza o conteúdo correspondente.
 
 ## Relacionamentos principais
 
 - `Curso 1:N Disciplina`.
 - `Disciplina 1:N Conteúdo acadêmico`.
+- `Usuário 1:N Conteúdo acadêmico`.
 - `Usuário 1:N Contribuição`.
 - `Disciplina 1:N Contribuição`.
-- `Fonte institucional 1:N Publicação institucional`.
-- `Usuário 1:N Denúncia`.
-- `Publicação institucional 1:N Denúncia`.
-- `Conteúdo acadêmico 1:N Denúncia`.
+- `Conteúdo acadêmico 1:N Contribuição` quando a contribuição representa alteração.
