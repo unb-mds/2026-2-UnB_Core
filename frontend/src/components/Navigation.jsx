@@ -1,7 +1,7 @@
 import './ui/ui.css'
 import { logout, useAuth } from '../state/auth'
 
-function Navigation({ active = 'editais', onNavigate }) {
+function Navigation({ active = 'conhecimento', onNavigate }) {
   const { isAuthenticated, user } = useAuth()
 
   function handleNavigate(event, path) {

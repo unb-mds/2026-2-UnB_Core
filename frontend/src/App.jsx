@@ -5,18 +5,11 @@ import ContribuicaoPage from './pages/ContribuicaoPage'
 import GuiaContribuicaoPage from './pages/GuiaContribuicaoPage'
 import MinhasContribuicoesPage from './pages/MinhasContribuicoesPage'
 import LoginPage from './pages/LoginPage'
-import PublicacaoDetalhePage from './pages/PublicacaoDetalhePage'
-import PublicacoesPage from './pages/PublicacoesPage'
 import ModeracaoPage from './pages/ModeracaoPage'
 import AdminUsuariosPage from './pages/AdminUsuariosPage'
 
 function getRoute() {
   const path = window.location.pathname.replace(/\/$/, '') || '/'
-  const detailMatch = path.match(/^\/editais\/(\d+)$/)
-
-  if (detailMatch) {
-    return { name: 'publication-detail', id: detailMatch[1] }
-  }
 
   if (path === '/base-de-conhecimentos') {
     return { name: 'knowledge' }
@@ -68,10 +61,6 @@ function App() {
   function navigate(path) {
     window.history.pushState({}, '', path)
     setRoute(getRoute())
-  }
-
-  if (route.name === 'publication-detail') {
-    return <PublicacaoDetalhePage publicationId={route.id} onBack={() => navigate('/editais')} onNavigate={navigate} />
   }
 
   if (route.name === 'knowledge') {
