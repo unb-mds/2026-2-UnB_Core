@@ -4,42 +4,25 @@ Base path: `/api/v1`
 Formato: JSON  
 Datas: ISO 8601
 
-## Publicações institucionais
+## Autenticação
 
-### `GET /publicacoes`
+### `POST /auth/cadastro`
 
-Lista publicações para consulta pública.
+Cria a própria conta com nome, e-mail único e senha.
 
-Query parameters opcionais: `termo`, `categoria`, `unidade` e `estado`.
+### `POST /auth/login`
 
-Resposta `200`:
+Autentica o usuário e retorna um token de acesso. Senhas não aparecem em respostas ou erros.
 
-```json
-{
-  "itens": [
-    {
-      "id": 1,
-      "titulo": "Edital de exemplo",
-      "resumo": "Resumo da publicação",
-      "categoria": "edital",
-      "unidade_responsavel": "Unidade da UnB",
-      "url_oficial": "https://exemplo.unb.br/edital",
-      "estado": "ativa",
-      "prazo_fim": "2026-12-20T23:59:00Z"
-    }
-  ]
-}
-```
+### `GET /auth/me`
 
-### `GET /publicacoes/{id}`
+Retorna os dados públicos do usuário autenticado.
 
-Retorna detalhes, `url_oficial`, estado quando disponível e aviso de que a fonte oficial prevalece em caso de divergência.
+## Cursos, disciplinas e conteúdos
 
-### `POST /publicacoes`
+### `GET /cursos`
 
-Cria um edital manualmente. Requer perfil `administrador` e `url_oficial`.
-
-## Base acadêmica
+Lista cursos ativos para consulta pública.
 
 ### `GET /cursos/{curso_id}/disciplinas`
 
@@ -49,25 +32,13 @@ Lista disciplinas ativas de um curso.
 
 Lista conteúdos publicados de uma disciplina. Pode receber `tipo` como filtro.
 
-### `GET /search`
+Tipos aceitos: `resumo`, `dica`, `dificuldade`, `prova`, `implementacao` e `link`.
 
-Busca conteúdos acadêmicos publicados. A integração com editais fica fora da Release 2:
+O `curso_id` é definido pela navegação anterior em `GET /cursos/{curso_id}/disciplinas`; a API deve rejeitar a consulta se a disciplina não pertencer ao curso selecionado no fluxo do cliente.
 
-```json
-{
-  "conteudos_academicos": []
-}
-```
+### `GET /conteudos/{conteudo_id}`
 
-## Autenticação
-
-### `POST /auth/cadastro`
-
-Cria a própria conta do estudante com nome, e-mail único e senha.
-
-### `POST /auth/login`
-
-Autentica o usuário e retorna a sessão ou token de acesso. Senhas não aparecem em respostas ou erros.
+Retorna os detalhes de um conteúdo publicado, incluindo disciplina, tipo, autoria ou origem e data de atualização.
 
 ## Contribuições
 
@@ -75,15 +46,36 @@ Autentica o usuário e retorna a sessão ou token de acesso. Senhas não aparece
 
 Cria uma contribuição para o usuário autenticado. O estado inicial é sempre `pendente`.
 
+Corpo:
+
+```json
+{
+  "disciplina_id": 1,
+  "conteudo_id": null,
+  "tipo": "resumo",
+  "titulo": "Resumo da unidade 1",
+  "corpo_ou_url": "Texto enviado pelo estudante",
+  "origem": "Anotações próprias"
+}
+```
+
+`autor_id` e `estado` são definidos pelo servidor.
+
 ### `GET /contribuicoes/minhas`
 
-Lista as contribuições do usuário autenticado com estado e justificativa de moderação, quando houver.
+Lista as contribuições do usuário autenticado com estado e justificativa de moderação.
 
-Uma contribuição sem `conteudo_id` representa criação de conteúdo; com `conteudo_id`, representa alteração.
+## Moderação
+
+### `GET /moderacao/contribuicoes`
+
+Lista contribuições pendentes ou em revisão. Requer perfil `moderador` ou `administrador`.
 
 ### `POST /moderacao/contribuicoes/{id}/decisao`
 
-Registra uma decisão de moderador. Corpo esperado:
+Registra uma decisão de moderação. Requer perfil `moderador` ou `administrador`.
+
+Corpo:
 
 ```json
 {
@@ -94,11 +86,31 @@ Registra uma decisão de moderador. Corpo esperado:
 
 Decisões aceitas: `aprovar`, `ajustes`, `rejeitar`, `arquivar`.
 
-## Relatos acadêmicos
+Transições aceitas:
 
-Relatos sobre conteúdos acadêmicos não fazem parte das rotas institucionais de editais.
-Quando implementados, exigirão autenticação, tipo e descrição e serão restritos à análise
-de moderadores e administradores.
+- `pendente` -> `aprovada`, `ajustes`, `rejeitada` ou `arquivada`;
+- `ajustes` -> `pendente`.
+
+As demais transições devem ser rejeitadas sem alterar a contribuição.
+
+Ao aprovar:
+
+- sem `conteudo_id`: cria um conteúdo publicado;
+- com `conteudo_id`: atualiza o conteúdo correspondente.
+
+## Administração de usuários
+
+### `GET /usuarios`
+
+Lista usuários para administração. Requer perfil `administrador`.
+
+### `POST /usuarios`
+
+Cria um usuário com perfil `usuario`, `moderador` ou `administrador`. Requer perfil `administrador`.
+
+### `PATCH /usuarios/{id}`
+
+Atualiza perfil ou estado ativo de um usuário. Requer perfil `administrador`.
 
 ## Erros
 

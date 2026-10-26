@@ -1,8 +1,8 @@
 import './ui/ui.css'
 import { logout, useAuth } from '../state/auth'
 
-function Navigation({ active = 'editais', onNavigate }) {
-  const { isAuthenticated } = useAuth()
+function Navigation({ active = 'conhecimento', onNavigate }) {
+  const { isAuthenticated, user } = useAuth()
 
   function handleNavigate(event, path) {
     if (!onNavigate) {
@@ -26,20 +26,22 @@ function Navigation({ active = 'editais', onNavigate }) {
         >
           Base de conhecimento
         </a>
-        <a
-          className={active === 'editais' ? 'topbar__link--active' : ''}
-          href="/editais"
-          aria-current={active === 'editais' ? 'page' : undefined}
-          onClick={(event) => handleNavigate(event, '/editais')}
-        >
-          Editais
-        </a>
         <a href="/contribuicao" onClick={(event) => handleNavigate(event, '/contribuicao')}>
           Contribuir
         </a>
         <a href="/minhas-contribuicoes" onClick={(event) => handleNavigate(event, '/minhas-contribuicoes')}>
           Minhas contribuições
         </a>
+        {isAuthenticated && (
+          <a href="/moderacao" onClick={(event) => handleNavigate(event, '/moderacao')}>
+            Moderação
+          </a>
+        )}
+        {user?.perfil === 'administrador' && (
+          <a href="/admin/usuarios" onClick={(event) => handleNavigate(event, '/admin/usuarios')}>
+            Usuários
+          </a>
+        )}
         {isAuthenticated ? (
           <>
             <a

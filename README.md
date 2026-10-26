@@ -1,9 +1,9 @@
 # UNB CORE
  
-Plataforma que centraliza informações acadêmicas e institucionais da Universidade de Brasília (UnB), combinando duas frentes:
+Plataforma acadêmica colaborativa da Universidade de Brasília (UnB), com conteúdos organizados por curso e disciplina e contribuições submetidas à moderação.
  
-1. **Base de conhecimento colaborativa** resumos, dicas, dificuldades comuns e materiais organizados por curso e disciplina.
-2. **Central de editais e avisos** publicações oficiais da UnB reunidas em um só lugar, com transparência sobre origem e data de atualização.
+1. **Base de conhecimento acadêmica** com resumos, dicas, dificuldades, provas, implementações e links.
+2. **Contribuições moderadas** enviadas por usuários autenticados e revisadas por moderadores ou administradores.
 Projeto desenvolvido para a disciplina de **Métodos de Desenvolvimento de Software (MDS) - 2026/2**, Universidade de Brasília.
 
 ## Status do projeto
@@ -58,11 +58,11 @@ Projeto desenvolvido para a disciplina de **Métodos de Desenvolvimento de Softw
 - `Figma Storymap:` https://www.figma.com/board/qmgPv7RFMwdFjr0kqOzTag/Welcome-to-FigJam?node-id=1-2&t=QFJpQxSbXNEcukDx-1
 - `Figma do Protótipo de Alta Fidelidade (Frontend):` https://www.figma.com/site/wV4UDTWGMPOiqpO7Ik9ErA/UnB_Core?node-id=23-665&t=vpy0So2nUZVnKKSz-1
 
-## Stack planejada
+## Stack
  
 - **Back-end**: Python (FastAPI)
 - **Front-end**: JavaScript (React)
-- **Banco de dados**: PostgreSQL 
+- **Banco de dados**: SQLite no desenvolvimento e no MVP
  
 ## Como rodar localmente
 
@@ -83,7 +83,7 @@ py -m venv .venv
 python -m pip install -r backend\requirements.txt
 ```
 
-Usando PostgreSQL. Configure as variáveis obrigatórias na mesma janela do PowerShell:
+Configure uma chave local para os tokens na mesma janela do PowerShell:
 
 ```powershell
 $env:DATABASE_URL = "postgresql+psycopg2://USUARIO:SENHA@localhost:5432/NOME_DO_BANCO"
@@ -106,16 +106,34 @@ http://127.0.0.1:8000/docs
 
 No Swagger UI:
 
-1. Execute `POST /usuario/cadastro` para criar um usuário.
-2. Execute `POST /usuario/login` com o mesmo e-mail e senha.
+1. Execute `POST /api/v1/auth/cadastro` para criar um usuário.
+2. Execute `POST /api/v1/auth/login` com o mesmo e-mail e senha.
 3. Copie o valor de `access_token` da resposta.
 4. Clique em **Authorize**, informe `Bearer <access_token>` e confirme.
-5. Execute `GET /usuario/me` para testar uma rota autenticada.
+5. Execute `GET /api/v1/auth/me` para testar uma rota autenticada.
 
-O usuário precisa estar ativo para acessar `/usuario/me`. No cadastro atual,
+O usuário precisa estar ativo para acessar `/api/v1/auth/me`. No cadastro atual,
 envie `"ativo": true` no corpo da requisição. Para parar o servidor, pressione
 `Ctrl+C` no terminal.
  
+### Frontend
+
+Em outro terminal, execute:
+
+```powershell
+cd frontend
+npm install
+npm run dev
+```
+
+Comandos de qualidade do frontend:
+
+```powershell
+npm run build
+npm run lint
+npm test
+```
+
 ## Contribuindo
  
 Consulte o guia de contribuição do grupo (em construção) antes de abrir uma Pull Request. Issues e o quadro de tarefas do projeto refletem o progresso das sprints.

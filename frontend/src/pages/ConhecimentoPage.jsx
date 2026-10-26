@@ -19,7 +19,8 @@ const contentTypes = [
   { value: 'link', label: 'Links úteis' },
 ]
 
-function ConhecimentoPage({ courses = [{ id: '1', nome: 'Engenharia de Software' }], onContribute = () => {}, onNavigate }) {
+function ConhecimentoPage({ onContribute = () => {}, onNavigate }) {
+  const [courses, setCourses] = useState([])
   const [selectedCourseId, setSelectedCourseId] = useState('')
   const [selectedDisciplineId, setSelectedDisciplineId] = useState('')
   const [selectedType, setSelectedType] = useState('')
@@ -28,6 +29,21 @@ function ConhecimentoPage({ courses = [{ id: '1', nome: 'Engenharia de Software'
   const [selectedContent, setSelectedContent] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
+
+  useEffect(() => {
+    const controller = new AbortController()
+
+    api
+      .get('/cursos', { signal: controller.signal })
+      .then((response) => setCourses(response?.itens || response?.cursos || []))
+      .catch((requestError) => {
+        if (requestError.name !== 'AbortError') {
+          setError(requestError instanceof ApiError ? requestError.message : 'Não foi possível carregar os cursos.')
+        }
+      })
+
+    return () => controller.abort()
+  }, [])
 
   useEffect(() => {
     if (!selectedCourseId) {

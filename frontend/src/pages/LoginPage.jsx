@@ -15,7 +15,7 @@ function LoginPage({ onNavigate }) {
     try {
       const session = await api.post('/usuario/login', { email: form.email, senha: form.senha })
       login(session)
-      onNavigate('/editais')
+      onNavigate('/base-de-conhecimentos')
     } catch (requestError) {
       setError(requestError instanceof ApiError ? requestError.message : 'Não foi possível entrar na conta.')
       throw requestError
