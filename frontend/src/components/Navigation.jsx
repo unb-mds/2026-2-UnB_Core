@@ -26,20 +26,17 @@ function Navigation({ active = 'editais', onNavigate }) {
         >
           Base de conhecimento
         </a>
-        <a
-          className={active === 'editais' ? 'topbar__link--active' : ''}
-          href="/editais"
-          aria-current={active === 'editais' ? 'page' : undefined}
-          onClick={(event) => handleNavigate(event, '/editais')}
-        >
-          Editais
-        </a>
         <a href="/contribuicao" onClick={(event) => handleNavigate(event, '/contribuicao')}>
           Contribuir
         </a>
         <a href="/minhas-contribuicoes" onClick={(event) => handleNavigate(event, '/minhas-contribuicoes')}>
           Minhas contribuições
         </a>
+        {isAuthenticated && (
+          <a href="/moderacao" onClick={(event) => handleNavigate(event, '/moderacao')}>
+            Moderação
+          </a>
+        )}
         {isAuthenticated ? (
           <>
             <a

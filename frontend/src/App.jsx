@@ -7,6 +7,7 @@ import MinhasContribuicoesPage from './pages/MinhasContribuicoesPage'
 import LoginPage from './pages/LoginPage'
 import PublicacaoDetalhePage from './pages/PublicacaoDetalhePage'
 import PublicacoesPage from './pages/PublicacoesPage'
+import ModeracaoPage from './pages/ModeracaoPage'
 
 function getRoute() {
   const path = window.location.pathname.replace(/\/$/, '') || '/'
@@ -40,7 +41,11 @@ function getRoute() {
     return { name: 'my-contributions' }
   }
 
-  return { name: 'publications' }
+  if (path === '/moderacao') {
+    return { name: 'moderation' }
+  }
+
+  return { name: 'knowledge' }
 }
 
 function App() {
@@ -88,7 +93,11 @@ function App() {
     return <MinhasContribuicoesPage onNavigate={navigate} />
   }
 
-  return <PublicacoesPage onSelectPublication={(publication) => navigate(`/editais/${publication.id}`)} onNavigate={navigate} />
+  if (route.name === 'moderation') {
+    return <ModeracaoPage onNavigate={navigate} />
+  }
+
+  return <ConhecimentoPage onNavigate={navigate} onContribute={() => navigate('/contribuicao')} />
 }
 
 export default App
