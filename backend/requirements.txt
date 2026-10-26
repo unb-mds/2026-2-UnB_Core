@@ -6,3 +6,5 @@ bcrypt==4.3.0
 PyJWT
 email-validator
 psycopg2-binary
+pytest
+httpx
