@@ -17,7 +17,7 @@ Regras:
 - O e-mail deve ser único.
 - Qualquer conta ativa e autenticada pode enviar contribuição.
 - Apenas moderadores podem decidir sobre contribuições.
-- Apenas administradores podem cadastrar ou alterar publicações institucionais.
+- Apenas administradores podem cadastrar manualmente editais.
 
 ## Curso
 
@@ -81,49 +81,34 @@ ajustes -> pendente
 
 Uma contribuição aprovada cria ou atualiza o conteúdo acadêmico correspondente.
 
-## Fonte institucional
-
-Canal oficial utilizado pelo administrador como origem de publicações.
-
-- `id`: identificador único.
-- `nome`: nome da fonte.
-- `unidade_responsavel`: órgão ou unidade da UnB.
-- `url_base`: endereço principal.
-- `estado`: `ativa`, `pausada` ou `indisponivel`.
-- `ultima_verificacao`: data da última consulta conhecida.
-
 ## Publicação institucional
 
-Edital, aviso ou comunicado cadastrado manualmente por um administrador.
+Edital cadastrado manualmente por um administrador para consulta e direcionamento à fonte oficial.
 
 - `id`: identificador único.
-- `fonte_id`: fonte oficial relacionada.
 - `titulo`: título da publicação.
 - `resumo`: resumo apresentado no portal.
-- `categoria`: edital, bolsa, monitoria, auxílio, processo seletivo, evento ou comunicado.
+- `curso_id : curso relacionado ao edital(opcional)
+- `categoria`: categoria do edital, quando disponível.
 - `unidade_responsavel`: unidade que publicou a informação.
-- `curso_id`: curso relacionado, quando aplicável.
 - `url_oficial`: endereço da fonte original.
 - `publicado_em`: data de publicação.
-- `prazo_inicio`, `prazo_fim`: datas do prazo, quando informadas.
-- `estado`: `ativa`, `nao_verificada` ou `sem_prazo`.
-- `ultima_verificacao`: data da última consulta da fonte.
-- `criado_em`, `atualizado_em`: datas de controle.
+- `prazo_fim`: data final do prazo, quando informada.
+- `estado`: estado ativa ou inativa,quando informado.
 
 Regras:
 
-- Uma publicação deve manter sua fonte oficial quando disponível.
-- O estado `nao_verificada` deve ser visível para o usuário.
-- O estado `sem_prazo` deve ser visível para o usuário.
-- Apenas administradores podem criar ou alterar registros.
+- Todo edital deve manter a `url_oficial` para consulta da fonte original.
+- A plataforma deve informar que a fonte oficial prevalece em caso de divergência.
+- A ausência de prazo não impede a consulta do edital.
+- Apenas administradores podem criar registros na Release 2.
 
-## Denúncia
+## Denuncia
 
-Relato de problema em uma publicação ou conteúdo.
+Relato autenticado de problema relacionado a um conteúdo acadêmico.
 
 - `id`: identificador único.
 - `autor_id`: usuário que realizou o relato, quando autenticado.
-- `publicacao_id`: publicação relacionada, quando aplicável.
 - `conteudo_id`: conteúdo relacionado, quando aplicável.
 - `tipo`: erro, duplicidade, link quebrado ou desatualização.
 - `descricao`: explicação do problema.
@@ -136,7 +121,5 @@ Relato de problema em uma publicação ou conteúdo.
 - `Disciplina 1:N Conteúdo acadêmico`.
 - `Usuário 1:N Contribuição`.
 - `Disciplina 1:N Contribuição`.
-- `Fonte institucional 1:N Publicação institucional`.
-- `Usuário 1:N Denúncia`.
-- `Publicação institucional 1:N Denúncia`.
-- `Conteúdo acadêmico 1:N Denúncia`.
+- `Usuário 1:N Relato acadêmico`.
+- `Conteúdo acadêmico 1:N Relato acadêmico`.

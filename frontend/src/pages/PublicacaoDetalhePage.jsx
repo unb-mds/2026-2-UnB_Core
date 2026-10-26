@@ -35,7 +35,7 @@ function PublicacaoDetalhePage({ publicationId, publication: initialPublication,
     const controller = new AbortController()
 
     api
-      .get(`/publicacoes/${publicationId}`, { signal: controller.signal })
+      .get(`/api/v1/publicacoes/${publicationId}`, { signal: controller.signal })
       .then((response) => setPublication(response))
       .catch((requestError) => {
         if (requestError.name !== 'AbortError') {

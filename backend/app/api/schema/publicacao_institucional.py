@@ -1,14 +1,15 @@
 from datetime import datetime, timezone
 from fastapi import APIRouter, HTTPException, Depends
 from pydantic import field_validator, HttpUrl
-from sqlmodel import SQLModel, Field, AutoString,Session, create_engine,select,Relationship
+from sqlmodel import SQLModel, Field, AutoString, Session
 #session
 from backend.app.db import get_session
+from backend.app.api.schema.usuario import Usuario, verificar_admin
 
 publicacao_router = APIRouter()
 def verificar_fonte_oficial(value : HttpUrl) -> str:
     if not value or  value == "/":
-        return "sem fonte"
+        raise HTTPException(status_code=422 ,detail="Url_oficial é parametro obrigatorio")
     else :
         return str(value)
 
@@ -16,14 +17,12 @@ def verificar_fonte_oficial(value : HttpUrl) -> str:
 
 
 class PublicacaoInstitucionalBase(SQLModel):
-    fonte_id: int
     titulo: str
     resumo: str
-    categoria: str
+    categoria : str
     unidade_responsavel: str
     curso_id: int | None = None
     estado: str = Field(default="ativa")
-    prazo_inicio: datetime | None = Field(default=None)
     prazo_fim: datetime | None = Field(default=None)
 
 
@@ -34,11 +33,8 @@ class PublicacaoInstitucionalBase(SQLModel):
             return "ativa"
         estados_permitidos = [
             "ativa",
-            "encerrada",
-            "cancelada",
-            "desatualizada",
-            "nao_verificada",
-            "sem_prazo",
+            "inativa",
+            "Sem informação"
         ]
 
         if valor not in estados_permitidos:
@@ -48,19 +44,12 @@ class PublicacaoInstitucionalBase(SQLModel):
 
         return valor
 
-
-
-
-
-
-
 class PublicacaoInstitucional(
     PublicacaoInstitucionalBase,
     table=True,
 ):
     publicacao_id: int | None = Field(default=None, primary_key=True)
     publicado_em: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-    ultima_verificacao: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     url_oficial: str
 
     @property
@@ -74,14 +63,13 @@ class PublicacaoInstitucional(
     
 
 class PublicacaoInstitucionalCreate(PublicacaoInstitucionalBase):
-    url_oficial: HttpUrl = Field(default=None, unique=True, index=True, sa_type=AutoString)
+    url_oficial: HttpUrl = Field(unique=True, index=True, sa_type=AutoString)
 
 
 class PublicacaoInstitucionalGet(PublicacaoInstitucionalBase):
     publicacao_id: int
     url_oficial: str | None = None
     publicado_em: datetime | None = None
-    ultima_verificacao: datetime | None = None
     aviso: str = "Atenção os dados aqui não substituem a fonte oficial"
 
     @property
@@ -89,28 +77,47 @@ class PublicacaoInstitucionalGet(PublicacaoInstitucionalBase):
         return self.publicacao_id
 
 
-
-@publicacao_router.get("/{publicacao_id}",response_model=PublicacaoInstitucionalGet)
-async def get_publicacao(publicacao_id: int, session : Session = Depends(get_session)):
-
-    publicacaoProcurar = session.get(PublicacaoInstitucional,publicacao_id)
-    if not publicacaoProcurar:
-        raise HTTPException(status_code=404,
-                                detail=f"publicação com Id {publicacao_id} não existe")
-    publicacao = PublicacaoInstitucionalGet.model_validate(publicacaoProcurar)
-
-    return publicacao
-
-@publicacao_router.get("/",response_model=list[PublicacaoInstitucionalGet])
-async def get_lista_publicacao(session : Session = Depends(get_session)):
-    publicacao = select(PublicacaoInstitucional)
-    lista_publicacao = session.exec(publicacao).all()
-    return lista_publicacao
+class PublicacaoInstitucionalLista(SQLModel):
+    itens: list[PublicacaoInstitucionalGet]
 
 
 
-@publicacao_router.post("/criar")
-async def post_publicacao(publicacao: PublicacaoInstitucionalCreate,session : Session = Depends(get_session)):
+@publicacao_router.get("/{id}", response_model=PublicacaoInstitucionalGet)
+def get_publicacao(id: int, session: Session = Depends(get_session)):
+    from backend.app.services.publicacao_service import detalhar_publicacao
+
+    return detalhar_publicacao(id, session)
+
+@publicacao_router.get("", response_model=PublicacaoInstitucionalLista)
+def get_lista_publicacao(
+    session: Session = Depends(get_session),
+    *,
+    termo: str | None = None,
+    categoria: str | None = None,
+    unidade: str | None = None,
+    curso_id: int | None = None,
+    estado: str | None = None,
+    prazo_fim: str | None = None,
+):
+    from backend.app.services.publicacao_service import listar_publicacoes
+
+    return {
+        "itens": listar_publicacoes(
+            session,
+            termo=termo,
+            categoria=categoria,
+            unidade=unidade,
+            curso_id=curso_id,
+            estado=estado,
+            prazo_fim=prazo_fim,
+        )
+    }
+
+
+
+@publicacao_router.post("")
+def post_publicacao(publicacao: PublicacaoInstitucionalCreate,session : Session = Depends(get_session),
+                          admin : Usuario = Depends(verificar_admin)):
     publicacao = publicacao.model_dump()
     publicacao["url_oficial"] = str(publicacao["url_oficial"])
     if not publicacao:

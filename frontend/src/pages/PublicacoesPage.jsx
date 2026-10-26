@@ -100,7 +100,7 @@ function PublicacoesPage({ onSelectPublication = () => {}, onNavigate }) {
     })
 
     api
-      .get(`/publicacoes${searchParams.toString() ? `?${searchParams}` : ''}`, {
+      .get(`/api/v1/publicacoes${searchParams.toString() ? `?${searchParams}` : ''}`, {
         signal: controller.signal,
       })
       .then((response) => setPublicacoes(response?.itens || []))

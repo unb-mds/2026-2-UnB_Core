@@ -8,7 +8,7 @@
 
 ## Summary
 
-O UNB CORE será uma aplicação web acadêmica com consulta pública da Base de Conhecimento e da Central de Editais e Avisos. O MVP terá uma API FastAPI em Python, persistência local com SQLite via SQLModel e uma interface React. Contribuições exigirão autenticação e permanecerão pendentes até a moderação; publicações institucionais serão cadastradas manualmente por administradores.
+O UNB CORE será uma aplicação web acadêmica com a Base de Conhecimento colaborativa como foco principal e uma Central de Editais complementar. A Release 2 terá uma API FastAPI em Python, uma interface React e persistência em PostgreSQL com SQLModel. Contribuições exigirão autenticação e permanecerão pendentes até a moderação; editais serão cadastrados manualmente por administradores e sempre manterão a `url_oficial`.
 
 ## Technical Context
 
@@ -22,7 +22,7 @@ O UNB CORE será uma aplicação web acadêmica com consulta pública da Base de
 
 **Primary Dependencies**: FastAPI, Pydantic, SQLModel, Uvicorn, React e um cliente HTTP para a interface
 
-**Storage**: SQLite no desenvolvimento e MVP; PostgreSQL fica previsto apenas para uma migração posterior
+**Storage**: PostgreSQL como banco da Release 2; SQLite pode ser usado apenas em testes locais isolados
 
 **Testing**: pytest para regras e API; testes de integração para fluxos principais; testes de interface ficam limitados aos fluxos críticos do MVP
 
@@ -32,9 +32,9 @@ O UNB CORE será uma aplicação web acadêmica com consulta pública da Base de
 
 **Performance Goals**: Não há metas específicas de desempenho no escopo acadêmico do MVP
 
-**Constraints**: Leitura pública sem autenticação; escrita protegida por autenticação e perfil; publicação institucional manual; contribuições sempre passam por moderação
+**Constraints**: Leitura pública sem autenticação; escrita protegida por autenticação e perfil; editais somente para cadastro manual e consulta; `url_oficial` obrigatória; contribuições sempre passam por moderação
 
-**Scale/Scope**: MVP acadêmico focado inicialmente em Engenharia de Software, com dois espaços públicos, autenticação, contribuições e administração básica
+**Scale/Scope**: Release 2 focada inicialmente em Engenharia de Software, com consulta acadêmica, autenticação, contribuições, moderação e uma consulta básica de editais
 
 ## Constitution Check
 

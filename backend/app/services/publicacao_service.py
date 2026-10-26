@@ -1,38 +1,40 @@
 from datetime import datetime
 from typing import Literal
 
-from fastapi import HTTPException, status
+from fastapi import HTTPException, status,Depends
 from sqlmodel import Session, select
+from backend.app.db import get_session
+
 
 from ..api.schema.publicacao_institucional import (
     PublicacaoInstitucional,
     PublicacaoInstitucionalGet,
 )
 
-PrazoFiltro = Literal["aberto", "encerrado", "sem_prazo"]
-PRAZOS_PERMITIDOS = {"aberto", "encerrado", "sem_prazo"}
+PrazoFiltro = Literal[  "ativa",
+                        "inativa",
+                        "Sem informação"]
+PRAZOS_PERMITIDOS = { "ativa",
+                      "inativa",
+                      "Sem informação"}
 
 
-def _contains(value: str) -> str: #não tenho certeza do porquê, mas o agente recomenda adicionar isso
-    escaped_value = value.replace("\\", "\\\\").replace("%", "\\%").replace(
-        "_", "\\_"
-    )
-    return f"%{escaped_value}%"
+ 
 
 
 def listar_publicacoes(
-    session: Session,
+    session: Session = Depends(get_session),
     *,
     termo: str | None = None,
     categoria: str | None = None,
     unidade: str | None = None,
     curso_id: int | None = None,
     estado: str | None = None,
-    prazo: PrazoFiltro | None = None,
+    prazo_fim: PrazoFiltro | None = None,
     agora: datetime | None = None,
 ) -> list[PublicacaoInstitucional]:
 
-    if prazo is not None and prazo not in PRAZOS_PERMITIDOS:
+    if prazo_fim is not None and prazo_fim not in PRAZOS_PERMITIDOS:
         permitidos = ", ".join(sorted(PRAZOS_PERMITIDOS))
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
@@ -69,25 +71,14 @@ def listar_publicacoes(
     if estado and estado.strip():
         pesquisa = pesquisa.where(PublicacaoInstitucional.estado.ilike(estado.strip()))
 
-    if prazo is not None:
+    if prazo_fim is not None:
         referencia = agora or datetime.now()
-        sem_datas = (
-            PublicacaoInstitucional.prazo_inicio.is_(None)
-            & PublicacaoInstitucional.prazo_fim.is_(None)
-        )
 
-        if prazo == "sem_prazo":
+        if prazo_fim == "Sem informação":
+            pesquisa = pesquisa.where(PublicacaoInstitucional.prazo_fim.is_(None))
+        elif prazo_fim == "ativa":
             pesquisa = pesquisa.where(
-                (PublicacaoInstitucional.estado == "sem_prazo") | sem_datas
-            )
-        elif prazo == "aberto":
-            pesquisa = pesquisa.where(
-                ~sem_datas
-                & (PublicacaoInstitucional.estado != "sem_prazo")
-                & (
-                    PublicacaoInstitucional.prazo_inicio.is_(None)
-                    | (PublicacaoInstitucional.prazo_inicio <= referencia)
-                )
+                (PublicacaoInstitucional.estado == "ativa")
                 & (
                     PublicacaoInstitucional.prazo_fim.is_(None)
                     | (PublicacaoInstitucional.prazo_fim >= referencia)
@@ -95,9 +86,9 @@ def listar_publicacoes(
             )
         else:
             pesquisa = pesquisa.where(
-                (PublicacaoInstitucional.estado == "encerrada")
+                (PublicacaoInstitucional.estado == "inativa")
                 | (
-                    (PublicacaoInstitucional.estado != "sem_prazo")
+                    PublicacaoInstitucional.prazo_fim.is_not(None)
                     & (PublicacaoInstitucional.prazo_fim < referencia)
                 )
             )
@@ -106,8 +97,14 @@ def listar_publicacoes(
     return list(session.exec(pesquisa).all())
 
 
+def _contains(value: str) -> str:
+    escaped = value.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+    return f"%{escaped}%"
+
+
 def detalhar_publicacao(
-    session: Session, publicacao_id: int
+    publicacao_id : int,
+    session: Session = Depends(get_session)
 ) -> PublicacaoInstitucionalGet:
     publicacao = session.get(PublicacaoInstitucional, publicacao_id)
     if publicacao is None:

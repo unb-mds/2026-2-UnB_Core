@@ -29,7 +29,7 @@ class UsuarioBase(SQLModel):
     nome : str
     #perfil : str  movi para a classe Usuario
     status : str = Field(default="Offline")
-    ativo : bool = Field(default = False)
+    ativo : bool = Field(default = True)
     @field_validator("status")
     def validate_status(cls,v):
         permitido = ["Online","Offline","Aparecer Offline","Ausente"]
@@ -93,6 +93,14 @@ router_usuario = APIRouter(prefix="/usuario")
 #nome autoexplicatorio
 def verificar_admin_moderador(usuario : get_current_user = Depends(get_usuario),session : Session = Depends(get_session)):
     if usuario.perfil == "administrador" or usuario.perfil == "moderador":
+        return usuario
+    else:
+        raise HTTPException(status_code=403,
+                        detail=f"{usuario.nome} não tem permição para acessar essa pagina")
+
+#mesmo que o de cima so que retorna apenas o administrador
+def verificar_admin(usuario : get_current_user = Depends(get_usuario),session : Session = Depends(get_session)):
+    if usuario.perfil == "administrador":
         return usuario
     else:
         raise HTTPException(status_code=403,

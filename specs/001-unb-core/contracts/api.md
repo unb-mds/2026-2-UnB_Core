@@ -10,7 +10,7 @@ Datas: ISO 8601
 
 Lista publicações para consulta pública.
 
-Query parameters opcionais: `termo`, `categoria`, `unidade`, `curso_id`, `estado` e `prazo`.
+Query parameters opcionais: `termo`, `categoria`, `unidade` e `estado`.
 
 Resposta `200`:
 
@@ -25,7 +25,7 @@ Resposta `200`:
       "unidade_responsavel": "Unidade da UnB",
       "url_oficial": "https://exemplo.unb.br/edital",
       "estado": "ativa",
-      "ultima_verificacao": "2026-09-09T10:00:00Z"
+      "prazo_fim": "2026-12-20T23:59:00Z"
     }
   ]
 }
@@ -33,39 +33,11 @@ Resposta `200`:
 
 ### `GET /publicacoes/{id}`
 
-Retorna detalhes, fonte, estado, datas e aviso de que o canal oficial prevalece em caso de divergência.
+Retorna detalhes, `url_oficial`, estado quando disponível e aviso de que a fonte oficial prevalece em caso de divergência.
 
 ### `POST /publicacoes`
 
-Cria uma publicação manualmente. Requer perfil `administrador`.
-
-### `PATCH /publicacoes/{id}`
-
-Atualiza classificação, estado, datas, resumo ou data de verificação. Requer perfil `administrador`.
-
-### `GET /fontes`
-
-Lista fontes institucionais cadastradas. Requer perfil `administrador`.
-
-### `POST /fontes`
-
-Cadastra uma fonte institucional. Requer perfil `administrador`.
-
-### `GET /categorias`
-
-Lista categorias disponíveis para publicações e conteúdos.
-
-### `POST /categorias`
-
-Cadastra uma categoria. Requer perfil `administrador`.
-
-### `POST /disciplinas`
-
-Cadastra uma disciplina vinculada a um curso. Requer perfil `administrador`.
-
-### `PATCH /disciplinas/{id}`
-
-Atualiza nome, código ou estado de uma disciplina. Requer perfil `administrador`.
+Cria um edital manualmente. Requer perfil `administrador` e `url_oficial`.
 
 ## Base acadêmica
 
@@ -79,12 +51,11 @@ Lista conteúdos publicados de uma disciplina. Pode receber `tipo` como filtro.
 
 ### `GET /search`
 
-Busca unificada em conteúdos acadêmicos e publicações institucionais. A resposta separa os dois grupos:
+Busca conteúdos acadêmicos publicados. A integração com editais fica fora da Release 2:
 
 ```json
 {
-  "conteudos_academicos": [],
-  "publicacoes_institucionais": []
+  "conteudos_academicos": []
 }
 ```
 
@@ -123,19 +94,11 @@ Registra uma decisão de moderador. Corpo esperado:
 
 Decisões aceitas: `aprovar`, `ajustes`, `rejeitar`, `arquivar`.
 
-## Denúncias
+## Relatos acadêmicos
 
-### `POST /publicacoes/{id}/denuncias`
-
-Registra uma denúncia autenticada com tipo e descrição.
-
-### `GET /denuncias`
-
-Lista denúncias para moderadores e administradores.
-
-### `PATCH /denuncias/{id}`
-
-Atualiza o estado de uma denúncia. Requer perfil `moderador` ou `administrador`.
+Relatos sobre conteúdos acadêmicos não fazem parte das rotas institucionais de editais.
+Quando implementados, exigirão autenticação, tipo e descrição e serão restritos à análise
+de moderadores e administradores.
 
 ## Erros
 
@@ -151,4 +114,4 @@ Formato comum:
 }
 ```
 
-Códigos mínimos: `VALIDACAO`, `NAO_ENCONTRADO`, `NAO_AUTENTICADO`, `PERMISSAO_NEGADA`, `FONTE_INDISPONIVEL` e `ERRO_INTERNO`.
+Códigos mínimos: `VALIDACAO`, `NAO_ENCONTRADO`, `NAO_AUTENTICADO`, `PERMISSAO_NEGADA` e `ERRO_INTERNO`.

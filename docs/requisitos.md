@@ -11,7 +11,7 @@
 O UNB CORE é uma plataforma de informações acadêmicas e institucionais da Universidade de Brasília (UnB). O sistema reúne dois espaços principais:
 
 1. **Base de Conhecimento:** materiais, resumos, dicas e experiências organizadas por curso e disciplina.
-2. **Central de Editais e Avisos:** publicações oficiais da UnB reunidas e organizadas em um único local.
+2. **Central de Editais:** publicações oficiais da UnB reunidas e organizadas em um único local.
 
 O objetivo é reduzir a dispersão do conhecimento acadêmico e facilitar o acesso a comunicados e oportunidades institucionais. O foco inicial da Base de Conhecimento será o curso de Engenharia de Software, com possibilidade de expansão para outros cursos.
 
@@ -28,14 +28,13 @@ A plataforma será um agregador de informações e não substituirá os canais o
 ### 3.1 Incluído no escopo
 
 - Consulta pública de conteúdos acadêmicos.
-- Consulta pública de editais, avisos e comunicados.
+- Consulta pública de editais cadastrados manualmente.
 - Organização por curso, disciplina, categoria e unidade responsável.
 - Busca e filtros para localizar informações.
 - Envio de contribuições acadêmicas.
 - Revisão e moderação das contribuições antes da publicação.
-- Registro da fonte e da data de verificação de publicações institucionais.
-- Relato de problemas em publicações, como duplicidade, link quebrado ou desatualização.
-- Cadastro de usuários para envio de contribuições e registro de denúncias.
+- Registro da URL oficial e aviso sobre o estado do edital quando essa informação estiver disponível.
+- Cadastro de usuários para envio de contribuições e registro de relatos sobre conteúdos acadêmicos.
 
 ### 3.2 Fora do escopo inicial
 
@@ -50,7 +49,7 @@ A plataforma será um agregador de informações e não substituirá os canais o
 
 ### RF-001 - Navegação principal
 
-O sistema deve apresentar acesso separado para a Base de Conhecimento e para a Central de Editais e Avisos.
+O sistema deve apresentar acesso separado para a Base de Conhecimento e para a Central de Editais.
 
 ### RF-002 - Organização acadêmica
 
@@ -60,85 +59,87 @@ O sistema deve permitir navegar por curso, disciplina e tipo de conteúdo.
 
 O sistema deve exibir, para cada conteúdo acadêmico publicado, a disciplina, o tipo, a autoria ou origem e a data de atualização.
 
-### RF-004 - Busca unificada
+### RF-004 - Busca acadêmica
 
-O sistema deve permitir pesquisar na Base de Conhecimento e na Central de Editais e Avisos, diferenciando claramente os resultados de cada espaço.
+O sistema deve permitir pesquisar conteúdos publicados na Base de Conhecimento.
+A integração da busca com os editais poderá ser tratada como evolução futura.
 
 ### RF-005 - Cadastro de publicações oficiais
 
-O sistema deve registrar editais, avisos e comunicados com título, resumo, fonte original, unidade responsável e endereço oficial de acesso.
+O sistema deve registrar editais cadastrados manualmente com título, resumo, categoria,
+unidade responsável e endereço oficial de acesso (`url_oficial`).
 
 ### RF-006 - Categorização institucional
 
-O sistema deve permitir classificar publicações por categoria, unidade responsável, curso relacionado e datas relevantes.
+O sistema deve permitir classificar editais por categoria e unidade responsável,
+mantendo, quando disponível, o curso relacionado e o prazo informado na fonte oficial.
 
-### RF-007 - Data de verificação
+### RF-007 - Contribuições acadêmicas
 
-O sistema deve exibir a data da última verificação ou atualização conhecida de cada publicação institucional.
-
-### RF-008 - Relato de problemas
-
-O sistema deve exigir autenticação para registrar relatos de erro, duplicidade, link quebrado ou desatualização, vinculando cada denúncia ao usuário que a criou.
-
-### RF-009 - Contribuições acadêmicas
-
-Somente usuários autenticados, considerados colaboradores, podem enviar contribuições associadas a curso, disciplina e tipo de conteúdo.
+Somente usuários autenticados, podem enviar contribuições associadas a curso, disciplina e tipo de conteúdo.
 
 O sistema deve exigir curso, disciplina, tipo e conteúdo ou URL. O vínculo com um conteúdo existente será informado somente em alterações.
 
-### RF-010 - Revisão de contribuições
+### RF-008 - Revisão de contribuições
 
 Novas contribuições ou alterações devem permanecer pendentes até a revisão de um moderador autorizado.
 
-### RF-011 - Moderação
+### RF-009 - Moderação
 
 Moderadores devem poder aprovar, rejeitar, arquivar ou devolver contribuições para ajustes. As decisões devem preservar uma justificativa quando informada.
 
-### RF-012 - Guia de contribuição
+### RF-010 - Guia de contribuição
 
 O sistema deve disponibilizar orientações sobre qualidade, escopo permitido, autoria e referência das fontes.
 
-### RF-013 - Acesso público
+### RF-011 - Acesso público
 
 A consulta básica de conteúdos e publicações deve estar disponível sem autenticação.
 
-### RF-014 - Administração
+### RF-012 - Administração
 
-Administradores devem possuir recursos para gerenciar publicações, fontes, categorias e disciplinas. Moderadores podem analisar contribuições e denúncias; administradores também podem executar essas ações.
+Administradores devem poder cadastrar manualmente editais e gerenciar informações acadêmicas
+conforme suas permissões. Moderadores podem analisar contribuições e relatos relacionados
+ao conteúdo acadêmico; administradores também podem executar essas ações.
 
-### RF-015 - Rastreabilidade
+### RF-013 - Rastreabilidade
 
 O sistema deve preservar a origem de cada informação e o vínculo com a fonte oficial ou com o colaborador responsável.
 
-### RF-016 - Tratamento de falhas
+### RF-014 - Tratamento de falhas
 
-Falhas de verificação devem ser identificadas explicitamente, sem remover silenciosamente informações relevantes. Documentos oficiais não pesquisáveis devem manter o link para consulta externa.
+O sistema deve informar que os dados dos editais são apenas agregados e manter a
+`url_oficial` para confirmação das informações diretamente na fonte oficial da UnB.
 
-### RF-017 - Permissões
+### RF-015 - Permissões
 
 O sistema deve impedir que usuários sem autorização publiquem ou alterem diretamente conteúdos moderados.
 
-### RF-018 - Mensagens de estado
+### RF-016 - Mensagens de estado
 
 O sistema deve apresentar mensagens que informem a causa do problema e, quando aplicável, orientem como corrigi-lo ou tentar novamente.
 
-### RF-019 - Cadastro de conta
+### RF-017 - Cadastro de conta
 
 O sistema deve permitir que estudantes criem a própria conta com nome, e-mail único e senha.
 
-### RF-020 - Cadastro de publicações
+### RF-018 - Cadastro de publicações
 
-Somente administradores podem cadastrar ou alterar publicações institucionais. O cadastro deve exigir título, resumo, categoria, unidade responsável e fonte oficial.
+Somente administradores podem cadastrar manualmente editais. O cadastro deve exigir
+título, resumo, categoria, unidade responsável e `url_oficial`.
 
-### RF-021 - Filtros e estados institucionais
+### RF-019 - Filtros e estados institucionais
 
-O filtro por termo deve pesquisar título e resumo. Categoria, unidade, curso, estado e prazo devem filtrar os respectivos campos.
+A consulta de editais deve permitir busca por título ou resumo e, quando disponível,
+filtragem por categoria, unidade responsável e estado. O prazo final pode ser exibido
+quando informado na fonte oficial.
 
-Publicações sem prazo devem ser identificadas como `sem_prazo` e essa condição deve ser informada ao usuário. Fontes não verificadas devem ser identificadas claramente.
 
-### RF-022 - Validação de dados
 
-O sistema deve rejeitar cadastros incompletos antes de criar registros parciais, informando os campos ausentes. Denúncias devem exigir tipo e descrição.
+### RF-020 - Validação de dados
+
+O sistema deve rejeitar cadastros incompletos antes de criar registros parciais,
+informando os campos ausentes. Relatos sobre conteúdos acadêmicos devem exigir tipo e descrição.
 
 ## 5. Requisitos não funcionais
 
@@ -148,7 +149,9 @@ O sistema deve diferenciar os perfis de usuário, moderador e administrador. Qua
 
 ### RNF-002 - Privacidade
 
-O sistema deve coletar somente os dados necessários para conta, autoria, denúncias e moderação. Senhas não podem aparecer em respostas, mensagens de erro ou registros de operação.
+O sistema deve coletar somente os dados necessários para conta, autoria, relatos
+acadêmicos e moderação. Senhas não podem aparecer em respostas, mensagens de erro
+ou registros de operação.
 
 ### RNF-003 - Acessibilidade
 
@@ -160,7 +163,8 @@ O MVP deve considerar os principais navegadores desktop atuais e as versões mó
 
 ### RNF-005 - Confiabilidade da informação
 
-Toda publicação institucional deve manter a origem, o estado de verificação, a data da última verificação e o link para a fonte oficial quando disponível.
+Todo edital deve manter a `url_oficial` e informar o estado quando essa informação
+estiver disponível. A fonte oficial da UnB prevalece em caso de divergência.
 
 ### RNF-006 - Manutenibilidade
 
@@ -176,10 +180,10 @@ Não fazem parte deste projeto metas de desempenho, capacidade, escalabilidade o
 
 ### Cenário 1: Encontrar um edital
 
-1. O estudante acessa a Central de Editais e Avisos.
-2. Filtra por categoria, unidade, curso ou prazo.
+1. O estudante acessa a Central de Editais.
+2. Consulta a lista ou filtra por categoria e unidade, quando esses dados estiverem disponíveis.
 3. Abre uma publicação relevante.
-4. Consulta o resumo, o prazo, o estado, a data de verificação e a fonte oficial.
+4. Consulta o resumo, o estado e a fonte oficial.
 5. Acessa o canal oficial para obter a informação definitiva.
 
 ### Cenário 2: Consultar uma disciplina
@@ -201,21 +205,20 @@ Não fazem parte deste projeto metas de desempenho, capacidade, escalabilidade o
 ## 7. Casos de exceção
 
 - Fonte oficial temporariamente indisponível.
-- Publicação duplicada em fontes diferentes.
-- Edital sem prazo informado.
-- Documento oficial em formato não pesquisável.
 - Contribuição com material sem fonte, ofensivo ou potencialmente protegido.
 - Formulário enviado sem informações obrigatórias.
 - Busca sem resultados.
 - Usuário tentando acessar uma função sem permissão.
 - Cadastro de conta com e-mail já utilizado.
-- Denúncia enviada sem autenticação, tipo ou descrição.
+- Relato sobre conteúdo acadêmico enviado sem autenticação, tipo ou descrição.
 
 ## 8. Entidades principais
 
 ### Usuário
 
-Pessoa que consulta informações e pode criar uma conta. Usuários autenticados podem enviar contribuições e denúncias; moderadores e administradores possuem permissões adicionais.
+Pessoa que consulta informações e pode criar uma conta. Usuários autenticados podem enviar
+contribuições e relatos sobre conteúdos acadêmicos; moderadores e administradores possuem
+permissões adicionais.
 
 ### Curso
 
@@ -233,17 +236,16 @@ Material publicado na Base de Conhecimento, como resumo, dica, dificuldade, prov
 
 Proposta de criação ou alteração de conteúdo acadêmico, mantida pendente até a decisão da moderação.
 
-### Fonte institucional
-
-Canal oficial monitorado pela equipe responsável pelo cadastro das publicações.
-
 ### Publicação institucional
 
-Edital, aviso ou comunicado que possui fonte, unidade responsável, categoria, datas, estado e link oficial. Estados previstos: ativa, não verificada e sem prazo.
+Edital cadastrado manualmente, com título, resumo, categoria, unidade responsável e
+link oficial. O estado pode ser informado quando disponível; a `url_oficial` é mantida
+para consulta da fonte original da UnB.
 
 ### Denúncia
 
-Relato autenticado de problema em uma publicação ou conteúdo, com tipo, descrição e estado de análise.
+Relato autenticado de problema relacionado a um conteúdo acadêmico, com tipo,
+descrição e estado de análise.
 
 ## 9. Arquitetura e tecnologias definidas
 
@@ -251,25 +253,24 @@ A solução será desenvolvida como uma aplicação web simples, adequada ao esc
 
 - **Front-end:** HTML, CSS e JavaScript, utilizando React para os componentes e páginas da interface.
 - **Back-end:** Python utilizando FastAPI para disponibilizar as funcionalidades do sistema.
-- **Banco de dados inicial:** SQLite, por ser adequado ao desenvolvimento local e à fase inicial do projeto.
-- **Banco de dados posterior:** PostgreSQL, caso o projeto avance para uma etapa que exija essa migração.
+- **Banco de dados:** PostgreSQL, junto com SQLModel para criação dos schemas.
 - **Autenticação:** cadastro e login locais, sem integração com login institucional da UnB no MVP.
-- **Cadastro institucional:** publicações serão inseridas manualmente por administradores a partir de fontes oficiais.
-- **Fontes iniciais:** Reitoria, decanatos, institutos, faculdades, coordenações e canais oficiais relacionados ao SEI.
+- **Cadastro institucional:** editais serão inseridos manualmente por administradores a partir de fontes oficiais, mantendo a `url_oficial`.
 - **Organização:** separação entre interface, regras do sistema, persistência de dados e testes.
 
-As decisões sobre autenticação, fontes institucionais prioritárias, hospedagem e armazenamento de arquivos ainda serão definidas pela equipe conforme a necessidade do projeto.
+As decisões sobre hospedagem e armazenamento de arquivos ainda serão definidas pela
+equipe conforme a necessidade do projeto.
 
 ## 10. Critérios de validação
 
 - Usuários conseguem consultar a Base de Conhecimento e a Central de Editais sem autenticação.
-- A busca diferencia resultados acadêmicos e institucionais.
-- Publicações exibem fonte oficial, unidade responsável, estado e data de verificação quando essas informações estiverem disponíveis.
+- Editais exibem título, resumo, categoria, unidade responsável e `url_oficial`.
+- A plataforma informa que os editais são referências agregadas e que a fonte oficial da UnB prevalece.
 - Contribuições novas permanecem pendentes até uma decisão de moderação.
 - Cada decisão de moderação altera o estado esperado da contribuição.
 - Usuários comuns não acessam operações de moderação ou administração.
-- Publicações sem prazo ou sem verificação são identificadas corretamente.
-- Relatos autenticados de problemas são registrados para análise.
+- O prazo final do edital é exibido quando informado na fonte oficial.
+- Relatos autenticados sobre conteúdos acadêmicos são registrados para análise.
 - O sistema apresenta a causa e uma orientação quando ocorre uma falha, quando aplicável.
 - A navegação principal pode ser realizada por teclado.
 

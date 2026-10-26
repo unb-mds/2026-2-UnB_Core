@@ -12,7 +12,7 @@
 cd backend
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
-pip install fastapi uvicorn sqlmodel pydantic[email] pytest httpx
+python -m pip install -r backend\requirements.txt
 ```
 
 Quando a aplicação estiver criada, iniciar o servidor com:
@@ -35,15 +35,15 @@ A URL exibida pelo comando deverá abrir a interface pública.
 
 ## Cenários de validação
 
-### 1. Consulta pública institucional
+### 1. Consulta pública de editais
 
-1. Cadastrar uma publicação de demonstração como administrador.
-2. Abrir a Central de Editais e Avisos sem login.
-3. Filtrar por categoria ou unidade.
+1. Cadastrar manualmente um edital de demonstração como administrador.
+2. Abrir a Central de Editais sem login.
+3. Filtrar por categoria ou unidade, quando disponíveis.
 4. Abrir os detalhes.
-5. Confirmar título, resumo, fonte oficial, estado e data de verificação.
+5. Confirmar título, resumo, estado quando disponível e `url_oficial`.
 
-Resultado esperado: a publicação aparece com a origem oficial e informa quando não foi verificada.
+Resultado esperado: o edital aparece como referência agregada e permite acessar a fonte oficial.
 
 ### 2. Consulta acadêmica
 
@@ -72,7 +72,7 @@ Resultado esperado: a contribuição válida fica pendente; dados incompletos pr
 3. Solicitar ajustes ou aprovar a contribuição.
 4. Confirmar o novo estado e a justificativa.
 5. Repetir a tentativa com usuário comum.
-6. Tentar cadastrar uma publicação com usuário não administrador.
+6. Tentar cadastrar um edital com usuário não administrador.
 
 Resultado esperado: decisões autorizadas alteram o estado; operações não autorizadas são negadas.
 

@@ -4,7 +4,7 @@
 
 **Created**: 2026-09-09
 
-**Status**: Draft
+**Status**: Revisado para a Release 2
 
 **Input**: User description: "Criar uma plataforma acadêmica e institucional para estudantes da UnB, reunindo uma base de conhecimento colaborativa e uma central de editais e avisos oficiais."
 
@@ -14,25 +14,25 @@
 
 - Q: Quem deve poder enviar contribuições acadêmicas para revisão? → A: Somente usuários previamente cadastrados como colaboradores.
 - Q: Como um usuário deve se tornar um colaborador cadastrado? → A: Qualquer usuário autenticado é automaticamente colaborador.
-- Q: Quem deve poder cadastrar e alterar editais, avisos e comunicados institucionais? → A: Somente administradores podem cadastrar e alterar publicações.
+- Q: Quem deve poder cadastrar editais na Release 2? → A: Somente administradores podem cadastrar manualmente editais.
 - Q: Como um estudante deve criar uma conta para acessar as funções autenticadas? → A: O estudante cria a própria conta.
-- Q: Como as publicações institucionais devem ser inseridas no sistema no MVP? → A: Administradores cadastram manualmente as publicações a partir das fontes oficiais.
+- Q: Como as publicações institucionais devem ser inseridas no MVP? → A: Administradores cadastram manualmente editais resumidos, sempre mantendo a `url_oficial` para consulta da fonte original.
 
 ## User Scenarios & Testing
 
-### User Story 1 - Consultar editais e avisos oficiais (Priority: P1)
+### User Story 1 - Consultar editais (Priority: P2)
 
-Como estudante da UnB, quero encontrar editais, avisos e comunicados oficiais organizados em um só lugar, para consultar oportunidades e acessar a fonte oficial da informação.
+Como estudante da UnB, quero encontrar editais cadastrados manualmente em um só lugar, para consultar um resumo e acessar a fonte oficial da informação.
 
-**Why this priority**: É uma das finalidades centrais do produto e atende diretamente à necessidade de reduzir a dispersão dos comunicados institucionais.
+**Why this priority**: O módulo institucional preserva o diferencial do produto, mas tem escopo complementar ao Tamburetei na Release 2.
 
-**Independent Test**: Pode ser testada cadastrando publicações de exemplo, filtrando por categoria ou unidade e verificando se os detalhes e a fonte oficial são exibidos.
+**Independent Test**: Pode ser testada cadastrando editais de exemplo, filtrando por categoria ou unidade e verificando se o resumo e a `url_oficial` são exibidos.
 
 **Acceptance Scenarios**:
 
-1. **Given** que existem publicações cadastradas, **When** o estudante acessa a Central de Editais e Avisos, **Then** ele visualiza uma lista organizada de publicações.
-2. **Given** que uma publicação possui fonte oficial, **When** o estudante abre seus detalhes, **Then** ele visualiza o resumo, a unidade responsável, as datas, o estado e o link oficial.
-3. **Given** que uma fonte oficial está indisponível ou não foi verificada, **When** o estudante consulta a publicação, **Then** essa limitação é informada claramente.
+1. **Given** que existem editais cadastrados, **When** o estudante acessa a Central de Editais, **Then** ele visualiza uma lista organizada.
+2. **Given** que um edital possui `url_oficial`, **When** o estudante abre seus detalhes, **Then** ele visualiza o resumo, a unidade responsável, o estado quando disponível e o link oficial.
+3. **Given** que o edital pode estar desatualizado, **When** o estudante consulta seus detalhes, **Then** o sistema informa que a fonte oficial prevalece.
 
 ---
 
@@ -74,9 +74,9 @@ Como usuário autenticado, quero enviar uma contribuição associada a um curso,
 
 ### User Story 4 - Moderar conteúdos e administrar informações (Priority: P2)
 
-Como moderador ou administrador, quero revisar contribuições, gerenciar publicações e tratar relatos de problemas, para preservar a qualidade e a confiabilidade das informações.
+Como moderador ou administrador, quero revisar contribuições acadêmicas e cadastrar editais básicos, para preservar a qualidade do conteúdo e direcionar usuários às fontes oficiais.
 
-**Why this priority**: A moderação é necessária para que os conteúdos compartilhados não sejam publicados sem revisão e para manter a transparência das publicações institucionais.
+**Why this priority**: A moderação é necessária para que conteúdos compartilhados não sejam publicados sem revisão; os editais da Release 2 serão apenas registros manuais de consulta.
 
 **Independent Test**: Pode ser testada com perfis autorizados e não autorizados, verificando decisões de moderação, justificativas e bloqueio de operações indevidas.
 
@@ -85,17 +85,14 @@ Como moderador ou administrador, quero revisar contribuições, gerenciar public
 1. **Given** que existe uma contribuição pendente, **When** um moderador aprova, rejeita, arquiva ou solicita ajustes, **Then** o estado da contribuição é atualizado conforme a decisão.
 2. **Given** que uma decisão exige explicação, **When** o moderador registra a decisão, **Then** a justificativa fica vinculada à contribuição.
 3. **Given** que um usuário comum tenta acessar uma operação de moderação, **When** ele realiza a tentativa, **Then** o acesso é negado.
-4. **Given** que existe um relato de duplicidade, link quebrado ou desatualização, **When** um administrador consulta os relatos, **Then** ele consegue encaminhar o problema para análise.
-5. **Given** que um usuário não é administrador, **When** ele tenta cadastrar ou alterar uma publicação institucional, **Then** o acesso é negado.
-6. **Given** que um administrador consulta uma fonte oficial, **When** ele cadastra uma publicação, **Then** a publicação é registrada com a origem e os dados disponíveis da fonte.
-7. **Given** que um moderador consulta uma contribuição ou denúncia, **When** ele realiza uma decisão permitida, **Then** somente o registro correspondente é alterado.
+4. **Given** que um usuário não é administrador, **When** ele tenta cadastrar um edital, **Then** o acesso é negado.
+5. **Given** que um administrador consulta uma fonte oficial, **When** ele cadastra um edital, **Then** o registro mantém o resumo e a `url_oficial`.
+6. **Given** que um moderador consulta uma contribuição, **When** ele realiza uma decisão permitida, **Then** somente o registro correspondente é alterado.
 
 ### Edge Cases
 
-- Uma fonte oficial pode ficar temporariamente indisponível.
-- Uma publicação pode aparecer em mais de uma fonte.
 - Um edital pode não informar prazo.
-- Um documento oficial pode não permitir pesquisa direta em seu conteúdo.
+- A fonte oficial pode conter informações mais atuais que o resumo armazenado.
 - Uma contribuição pode não possuir fonte, conter material ofensivo ou utilizar material potencialmente protegido.
 - Uma busca pode não retornar resultados.
 - Um usuário pode tentar acessar uma função sem a permissão necessária.
@@ -104,37 +101,31 @@ Como moderador ou administrador, quero revisar contribuições, gerenciar public
 
 ### Functional Requirements
 
-- **FR-001**: O sistema MUST apresentar acesso separado para a Base de Conhecimento e para a Central de Editais e Avisos.
+- **FR-001**: O sistema MUST apresentar acesso separado para a Base de Conhecimento e para a Central de Editais.
 - **FR-002**: O sistema MUST permitir navegar por curso, disciplina e tipo de conteúdo.
-- **FR-003**: O sistema MUST permitir consultar publicações institucionais por categoria, unidade, curso relacionado e datas relevantes.
-- **FR-004**: O sistema MUST permitir pesquisar na Base de Conhecimento e na Central de Editais e Avisos, diferenciando os resultados.
-- **FR-005**: O sistema MUST exibir a origem, a unidade responsável, o estado e a data de verificação das publicações quando essas informações estiverem disponíveis.
-- **FR-006**: O sistema MUST exigir autenticação para registrar relatos de erro, duplicidade, link quebrado ou desatualização, vinculando cada denúncia ao usuário que a criou.
-- **FR-007**: O sistema MUST permitir que somente usuários autenticados, considerados colaboradores, enviem contribuições associadas a curso, disciplina e tipo de conteúdo.
-- **FR-008**: O sistema MUST manter novas contribuições pendentes até a revisão de um moderador autorizado.
-- **FR-009**: O sistema MUST permitir que moderadores aprovem, rejeitem, arquivem ou devolvam contribuições para ajustes.
-- **FR-010**: O sistema MUST preservar a justificativa das decisões de moderação quando ela for registrada.
-- **FR-011**: O sistema MUST disponibilizar orientações sobre qualidade, escopo permitido, autoria e fontes para a primeira contribuição.
-- **FR-012**: A consulta básica de conteúdos e publicações MUST estar disponível sem autenticação.
-- **FR-013**: O sistema MUST impedir que usuários sem autorização publiquem ou alterem diretamente conteúdos moderados.
-- **FR-014**: O sistema MUST apresentar mensagens compreensíveis para estados vazios, falhas de fonte, erros de acesso e envios incompletos.
-- **FR-015**: O sistema MUST preservar o vínculo de cada informação com sua fonte oficial ou com o colaborador responsável.
-- **FR-016**: O sistema MUST permitir que somente administradores cadastrem ou alterem publicações institucionais.
-- **FR-017**: O sistema MUST permitir que estudantes criem a própria conta para acessar as funções autenticadas.
-- **FR-018**: O sistema MUST permitir que administradores cadastrem manualmente publicações consultadas em fontes oficiais no MVP.
-- **FR-019**: O sistema MUST exigir título, resumo, categoria, unidade responsável e fonte oficial para cadastrar uma publicação institucional.
-- **FR-020**: O sistema MUST exigir curso, disciplina, tipo e conteúdo ou URL para enviar uma contribuição; `conteudo_id` será informado somente quando a contribuição alterar conteúdo existente.
-- **FR-021**: O sistema MUST interpretar o filtro `termo` como busca em título e resumo; `categoria`, `unidade`, `curso_id`, `estado` e `prazo` devem filtrar pelos campos correspondentes.
-- **FR-022**: O sistema MUST representar publicações sem prazo como `sem_prazo` e informar essa condição ao usuário.
-- **FR-023**: O sistema MUST informar quando um documento oficial não puder ser pesquisado diretamente, mantendo o link para consulta externa.
-- **FR-024**: O sistema MUST permitir que moderadores analisem contribuições e denúncias, enquanto administradores podem executar essas ações e também gerenciar publicações institucionais, fontes, categorias e disciplinas.
-- **FR-025**: O sistema MUST rejeitar o cadastro de publicação ou contribuição incompleto antes de criar um registro parcial, informando os campos ausentes.
-- **FR-026**: O sistema MUST oferecer nomes acessíveis, foco visível e navegação por teclado nos fluxos principais de consulta, busca, contribuição e moderação.
-- **FR-027**: O MVP deve considerar os principais navegadores desktop atuais e as versões móveis atuais de Chrome e Safari, sem exigir suporte a versões antigas específicas.
-- **FR-028**: O sistema MUST exigir nome, e-mail e senha para criar uma conta, e-mail único para cada conta.
-- **FR-029**: O sistema MUST exigir tipo e descrição para registrar uma denúncia.
-- **FR-030**: O sistema MUST impedir que senhas apareçam em respostas da API, mensagens de erro ou registros de operação.
-- **FR-031**: O sistema MUST apresentar nas mensagens de erro a causa do problema e, quando aplicável, a orientação para corrigi-lo ou tentar novamente.
+- **FR-003**: O sistema MUST permitir consultar editais por categoria e unidade responsável, quando esses dados estiverem disponíveis.
+- **FR-004**: O sistema MUST permitir pesquisar conteúdos da Base de Conhecimento; a busca institucional integrada fica fora da Release 2.
+- **FR-005**: O sistema MUST exibir o resumo, a unidade responsável, o estado quando disponível e a `url_oficial` de cada edital.
+- **FR-006**: O sistema MUST permitir que somente usuários autenticados enviem contribuições acadêmicas.
+- **FR-007**: O sistema MUST manter novas contribuições pendentes até a revisão de um moderador autorizado.
+- **FR-008**: O sistema MUST permitir que moderadores aprovem, rejeitem, arquivem ou devolvam contribuições para ajustes.
+- **FR-009**: O sistema MUST preservar a justificativa das decisões de moderação quando ela for registrada.
+- **FR-010**: O sistema MUST disponibilizar orientações sobre qualidade, escopo permitido, autoria e fontes para a primeira contribuição.
+- **FR-011**: A consulta básica de conteúdos e editais MUST estar disponível sem autenticação.
+- **FR-012**: O sistema MUST impedir que usuários sem autorização publiquem ou alterem diretamente conteúdos moderados.
+- **FR-013**: O sistema MUST apresentar mensagens compreensíveis para estados vazios, erros de acesso e envios incompletos.
+- **FR-014**: O sistema MUST preservar o vínculo de cada informação acadêmica com o colaborador responsável e cada edital com sua `url_oficial`.
+- **FR-015**: O sistema MUST permitir que somente administradores cadastrem manualmente editais.
+- **FR-016**: O sistema MUST permitir que estudantes criem a própria conta para acessar as funções autenticadas.
+- **FR-017**: O sistema MUST exigir título, resumo, categoria, unidade responsável e `url_oficial` para cadastrar um edital.
+- **FR-018**: O sistema MUST exigir curso, disciplina, tipo e conteúdo ou URL para enviar uma contribuição; `conteudo_id` será informado somente quando a contribuição alterar conteúdo existente.
+- **FR-019**: O sistema MUST permitir busca de editais por título ou resumo e filtros por categoria, unidade e estado quando disponíveis.
+- **FR-020**: O sistema MUST rejeitar o cadastro de edital ou contribuição incompleto antes de criar um registro parcial, informando os campos ausentes.
+- **FR-021**: O sistema MUST oferecer nomes acessíveis, foco visível e navegação por teclado nos fluxos principais de consulta, busca, contribuição e moderação.
+- **FR-022**: O MVP deve considerar os principais navegadores desktop atuais e as versões móveis atuais de Chrome e Safari, sem exigir suporte a versões antigas específicas.
+- **FR-023**: O sistema MUST exigir nome, e-mail e senha para criar uma conta, com e-mail único para cada conta.
+- **FR-024**: O sistema MUST impedir que senhas apareçam em respostas da API, mensagens de erro ou registros de operação.
+- **FR-025**: O sistema MUST apresentar nas mensagens de erro a causa do problema e, quando aplicável, a orientação para corrigi-lo ou tentar novamente.
 
 ### Key Entities
 
@@ -143,20 +134,19 @@ Como moderador ou administrador, quero revisar contribuições, gerenciar public
 - **Disciplina**: unidade curricular pertencente a um curso.
 - **Conteúdo acadêmico**: material publicado na Base de Conhecimento, como resumo, dica, dificuldade, prova, implementação ou link.
 - **Contribuição**: proposta de criação ou alteração de conteúdo acadêmico que passa por estados de revisão.
-- **Fonte institucional**: canal oficial relacionado a publicações da UnB.
-- **Publicação institucional**: edital, aviso ou comunicado com origem, unidade, categoria, datas, estado e link oficial. Fontes iniciais incluem Reitoria, decanatos, institutos, faculdades, coordenações e canais oficiais relacionados ao SEI.
-- **Denúncia**: relato de problema em uma publicação ou conteúdo, encaminhado para análise.
+- **Publicação institucional**: edital cadastrado manualmente com título, resumo, categoria, unidade responsável, estado quando disponível e `url_oficial`.
+- **Relato acadêmico**: relato autenticado de problema relacionado a um conteúdo acadêmico, encaminhado para análise.
 
 ## Success Criteria
 
 ### Measurable Outcomes
 
-- **SC-001**: Em uma demonstração, um estudante consegue encontrar uma publicação institucional usando busca ou filtros e acessar sua fonte oficial.
+- **SC-001**: Em uma demonstração, um estudante consegue encontrar um edital usando lista ou filtros básicos e acessar sua fonte oficial.
 - **SC-002**: Em uma demonstração, um estudante consegue localizar conteúdos de uma disciplina selecionando curso, disciplina e categoria.
 - **SC-003**: 100% das contribuições enviadas durante os testes permanecem pendentes até uma decisão de moderação.
 - **SC-004**: 100% das decisões de moderação realizadas durante os testes resultam no estado correspondente e preservam a justificativa quando informada.
 - **SC-005**: Usuários sem permissão não conseguem executar operações de moderação ou administração durante os testes.
-- **SC-006**: Publicações sem verificação são identificadas claramente nos testes de consulta.
+- **SC-006**: Os editais exibem a `url_oficial` e informam que a fonte oficial prevalece em caso de divergência.
 - **SC-007**: Os fluxos principais de consulta, busca e envio de contribuição podem ser realizados por teclado.
 
 ## Assumptions
@@ -164,11 +154,11 @@ Como moderador ou administrador, quero revisar contribuições, gerenciar public
 - O foco inicial da Base de Conhecimento será Engenharia de Software.
 - A consulta pública não exige autenticação.
 - A publicação de contribuições depende de revisão humana.
-- A Central de Editais e Avisos manterá um link para a fonte oficial sempre que ele estiver disponível.
-- Denúncias exigem autenticação no MVP; cadastro de conta, verificação de e-mail e recuperação de senha ficam fora do escopo inicial.
+- A Central de Editais manterá a `url_oficial` para consulta da fonte original da UnB.
+- Relatos acadêmicos exigem autenticação no MVP; cadastro de conta, verificação de e-mail e recuperação de senha ficam fora do escopo inicial.
 - O sistema será desenvolvido como projeto acadêmico de escopo reduzido, sem metas de desempenho, capacidade ou infraestrutura avançada.
-- Autenticação, fontes institucionais prioritárias e hospedagem serão detalhadas durante o planejamento técnico, sem alterar os fluxos principais desta especificação.
+- Hospedagem será detalhada durante o planejamento técnico, sem alterar os fluxos principais desta especificação.
 - Qualquer usuário autenticado será considerado colaborador e poderá enviar contribuições para revisão.
-- Somente administradores poderão cadastrar ou alterar publicações institucionais.
+- Somente administradores poderão cadastrar manualmente editais.
 - Estudantes poderão criar a própria conta sem aprovação prévia de um administrador.
 - No MVP, as publicações institucionais serão cadastradas manualmente por administradores a partir das fontes oficiais.
