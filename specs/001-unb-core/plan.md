@@ -14,7 +14,7 @@ O UNB CORE será uma plataforma acadêmica colaborativa para consulta de conteú
 
 **Storage**: SQLite no desenvolvimento e MVP; migração para PostgreSQL fica fora deste incremento
 
-**Testing**: pytest e httpx para regras e API; testes de integração para os fluxos de autenticação, consulta, contribuição e moderação; testes de interface para os fluxos críticos
+**Testing**: pytest e httpx para regras e API; Vitest, Testing Library e ESLint no frontend; testes de integração para os fluxos de autenticação, consulta, contribuição e moderação; testes de interface para os fluxos críticos
 
 **Target Platform**: Navegadores desktop atuais e Chrome/Safari mobile atuais
 
@@ -22,7 +22,7 @@ O UNB CORE será uma plataforma acadêmica colaborativa para consulta de conteú
 
 **Performance Goals**: Sem metas específicas de desempenho para o MVP acadêmico
 
-**Constraints**: Consulta pública; escrita protegida por autenticação e perfil; contribuições sempre começam como pendentes; aprovação cria ou atualiza conteúdo
+**Constraints**: Consulta pública; escrita protegida por autenticação e perfil; contribuições sempre começam como pendentes; aprovação cria ou atualiza conteúdo; a matriz de validação cobre Chrome, Edge e Firefox desktop e Chrome Android e Safari iOS nas versões estáveis mais recentes
 
 **Scale/Scope**: MVP acadêmico inicialmente focado em Engenharia de Software, com cursos, disciplinas, conteúdos, autenticação, contribuições, moderação e administração de usuários
 

@@ -12,7 +12,7 @@ description: "Tarefas de implementação do MVP acadêmico do UNB CORE"
 
 - [ ] T001 Criar a estrutura de testes em `backend/tests/{unit,integration,contract}` e `frontend/tests/{unit,integration}`.
 - [ ] T002 [P] Consolidar `backend/requirements.txt` com FastAPI, Uvicorn, SQLModel, PyJWT, passlib, bcrypt, pytest e httpx.
-- [ ] T003 [P] Criar ou corrigir `frontend/package.json` e scripts `dev`, `build`, `lint` e `test`.
+- [ ] T003 [P] Criar ou corrigir `frontend/package.json` e scripts `dev`, `build`, `lint` e `test`, usando Vitest, Testing Library e ESLint para os comandos de qualidade.
 - [ ] T004 [P] Atualizar `README.md` para descrever somente o MVP acadêmico e seus comandos de execução.
 
 ## Phase 2: Foundational
@@ -38,7 +38,7 @@ description: "Tarefas de implementação do MVP acadêmico do UNB CORE"
 - [ ] T016 [US1] Implementar `GET /api/v1/disciplinas/{disciplina_id}/conteudos` e `GET /api/v1/conteudos/{conteudo_id}` em `backend/app/api/routers/academico.py`.
 - [ ] T017 [P] [US1] Remover mocks de cursos e integrar `frontend/src/pages/ConhecimentoPage.jsx` aos endpoints acadêmicos.
 - [ ] T018 [P] [US1] Ajustar `frontend/src/components/conteudos/ConteudoCard.jsx` e `ConteudoDetalhe.jsx` aos campos do contrato acadêmico.
-- [ ] T019 [US1] Criar `frontend/tests/integration/knowledge.test.jsx` para consulta, filtro, carregamento, erro e estado vazio.
+- [ ] T019 [US1] Criar `frontend/tests/integration/knowledge.test.jsx` para consulta, filtro, carregamento, erro, estado vazio, foco visível e navegação por teclado.
 
 ## Phase 4: User Story 2 — Enviar e acompanhar contribuições (P2)
 
@@ -55,7 +55,7 @@ description: "Tarefas de implementação do MVP acadêmico do UNB CORE"
 - [ ] T026 [US2] Ajustar `frontend/src/services/api.js` e `frontend/src/state/auth.js` ao contrato de autenticação versionado.
 - [ ] T027 [US2] Ajustar `frontend/src/pages/CadastroPage.jsx`, `LoginPage.jsx` e `ContribuicaoPage.jsx` aos payloads de autenticação e contribuição.
 - [ ] T028 [P] [US2] Ajustar `frontend/src/pages/MinhasContribuicoesPage.jsx` para carregar estados e justificativas reais.
-- [ ] T029 [US2] Criar `frontend/tests/integration/auth-contribution.test.jsx` para cadastro, login, envio autenticado e bloqueio sem sessão.
+- [ ] T029 [US2] Criar `frontend/tests/integration/auth-contribution.test.jsx` para cadastro, login, envio autenticado, bloqueio sem sessão, foco visível e navegação por teclado.
 
 ## Phase 5: User Story 3 — Moderar conteúdos (P2)
 
@@ -63,13 +63,13 @@ description: "Tarefas de implementação do MVP acadêmico do UNB CORE"
 
 **Independent Test**: Criar contribuição pendente, decidir como moderador, confirmar estado, justificativa e criação/atualização do conteúdo; negar operação para usuário comum.
 
-- [ ] T030 [P] [US3] Criar `backend/tests/integration/test_moderacao.py` para decisões, transições, permissões e efeitos sobre conteúdo.
+- [ ] T030 [P] [US3] Criar `backend/tests/integration/test_moderacao.py` para decisões, todas as transições válidas e inválidas, permissões e efeitos sobre conteúdo.
 - [ ] T031 [US3] Implementar `backend/app/services/moderacao_service.py` com transições válidas e justificativas.
 - [ ] T032 [US3] Implementar aprovação criando ou atualizando conteúdo em `backend/app/services/conteudo_service.py`.
 - [ ] T033 [US3] Implementar `GET /api/v1/moderacao/contribuicoes` e `POST /api/v1/moderacao/contribuicoes/{id}/decisao` em `backend/app/api/routers/moderacao.py`.
 - [ ] T034 [P] [US3] Criar `frontend/src/pages/ModeracaoPage.jsx` e componentes em `frontend/src/components/moderacao/` para listar e decidir contribuições.
 - [ ] T035 [US3] Proteger a navegação de moderação em `frontend/src/components/Navigation.jsx` e tratar respostas 403/401.
-- [ ] T036 [US3] Criar `frontend/tests/integration/moderacao.test.jsx` para permissões, decisão e atualização da lista.
+- [ ] T036 [US3] Criar `frontend/tests/integration/moderacao.test.jsx` para permissões, decisão, atualização da lista, foco visível e navegação por teclado.
 
 ## Phase 6: Administração de usuários
 
@@ -87,6 +87,7 @@ description: "Tarefas de implementação do MVP acadêmico do UNB CORE"
 - [ ] T045 Remover rotas, modelos, serviços e componentes de editais, publicações institucionais, fontes, denúncias e busca unificada que não sejam mais utilizados.
 - [ ] T046 Atualizar `.gitignore` para ignorar `__pycache__/`, `*.pyc`, bancos SQLite locais e arquivos de ambiente.
 - [ ] T047 Executar a validação completa dos cenários de `quickstart.md` e registrar o resultado na issue #126.
+- [ ] T048 [P] Criar o componente de orientações da primeira contribuição em `frontend/src/components/contribuicoes/OrientacoesContribuicao.jsx`, integrá-lo ao formulário e cobrir sua exibição em `frontend/tests/integration/auth-contribution.test.jsx`.
 
 ## Dependencies and Execution Order
 
@@ -108,6 +109,7 @@ US1: T012, T013, T017 e T018 podem começar em paralelo após T007 e T008.
 US2: T020, T021, T022 e T026 podem começar em paralelo após T007-T010.
 US3: T030 e T034 podem começar em paralelo após os contratos de contribuição e autenticação.
 Administração: T037 e T040 podem começar em paralelo após T010 e T011.
+Qualidade: T048 pode começar em paralelo com T026-T029 após T008.
 ```
 
 ## Implementation Strategy

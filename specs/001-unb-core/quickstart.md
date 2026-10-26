@@ -59,11 +59,12 @@ Resultado esperado: a conta é criada, o login retorna um token e a rota protegi
 ### 3. Contribuição autenticada
 
 1. Criar uma conta de estudante e entrar.
-2. Enviar uma contribuição válida.
-3. Consultar as contribuições da conta.
-4. Confirmar o estado `pendente`.
-5. Tentar enviar sem preencher um campo obrigatório.
-6. Tentar enviar sem autenticação.
+2. Abrir as orientações da primeira contribuição e confirmar que qualidade, escopo, autoria e fontes são explicados.
+3. Enviar uma contribuição válida.
+4. Consultar as contribuições da conta.
+5. Confirmar o estado `pendente`.
+6. Tentar enviar sem preencher um campo obrigatório.
+7. Tentar enviar sem autenticação.
 
 Resultado esperado: a contribuição válida fica pendente; dados incompletos produzem mensagem compreensível; usuário não autenticado não consegue enviar.
 
@@ -87,6 +88,15 @@ Resultado esperado: decisões autorizadas alteram o estado e refletem no conteú
 4. Repetir a operação com usuário sem perfil de administrador.
 
 Resultado esperado: somente administradores podem criar ou alterar perfis administrativos.
+
+### 6. Acessibilidade e compatibilidade
+
+1. Repetir consulta, contribuição e moderação usando somente teclado.
+2. Confirmar foco visível, ordem de foco coerente e nomes acessíveis nos controles principais.
+3. Repetir a consulta nos navegadores Chrome, Edge e Firefox para desktop.
+4. Repetir a consulta no Chrome para Android e Safari para iOS nas versões estáveis mais recentes disponíveis no ciclo de validação.
+
+Resultado esperado: os fluxos principais podem ser concluídos sem mouse e mantêm comportamento funcional na matriz de navegadores definida no plano.
 
 ## Testes automatizados
 

@@ -91,7 +91,7 @@ Como moderador ou administrador, quero revisar contribuições acadêmicas, para
 - **FR-005**: O sistema MUST permitir que moderadores e administradores aprovem, rejeitem, arquivem ou devolvam contribuições para ajustes.
 - **FR-006**: O sistema MUST preservar a justificativa das decisões de moderação quando ela for registrada.
 - **FR-007**: Ao aprovar uma contribuição sem `conteudo_id`, o sistema MUST criar um novo conteúdo publicado; ao aprovar uma contribuição com `conteudo_id`, MUST atualizar o conteúdo correspondente.
-- **FR-008**: O sistema MUST disponibilizar orientações sobre qualidade, escopo permitido, autoria e fontes para a primeira contribuição.
+- **FR-008**: O sistema MUST disponibilizar, antes do primeiro envio, orientações visíveis sobre qualidade, escopo permitido, autoria e fontes, e MUST permitir que o usuário as consulte novamente durante o preenchimento.
 - **FR-009**: A consulta básica de conteúdos MUST estar disponível sem autenticação.
 - **FR-010**: O sistema MUST impedir que usuários sem autorização publiquem ou alterem diretamente conteúdos moderados.
 - **FR-011**: O sistema MUST apresentar mensagens compreensíveis para estados vazios, erros de acesso e envios incompletos.
@@ -100,7 +100,7 @@ Como moderador ou administrador, quero revisar contribuições acadêmicas, para
 - **FR-014**: O sistema MUST exigir curso, disciplina, tipo e conteúdo ou URL para enviar uma contribuição; `conteudo_id` será informado somente quando a contribuição alterar conteúdo existente.
 - **FR-015**: O sistema MUST rejeitar o envio de contribuição incompleto antes de criar um registro parcial, informando os campos ausentes.
 - **FR-016**: O sistema MUST oferecer nomes acessíveis, foco visível e navegação por teclado nos fluxos principais de consulta, busca, contribuição e moderação.
-- **FR-017**: O MVP deve considerar os principais navegadores desktop atuais e as versões móveis atuais de Chrome e Safari, sem exigir suporte a versões antigas específicas.
+- **FR-017**: O MVP MUST ser validado na versão estável mais recente de Chrome, Edge e Firefox em desktop e na versão estável mais recente de Chrome para Android e Safari para iOS disponível no ciclo de validação, sem exigir suporte a versões antigas específicas.
 - **FR-018**: O sistema MUST exigir nome, e-mail e senha para criar uma conta, e-mail único para cada conta.
 - **FR-019**: O sistema MUST impedir que senhas apareçam em respostas da API, mensagens de erro ou registros de operação.
 - **FR-020**: O sistema MUST apresentar nas mensagens de erro a causa do problema e, quando aplicável, a orientação para corrigi-lo ou tentar novamente.

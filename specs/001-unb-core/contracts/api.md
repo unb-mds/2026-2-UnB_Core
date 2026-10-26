@@ -34,6 +34,8 @@ Lista conteúdos publicados de uma disciplina. Pode receber `tipo` como filtro.
 
 Tipos aceitos: `resumo`, `dica`, `dificuldade`, `prova`, `implementacao` e `link`.
 
+O `curso_id` é definido pela navegação anterior em `GET /cursos/{curso_id}/disciplinas`; a API deve rejeitar a consulta se a disciplina não pertencer ao curso selecionado no fluxo do cliente.
+
 ### `GET /conteudos/{conteudo_id}`
 
 Retorna os detalhes de um conteúdo publicado, incluindo disciplina, tipo, autoria ou origem e data de atualização.
@@ -83,6 +85,13 @@ Corpo:
 ```
 
 Decisões aceitas: `aprovar`, `ajustes`, `rejeitar`, `arquivar`.
+
+Transições aceitas:
+
+- `pendente` -> `aprovada`, `ajustes`, `rejeitada` ou `arquivada`;
+- `ajustes` -> `pendente`.
+
+As demais transições devem ser rejeitadas sem alterar a contribuição.
 
 Ao aprovar:
 
