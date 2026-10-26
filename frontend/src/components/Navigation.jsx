@@ -2,7 +2,7 @@ import './ui/ui.css'
 import { logout, useAuth } from '../state/auth'
 
 function Navigation({ active = 'editais', onNavigate }) {
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, user } = useAuth()
 
   function handleNavigate(event, path) {
     if (!onNavigate) {
@@ -35,6 +35,11 @@ function Navigation({ active = 'editais', onNavigate }) {
         {isAuthenticated && (
           <a href="/moderacao" onClick={(event) => handleNavigate(event, '/moderacao')}>
             Moderação
+          </a>
+        )}
+        {user?.perfil === 'administrador' && (
+          <a href="/admin/usuarios" onClick={(event) => handleNavigate(event, '/admin/usuarios')}>
+            Usuários
           </a>
         )}
         {isAuthenticated ? (

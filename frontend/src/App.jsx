@@ -8,6 +8,7 @@ import LoginPage from './pages/LoginPage'
 import PublicacaoDetalhePage from './pages/PublicacaoDetalhePage'
 import PublicacoesPage from './pages/PublicacoesPage'
 import ModeracaoPage from './pages/ModeracaoPage'
+import AdminUsuariosPage from './pages/AdminUsuariosPage'
 
 function getRoute() {
   const path = window.location.pathname.replace(/\/$/, '') || '/'
@@ -43,6 +44,10 @@ function getRoute() {
 
   if (path === '/moderacao') {
     return { name: 'moderation' }
+  }
+
+  if (path === '/admin/usuarios') {
+    return { name: 'admin-users' }
   }
 
   return { name: 'knowledge' }
@@ -95,6 +100,10 @@ function App() {
 
   if (route.name === 'moderation') {
     return <ModeracaoPage onNavigate={navigate} />
+  }
+
+  if (route.name === 'admin-users') {
+    return <AdminUsuariosPage onNavigate={navigate} />
   }
 
   return <ConhecimentoPage onNavigate={navigate} onContribute={() => navigate('/contribuicao')} />
