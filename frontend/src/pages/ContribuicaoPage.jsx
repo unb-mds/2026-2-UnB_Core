@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { api, ApiError } from '../services/api'
 import { useAuth } from '../state/auth'
 import ErrorMessage from '../components/ErrorMessage'
@@ -31,6 +31,30 @@ function ContribuicaoPage({ courses = [], disciplines = [], onNavigate }) {
   const [error, setError] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+  const [availableCourses, setAvailableCourses] = useState(courses)
+  const [availableDisciplines, setAvailableDisciplines] = useState(disciplines)
+
+  useEffect(() => {
+    api.get('/cursos')
+      .then((response) => setAvailableCourses(response?.itens || response?.cursos || []))
+      .catch(() => {})
+  }, [])
+
+  useEffect(() => {
+    if (!form.curso_id) {
+      setAvailableDisciplines([])
+      return undefined
+    }
+
+    const controller = new AbortController()
+    api.get(`/cursos/${form.curso_id}/disciplinas`, { signal: controller.signal })
+      .then((response) => setAvailableDisciplines(response?.itens || response?.disciplinas || []))
+      .catch((requestError) => {
+        if (requestError.name !== 'AbortError') setAvailableDisciplines([])
+      })
+
+    return () => controller.abort()
+  }, [form.curso_id])
 
   function updateField(event) {
     const { name, value } = event.target
@@ -72,12 +96,11 @@ function ContribuicaoPage({ courses = [], disciplines = [], onNavigate }) {
 
     try {
       await api.post('/contribuicoes', {
-        curso_id: form.curso_id,
         disciplina_id: form.disciplina_id,
         tipo: form.tipo,
         titulo: form.titulo.trim(),
-        conteudo: form.conteudo.trim() || undefined,
-        url: form.url.trim() || undefined,
+        corpo_ou_url: form.conteudo.trim() || form.url.trim(),
+        origem: form.url.trim() || undefined,
       })
       setSubmitted(true)
     } catch (requestError) {
@@ -124,19 +147,19 @@ function ContribuicaoPage({ courses = [], disciplines = [], onNavigate }) {
           <div className="contribution-form__grid">
             <label>
               Curso <span aria-hidden="true">*</span>
-              {courses.length > 0 ? (
+              {availableCourses.length > 0 ? (
                 <select name="curso_id" value={form.curso_id} onChange={updateField}>
                   <option value="">Selecione um curso</option>
-                  {courses.map((course) => <option key={course.id} value={course.id}>{course.nome || course.name}</option>)}
+                  {availableCourses.map((course) => <option key={course.id} value={course.id}>{course.nome || course.name}</option>)}
                 </select>
               ) : <input name="curso_id" value={form.curso_id} onChange={updateField} placeholder="Código do curso" />}
             </label>
             <label>
               Disciplina <span aria-hidden="true">*</span>
-              {disciplines.length > 0 ? (
+              {availableDisciplines.length > 0 ? (
                 <select name="disciplina_id" value={form.disciplina_id} onChange={updateField}>
                   <option value="">Selecione uma disciplina</option>
-                  {disciplines.map((discipline) => <option key={discipline.id} value={discipline.id}>{discipline.nome || discipline.name}</option>)}
+                  {availableDisciplines.map((discipline) => <option key={discipline.id} value={discipline.id}>{discipline.nome || discipline.name}</option>)}
                 </select>
               ) : <input name="disciplina_id" value={form.disciplina_id} onChange={updateField} placeholder="Código da disciplina" />}
             </label>
