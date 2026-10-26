@@ -19,18 +19,9 @@
 - Arthur Vinícius: 
   * 
   
-- Breno : 
-  * 
-
 - Daniel Almeida:
   * 
 
-- Daniel Paz:
-  * 
-
-- Debórah: 
-  *
- 
 - João Vithor : 
   *
   
@@ -41,18 +32,9 @@
 - Arthur Vinícius: 
   *
   
-- Breno : 
-  * 
-
 - Daniel Almeida:
   * 
 
-- Daniel Paz:
-  * 
-
-- Debórah:
-  *
- 
 - João Vithor : 
   * 
   
@@ -63,18 +45,9 @@
 - Arthur Vinícius: 
   *
   
-- Breno : 
-  * 
-
 - Daniel Almeida:
   * 
 
-- Daniel Paz:
-  * 
-
-- Debórah: 
-  *
- 
 - João Vithor: 
   * 
 

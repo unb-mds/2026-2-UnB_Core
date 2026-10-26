@@ -13,7 +13,7 @@ function LoginPage({ onNavigate }) {
     setError(null)
 
     try {
-      const session = await api.post('/auth/login', { email: form.email, senha: form.senha })
+      const session = await api.post('/usuario/login', { email: form.email, senha: form.senha })
       login(session)
       onNavigate('/base-de-conhecimentos')
     } catch (requestError) {
