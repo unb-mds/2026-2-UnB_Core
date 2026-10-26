@@ -5,7 +5,7 @@ from backend.app.settings.config import settings
 
 engine = create_engine(
     settings.database_url,
-    echo=True, # colocar echo = False depois de terminamos os tests
+    echo=False,
     pool_pre_ping=True,
 )
 
@@ -16,11 +16,11 @@ def get_session() -> Generator[Session, None, None]:
 
 
 def create_db_and_tables() -> None:
-    from backend.app.api.schema import (
-        PublicacaoInstitucional,
+    from backend.app.domain import (
+        ConteudoAcademico,
+        Contribuicao,
+        Curso,
         Disciplina,
         Usuario,
-        Contribuicao,
     )
     SQLModel.metadata.create_all(engine)
-

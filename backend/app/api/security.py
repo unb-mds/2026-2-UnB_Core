@@ -5,7 +5,7 @@ from fastapi.security import OAuth2PasswordBearer
 
 from backend.app.settings.config import settings
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/usuario/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 
 
 def criar_access_token(usuario_id: int, perfil: str) -> str:
