@@ -87,7 +87,7 @@ Configure uma chave local para os tokens na mesma janela do PowerShell:
 
 ```powershell
 $env:DATABASE_URL = "postgresql+psycopg2://USUARIO:SENHA@localhost:5432/NOME_DO_BANCO"
-$env:JWT_SECRET_KEY = "dev-only-change-this-secret"
+$env:JWT_SECRET_KEY = "dev-only-change-this-secret-key-32-bytes-minimum"
 ```
 
 

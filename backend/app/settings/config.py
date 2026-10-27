@@ -8,7 +8,7 @@ class Settings:
     )
     jwt_secret_key: str = os.getenv(
         "JWT_SECRET_KEY",
-        "dev-only-change-this-secret-32-bytes",
+        "dev-only-change-this-secret-key-32-bytes-minimum",
     )
     jwt_algorithm: str = "HS256"
     access_token_expire_minutes: int = 30

@@ -52,7 +52,7 @@ class ErroValidacao(ErroAPI):
         super().__init__(
             codigo=CodigoErro.VALIDACAO,
             mensagem=mensagem,
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
         )
 
 
@@ -203,7 +203,7 @@ async def tratar_erro_validacao(
             "Os dados informados são inválidos. "
             "Revise os campos obrigatórios e os formatos utilizados."
         ),
-        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
     )
 
 
