@@ -12,7 +12,7 @@ function CadastroPage({ onNavigate }) {
     setError(null)
 
     try {
-      await api.post('/usuario/cadastro', form)
+      await api.post('/auth/cadastro', form)
       onNavigate('/login?cadastro=sucesso')
     } catch (requestError) {
       setError(requestError instanceof ApiError ? requestError.message : 'Não foi possível criar sua conta.')
