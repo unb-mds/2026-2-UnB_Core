@@ -17,7 +17,7 @@ python -m pip install -r backend\requirements.txt
 Defina uma chave local para os tokens:
 
 ```powershell
-$env:JWT_SECRET_KEY = "dev-only-change-this-secret"
+$env:JWT_SECRET_KEY = "dev-only-change-this-secret-key-32-bytes-minimum"
 ```
 
 Inicie a API a partir da raiz:
