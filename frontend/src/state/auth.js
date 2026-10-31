@@ -24,7 +24,7 @@ function getServerSnapshot() {
 
 export function useAuth() {
   const currentSession = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
-  const devUser = authBypassEnabled ? { nome: 'Usuário local', perfil: 'admin' } : null
+  const devUser = authBypassEnabled ? { nome: 'Usuário local', perfil: 'administrador' } : null
 
   return {
     session: currentSession || (authBypassEnabled ? { usuario: devUser, access_token: 'dev-bypass' } : null),

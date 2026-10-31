@@ -6,14 +6,10 @@ import EmptyState from '../components/ui/EmptyState'
 import Button from '../components/ui/Button'
 import SiteHeader from '../components/SiteHeader'
 import SiteFooter from '../components/SiteFooter'
+import DecisaoModal from '../components/moderacao/DecisaoModal'
+import StatusBadge from '../components/moderacao/StatusBadge'
 import './MinhasContribuicoesPage.css'
-
-const decisions = [
-  { value: 'aprovar', label: 'Aprovar' },
-  { value: 'ajustes', label: 'Solicitar ajustes' },
-  { value: 'rejeitar', label: 'Rejeitar' },
-  { value: 'arquivar', label: 'Arquivar' },
-]
+import './governance.css'
 
 function ModeracaoPage({ onNavigate }) {
   const { user, isAuthenticated } = useAuth()
@@ -21,6 +17,8 @@ function ModeracaoPage({ onNavigate }) {
   const [contributions, setContributions] = useState([])
   const [error, setError] = useState(null)
   const [isLoading, setIsLoading] = useState(canModerate)
+  const [selectedContribution, setSelectedContribution] = useState(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   function loadContributions() {
     setIsLoading(true)
@@ -34,13 +32,21 @@ function ModeracaoPage({ onNavigate }) {
     if (canModerate) loadContributions()
   }, [canModerate])
 
-  async function decide(id, decisao) {
-    const justificativa = window.prompt('Justificativa (opcional):') || undefined
+  useEffect(() => {
+    if (!isAuthenticated) onNavigate?.('/login')
+    else if (!canModerate) onNavigate?.('/')
+  }, [isAuthenticated, canModerate, onNavigate])
+
+  async function decide(id, decision) {
+    setIsSubmitting(true)
     try {
-      await api.post(`/moderacao/contribuicoes/${id}/decisao`, { decisao, justificativa })
+      await api.post(`/moderacao/contribuicoes/${id}/decisao`, decision)
+      setSelectedContribution(null)
       loadContributions()
     } catch (requestError) {
       setError(requestError instanceof ApiError ? requestError.message : 'Não foi possível registrar a decisão.')
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -63,24 +69,16 @@ function ModeracaoPage({ onNavigate }) {
             <section className="my-contributions-list" aria-label="Contribuições para moderação">
               {contributions.map((contribution) => (
                 <article className="my-contribution-card" key={contribution.id}>
-                  <div className="my-contribution-card__heading">
-                    <span className="badge badge-category">{contribution.tipo}</span>
-                    <span>{contribution.estado}</span>
-                  </div>
+                  <div className="my-contribution-card__heading"><span className="badge badge-category">{contribution.tipo}</span><StatusBadge status={contribution.estado} /></div>
                   <h2>{contribution.titulo}</h2>
                   <p>{contribution.corpo_ou_url}</p>
-                  <div className="contribution-form__type-options">
-                    {decisions.map((decision) => (
-                      <Button key={decision.value} variant="outline" onClick={() => decide(contribution.id, decision.value)}>
-                        {decision.label}
-                      </Button>
-                    ))}
-                  </div>
+                  <Button variant="outline" onClick={() => setSelectedContribution(contribution)}>Tomar decisão</Button>
                 </article>
               ))}
             </section>
           </>
         )}
+        <DecisaoModal item={selectedContribution} onClose={() => setSelectedContribution(null)} onSubmit={(decision) => decide(selectedContribution.id, decision)} isSubmitting={isSubmitting} />
       </main>
       <SiteFooter />
     </div>

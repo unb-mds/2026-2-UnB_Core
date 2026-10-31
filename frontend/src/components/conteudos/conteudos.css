@@ -20,3 +20,5 @@
 @media (max-width: 700px) {
   .content-detail__metadata { grid-template-columns: 1fr; }
 }
+.content-warning { display: grid; gap: 5px; padding: 10px 12px; border-left: 3px solid var(--color-warning); color: var(--color-warning-text); background: var(--color-warning-bg); font-size: 13px; }
+.content-warning a { color: var(--color-primary); font-weight: 600; }

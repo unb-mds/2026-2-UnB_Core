@@ -21,6 +21,12 @@ function ConteudoCard({ content, onOpen }) {
       </div>
       <h2>{content.titulo}</h2>
       <p>{content.resumo || content.descricao || 'Conteúdo acadêmico publicado pela comunidade.'}</p>
+      {content.nao_pesquisavel && (
+        <div className="content-warning" role="note">
+          <strong>Documento não pesquisável.</strong>
+          {content.orientacao_link_oficial && <a href={content.orientacao_link_oficial} target="_blank" rel="noreferrer">Consulte o documento original</a>}
+        </div>
+      )}
       <div className="knowledge-card__footer">
         <span>Por {content.autor_nome || content.autoria || 'colaborador'}</span>
         <Button variant="outline" onClick={() => onOpen(content)}>Ver conteúdo</Button>
