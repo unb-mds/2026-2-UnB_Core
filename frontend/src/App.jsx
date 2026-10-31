@@ -7,6 +7,7 @@ import MinhasContribuicoesPage from './pages/MinhasContribuicoesPage'
 import LoginPage from './pages/LoginPage'
 import ModeracaoPage from './pages/ModeracaoPage'
 import AdminUsuariosPage from './pages/AdminUsuariosPage'
+import AdminPage from './pages/AdminPage'
 
 function getRoute() {
   const path = window.location.pathname.replace(/\/$/, '') || '/'
@@ -41,6 +42,10 @@ function getRoute() {
 
   if (path === '/admin/usuarios') {
     return { name: 'admin-users' }
+  }
+
+  if (path === '/admin') {
+    return { name: 'admin' }
   }
 
   return { name: 'knowledge' }
@@ -93,6 +98,10 @@ function App() {
 
   if (route.name === 'admin-users') {
     return <AdminUsuariosPage onNavigate={navigate} />
+  }
+
+  if (route.name === 'admin') {
+    return <AdminPage onNavigate={navigate} />
   }
 
   return <ConhecimentoPage onNavigate={navigate} onContribute={() => navigate('/contribuicao')} />

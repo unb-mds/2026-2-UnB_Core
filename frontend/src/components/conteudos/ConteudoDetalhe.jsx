@@ -48,6 +48,13 @@ function ConteudoDetalhe({ content, onClose }) {
         )}
       </dl>
       <div className="content-detail__body">
+        {content.nao_pesquisavel && (
+          <div className="content-warning" role="note">
+            <strong>Documento não pesquisável.</strong>
+            <p>Consulte o documento original pelo link oficial para acessar o conteúdo completo.</p>
+            {content.orientacao_link_oficial && <a href={content.orientacao_link_oficial} target="_blank" rel="noreferrer">Abrir documento oficial</a>}
+          </div>
+        )}
         <p>{content.conteudo || content.descricao || content.resumo || 'Este conteúdo não possui texto disponível.'}</p>
       </div>
       {content.url && <a href={content.url} target="_blank" rel="noreferrer">Abrir material original</a>}
