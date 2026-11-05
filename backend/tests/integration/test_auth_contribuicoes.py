@@ -31,6 +31,14 @@ app.dependency_overrides[get_session] = session_override
 app.router.lifespan_context = no_lifespan
 
 
+def autenticar(client: TestClient, email: str) -> dict[str, str]:
+    token = client.post(
+        "/api/v1/auth/login",
+        json={"email": email, "senha": "senha-segura"},
+    ).json()["access_token"]
+    return {"Authorization": f"Bearer {token}"}
+
+
 def setup_function() -> None:
     app.dependency_overrides[get_session] = session_override
     app.router.lifespan_context = no_lifespan
@@ -61,19 +69,9 @@ def test_cadastro_login_e_me() -> None:
         assert cadastro.status_code == 201
         assert "senha" not in cadastro.text
 
-        login = client.post(
-            "/api/v1/auth/login",
-            json={
-                "email": "estudante@example.com",
-                "senha": "senha-segura",
-            },
-        )
-        assert login.status_code == 200
-        token = login.json()["access_token"]
-
         me = client.get(
             "/api/v1/auth/me",
-            headers={"Authorization": f"Bearer {token}"},
+            headers=autenticar(client, "estudante@example.com"),
         )
         assert me.status_code == 200
         assert me.json()["email"] == "estudante@example.com"
@@ -89,7 +87,7 @@ def test_contribuicao_exige_login_e_fica_pendente() -> None:
         }
         assert client.post("/api/v1/contribuicoes", json=payload).status_code == 401
 
-        login = client.post(
+        cadastro = client.post(
             "/api/v1/auth/cadastro",
             json={
                 "nome": "Colaborador",
@@ -97,26 +95,107 @@ def test_contribuicao_exige_login_e_fica_pendente() -> None:
                 "senha": "senha-segura",
             },
         )
-        assert login.status_code == 201
-        token = client.post(
-            "/api/v1/auth/login",
-            json={
-                "email": "colaborador@example.com",
-                "senha": "senha-segura",
-            },
-        ).json()["access_token"]
+        assert cadastro.status_code == 201
+        auth = autenticar(client, "colaborador@example.com")
 
         response = client.post(
             "/api/v1/contribuicoes",
             json=payload,
-            headers={"Authorization": f"Bearer {token}"},
+            headers=auth,
         )
         assert response.status_code == 201
         assert response.json()["estado"] == "pendente"
 
         minhas = client.get(
             "/api/v1/contribuicoes/minhas",
-            headers={"Authorization": f"Bearer {token}"},
+            headers=auth,
         )
         assert minhas.status_code == 200
         assert len(minhas.json()) == 1
+
+
+def test_usuario_edita_sua_contribuicao_e_reenvia_para_moderacao() -> None:
+    with TestClient(app) as client:
+        client.post(
+            "/api/v1/auth/cadastro",
+            json={
+                "nome": "Colaborador",
+                "email": "colaborador@example.com",
+                "senha": "senha-segura",
+            },
+        )
+        auth = autenticar(client, "colaborador@example.com")
+        criada = client.post(
+            "/api/v1/contribuicoes",
+            json={
+                "disciplina_id": 1,
+                "tipo": "resumo",
+                "titulo": "Resumo original",
+                "corpo_ou_url": "Conteúdo original",
+            },
+            headers=auth,
+        )
+
+        resposta = client.patch(
+            f"/api/v1/contribuicoes/minhas/{criada.json()['id']}",
+            json={"titulo": "Resumo atualizado"},
+            headers=auth,
+        )
+
+        assert resposta.status_code == 200
+        assert resposta.json()["titulo"] == "Resumo atualizado"
+        assert resposta.json()["tipo"] == "resumo"
+        assert resposta.json()["corpo_ou_url"] == "Conteúdo original"
+        assert resposta.json()["estado"] == "pendente"
+
+
+def test_edicao_de_contribuicao_exige_login() -> None:
+    with TestClient(app) as client:
+        resposta = client.patch(
+            "/api/v1/contribuicoes/minhas/1",
+            json={"titulo": "Atualização"},
+        )
+
+        assert resposta.status_code == 401
+
+
+def test_edicao_retorna_404_para_contribuicao_inexistente() -> None:
+    with TestClient(app) as client:
+        client.post(
+            "/api/v1/auth/cadastro",
+            json={
+                "nome": "Colaborador",
+                "email": "colaborador@example.com",
+                "senha": "senha-segura",
+            },
+        )
+        auth = autenticar(client, "colaborador@example.com")
+
+        resposta = client.patch(
+            "/api/v1/contribuicoes/minhas/999",
+            json={"titulo": "Atualização"},
+            headers=auth,
+        )
+
+        assert resposta.status_code == 404
+
+
+def test_edicao_rejeita_payload_invalido() -> None:
+    with TestClient(app) as client:
+        client.post(
+            "/api/v1/auth/cadastro",
+            json={
+                "nome": "Colaborador",
+                "email": "colaborador@example.com",
+                "senha": "senha-segura",
+            },
+        )
+        auth = autenticar(client, "colaborador@example.com")
+
+        resposta = client.patch(
+            "/api/v1/contribuicoes/minhas/1",
+            json={"titulo": ""},
+            headers=auth,
+        )
+
+        assert resposta.status_code == 422

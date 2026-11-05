@@ -29,3 +29,10 @@ class ContribuicaoPublica(BaseModel):
     justificativa_moderacao: str | None
     criado_em: datetime
     atualizado_em: datetime
+
+
+class ContribuicaoUpdate(BaseModel):
+    tipo: TipoConteudo | None = None
+    titulo: str | None = Field(default=None, min_length=1, max_length=200)
+    corpo_ou_url: str | None = Field(default=None, min_length=1)
+    origem: str | None = Field(default=None, max_length=500)
