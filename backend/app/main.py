@@ -5,11 +5,9 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from backend.app.api.errors import configurar_tratamento_de_erros
 from backend.app.api.router import api_router
-from backend.app.db import create_db_and_tables
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
-    create_db_and_tables()
     yield
 
 
