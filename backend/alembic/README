@@ -1,0 +1,30 @@
+# Migracoes do banco de dados
+
+As migracoes sao executadas pelo Alembic e usam `DATABASE_URL`, definido em
+`backend.app.settings.config`. A aplicacao nao cria tabelas automaticamente ao
+iniciar.
+
+Execute os comandos a partir da raiz do repositorio:
+
+```powershell
+.\.venv\Scripts\alembic.exe -c backend\alembic.ini current
+.\.venv\Scripts\alembic.exe -c backend\alembic.ini upgrade head
+```
+
+Para PostgreSQL:
+
+```powershell
+$env:DATABASE_URL = "postgresql+psycopg2://postgres:SENHA@localhost:5432/unb_core"
+.\.venv\Scripts\alembic.exe -c backend\alembic.ini upgrade head
+```
+
+Depois de alterar os modelos, gere uma nova migration somente quando o banco
+estiver atualizado:
+
+```powershell
+.\.venv\Scripts\alembic.exe -c backend\alembic.ini revision --autogenerate -m "descreva a alteracao"
+.\.venv\Scripts\alembic.exe -c backend\alembic.ini upgrade head
+```
+
+Revise sempre o arquivo gerado antes de aplicar a migration, principalmente
+operacoes que removem tabelas ou colunas.

@@ -90,6 +90,14 @@ $env:DATABASE_URL = "postgresql+psycopg2://USUARIO:SENHA@localhost:5432/NOME_DO_
 $env:JWT_SECRET_KEY = "dev-only-change-this-secret-key-32-bytes-minimum"
 ```
 
+Antes de iniciar a API, aplique as migrations:
+
+```powershell
+.\.venv\Scripts\alembic.exe -c backend\alembic.ini upgrade head
+```
+
+Inicie a API:
+
 
 
 
