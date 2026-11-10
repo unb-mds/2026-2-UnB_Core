@@ -9,3 +9,4 @@ psycopg2-binary
 pytest
 httpx
 python-multipart
+alembic
