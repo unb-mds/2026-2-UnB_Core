@@ -20,13 +20,13 @@ Objetivo Geral: Ajustar o escopo do MVP, reforçar a qualidade do backend e conc
 
 ### Backend & Qualidade (João)
 
-* Ajustar o escopo acadêmico do MVP.
-
 * Implementar testes unitários do backend e testes de erro de integração.
 
 * Revisar as rotas e os schemas de acordo com o novo escopo.
 
 ### Frontend (Daniel)
+
+* Ajustar o escopo acadêmico do MVP.
 
 * Concluir as interfaces de governança.
 
