@@ -8,7 +8,7 @@ Projeto desenvolvido para a disciplina de **Métodos de Desenvolvimento de Softw
 
 ## Status do projeto
 
-**Fase atual: desenvolvimento e integração.** O backend possui uma API funcional construída com FastAPI, incluindo autenticação de usuários, cadastro, login e acesso a rotas protegidas. O projeto continua em evolução, com novas funcionalidades, testes, integração com o frontend e melhorias de documentação sendo desenvolvidos nas sprints.
+**Fase atual: consolidação final do MVP e preparação para a entrega.** O backend possui uma API funcional construída com FastAPI, com autenticação, rotas acadêmicas, contribuições, moderação e testes unitários e de integração. A integração com o frontend está em andamento, e o projeto já conta com PostgreSQL e fluxo de migrações com Alembic, além de atualizações nas bibliotecas e nas instruções de execução do frontend. A configuração Docker ainda está em estudo e implementação, sem entrega concluída até o momento.
  
 
 ## Integrantes
@@ -24,17 +24,6 @@ Projeto desenvolvido para a disciplina de **Métodos de Desenvolvimento de Softw
       <sub>Matrícula: 242015764</sub><br />
       <sub>Função: <i>Backend Dev</i></sub>
     </td>
-
-   <td align="center">
-      <a href="https://github.com/Brenohrr">
-        <img style="border-radius: 50%;" src="https://github.com/Brenohrr.png" width="150px" alt="Breno Henrique da Rocha Rodrigues"/><br />
-        <sub><b>Breno Henrique da Rocha Rodrigues</b></sub>
-      </a>
-      <br />
-      <sub>Matrícula: 222006599</sub><br />
-      <sub>Função: <i>Backend Dev</i></sub>
-    </td>
-    
 </tr>
    <td align="center">
       <a href="https://github.com/DanielAlmeidaFrota">
@@ -67,4 +56,3 @@ Projeto desenvolvido para a disciplina de **Métodos de Desenvolvimento de Softw
  
 
  
-
