@@ -6,8 +6,9 @@ from backend.app.domain.models import (
     EstadoContribuicao,
     EstadoConteudo,
     PerfilUsuario,
-    Usuario,
+    GrauCurso,
     TipoConteudo,
+    Usuario,
 )
 
 __all__ = [
@@ -18,6 +19,7 @@ __all__ = [
     "EstadoContribuicao",
     "EstadoConteudo",
     "PerfilUsuario",
+    "GrauCurso",
     "TipoConteudo",
     "Usuario",
 ]

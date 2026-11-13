@@ -42,10 +42,12 @@ backend/
 │   ├── services/
 │   ├── settings/
 │   └── main.py
-└── tests/
-    ├── contract/
-    ├── integration/
-    └── unit/
+|── tests/
+|   ├── contract/
+|   ├── integration/
+|   └── unit/
+|
+└── alembic/
 
 frontend/
 ├── src/

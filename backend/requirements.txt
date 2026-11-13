@@ -8,4 +8,6 @@ email-validator
 psycopg2-binary
 pytest
 httpx
+beautifulsoup4
 python-multipart
+alembic

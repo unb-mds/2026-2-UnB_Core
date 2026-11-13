@@ -1,0 +1,72 @@
+services:
+# BANCO DE DADOS
+  db:
+    image: postgres:16-alpine
+    container_name: unb-core-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-unb_core}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-unb_core}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - unb-core-network
+# BACKEND
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: unb-core-backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg2://postgres:postgres@db:5432/unb_core}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-dev-only-change-this-secret-key-32-bytes-minimum}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app/backend
+    command: >
+      sh -c "alembic -c backend/alembic.ini upgrade head &&
+             uvicorn backend.app.main:app --host 0.0.0.0 --port 8000 --reload"
+    networks:
+      - unb-core-network
+# FRONTEND
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: unb-core-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      VITE_API_URL: ${VITE_API_URL:-http://localhost:8000/api/v1}
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    command: npm run dev -- --host 0.0.0.0
+    networks:
+      - unb-core-network
+
+volumes:
+  postgres_data:
+    name: unb-core-pgdata
+
+networks:
+  unb-core-network:
+    name: unb-core-net
+    driver: bridge
+

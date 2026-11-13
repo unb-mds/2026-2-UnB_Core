@@ -39,3 +39,24 @@ def listar_contribuicoes_do_usuario(
             .order_by(Contribuicao.atualizado_em.desc())
         ).all()
     )
+
+
+def obter_contribuicao_do_usuario(
+    session: Session,
+    usuario: Usuario,
+    id_contribuicao: int,
+) -> Contribuicao:
+    contribuicao = (
+        session.exec(
+            select(Contribuicao)
+            .where(Contribuicao.id == id_contribuicao)
+        ).first()
+    )
+
+    if contribuicao is None:
+        raise NaoEncontrado("Não foi encontrada contribuição com esse id")
+
+    if contribuicao.autor_id != usuario.id:
+        raise ErroValidacao("Usuario não tem permissão de editar essa contribuição")
+
+    return contribuicao

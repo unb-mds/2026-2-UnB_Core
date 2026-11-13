@@ -126,11 +126,35 @@ envie `"ativo": true` no corpo da requisição. Para parar o servidor, pressione
  
 ### Frontend
 
-Em outro terminal, execute:
+O frontend requer Node.js 20.19 ou superior, ou Node.js 22.12 ou superior.
+Verifique a versão instalada:
+
+```powershell
+node --version
+```
+
+Se necessário, atualize o Node.js no Windows:
+
+```powershell
+winget upgrade OpenJS.NodeJS
+```
+
+Feche e reabra o terminal após a atualização. Em seguida, em outro terminal,
+instale as dependências e inicie o frontend:
 
 ```powershell
 cd frontend
-npm install
+npm ci
+npm run dev
+```
+
+Se ocorrer o erro `Cannot find native binding`, refaça a instalação das
+dependências:
+
+```powershell
+cd frontend
+Remove-Item node_modules -Recurse -Force
+npm ci
 npm run dev
 ```
 

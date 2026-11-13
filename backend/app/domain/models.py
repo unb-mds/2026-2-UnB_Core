@@ -36,6 +36,11 @@ class EstadoContribuicao(StrEnum):
     ARQUIVADA = "arquivada"
 
 
+class GrauCurso(StrEnum):
+    BACHARELADO = "Bacharelado"
+    LICENCIATURA = "Licenciatura"
+
+
 class Usuario(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     nome: str
@@ -51,7 +56,7 @@ class Curso(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     nome: str
     sigla: str
-    ativo: bool = Field(default=True)
+    grau: GrauCurso = Field(default=GrauCurso.BACHARELADO)
 
 
 class Disciplina(SQLModel, table=True):
