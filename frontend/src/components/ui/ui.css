@@ -38,6 +38,8 @@
 .badge-pendente, .badge-ajustes { color: var(--color-warning-text); background: var(--color-warning-bg); }
 .badge-aprovada { color: var(--color-success); background: var(--color-success-bg); }
 .badge-rejeitada { color: var(--color-error-text); background: var(--color-error-bg); }
+.badge-deferida { color: var(--color-success); background: var(--color-success-bg); }
+.badge-indeferida { color: var(--color-error-text); background: var(--color-error-bg); }
 
 /* ---------- Tags secundárias (outline) ---------- */
 .tag { display: inline-flex; width: fit-content; padding: 2px 8px; border-radius: var(--radius-full); font-size: 10px; font-weight: 500; line-height: 1.4; }
