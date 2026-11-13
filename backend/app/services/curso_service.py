@@ -3,12 +3,15 @@ from sqlmodel import Session, select
 from backend.app.domain import Curso, Disciplina
 
 
-def listar_cursos_ativos(session: Session) -> list[Curso]:
+def listar_cursos(session: Session) -> list[Curso]:
     return list(
         session.exec(
-            select(Curso).where(Curso.ativo).order_by(Curso.nome)
+            select(Curso).order_by(Curso.nome, Curso.grau)
         ).all()
     )
+
+
+listar_cursos_ativos = listar_cursos
 
 
 def listar_disciplinas_ativas(

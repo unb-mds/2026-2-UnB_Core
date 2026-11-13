@@ -2,7 +2,7 @@ from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict
 
-from backend.app.domain import TipoConteudo
+from backend.app.domain import GrauCurso, TipoConteudo
 
 
 class CursoPublico(BaseModel):
@@ -11,6 +11,7 @@ class CursoPublico(BaseModel):
     id: int
     nome: str
     sigla: str
+    grau: GrauCurso
 
 
 class DisciplinaPublica(BaseModel):
