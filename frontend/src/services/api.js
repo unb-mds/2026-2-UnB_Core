@@ -86,6 +86,11 @@ export async function request(path, options = {}) {
       body: body === undefined ? undefined : JSON.stringify(body),
     })
   } catch (error) {
+    // Requisições canceladas (troca de página, StrictMode) não são falha de conexão.
+    if (error?.name === 'AbortError') {
+      throw error
+    }
+
     throw new ApiError('Não foi possível conectar à API.', {
       code: 'FONTE_INDISPONIVEL',
       details: error,

@@ -40,12 +40,24 @@ def atualizar_usuario(
     *,
     perfil: PerfilUsuario | None,
     ativo: bool | None,
+    usuario_atual_id: int | None = None,
 ) -> Usuario:
     usuario = session.get(Usuario, usuario_id)
     if usuario is None:
         raise NaoEncontrado("O usuário não foi encontrado.")
     if perfil is None and ativo is None:
         raise ErroValidacao("Informe ao menos o perfil ou o estado ativo.")
+
+    # Impede que o administrador se bloqueie: ao desativar a própria conta ou
+    # remover o próprio perfil de administrador, ele perderia o acesso
+    # necessário para desfazer a alteração.
+    if usuario_atual_id is not None and usuario.id == usuario_atual_id:
+        if ativo is False:
+            raise ErroValidacao("Você não pode desativar a sua própria conta.")
+        if perfil is not None and perfil != PerfilUsuario.ADMINISTRADOR:
+            raise ErroValidacao(
+                "Você não pode remover o seu próprio perfil de administrador."
+            )
 
     if perfil is not None:
         usuario.perfil = perfil

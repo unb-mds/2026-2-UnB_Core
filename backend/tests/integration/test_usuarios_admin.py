@@ -100,3 +100,29 @@ def test_administrador_cria_e_atualiza_moderador() -> None:
         )
         assert updated.status_code == 200
         assert updated.json()["ativo"] is False
+
+
+def test_administrador_nao_desativa_nem_rebaixa_a_propria_conta() -> None:
+    with TestClient(app) as client:
+        login = client.post(
+            "/api/v1/auth/login",
+            json={"email": "admin@example.com", "senha": "senha-segura"},
+        ).json()
+        auth = {"Authorization": f"Bearer {login['access_token']}"}
+        admin_id = login["usuario"]["id"]
+
+        desativar = client.patch(
+            f"/api/v1/usuarios/{admin_id}",
+            headers=auth,
+            json={"ativo": False},
+        )
+        rebaixar = client.patch(
+            f"/api/v1/usuarios/{admin_id}",
+            headers=auth,
+            json={"perfil": "usuario"},
+        )
+        ainda_admin = client.get("/api/v1/usuarios", headers=auth)
+
+    assert desativar.status_code == 422
+    assert rebaixar.status_code == 422
+    assert ainda_admin.status_code == 200
