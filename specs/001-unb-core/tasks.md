@@ -88,6 +88,11 @@ description: "Tarefas de implementação do MVP acadêmico do UNB CORE"
 - [ ] T046 Atualizar `.gitignore` para ignorar `__pycache__/`, `*.pyc`, bancos SQLite locais e arquivos de ambiente.
 - [ ] T047 Executar a validação completa dos cenários de `quickstart.md` e registrar o resultado na issue #126.
 - [ ] T048 [P] Criar o componente de orientações da primeira contribuição em `frontend/src/components/contribuicoes/OrientacoesContribuicao.jsx`, integrá-lo ao formulário e cobrir sua exibição em `frontend/tests/integration/auth-contribution.test.jsx`.
+- [x] T049 [US1] Filtrar em `frontend/src/services/cursos.js` somente os cursos da FCTE (campus do Gama) na Base de Conhecimento e no formulário de contribuição.
+- [x] T050 [US2] Integrar a edição de contribuições (`PATCH /api/v1/contribuicoes/minhas/{id_contribuicao}`) em `frontend/src/pages/MinhasContribuicoesPage.jsx`.
+- [x] T051 [US2] Corrigir a listagem de `GET /api/v1/contribuicoes/minhas` no frontend e o tratamento de requisições canceladas em `frontend/src/services/api.js`.
+- [x] T052 Impedir que o administrador desative a própria conta ou remova o próprio perfil em `backend/app/services/usuario_service.py`, com teste em `backend/tests/integration/test_usuarios_admin.py`.
+- [x] T053 [P] Atualizar `docs/requisitos.md`, `docs/index.md` e `specs/001-unb-core/` ao escopo acadêmico restrito ao campus do Gama.
 
 ## Dependencies and Execution Order
 

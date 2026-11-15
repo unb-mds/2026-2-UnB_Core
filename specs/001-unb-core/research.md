@@ -5,10 +5,10 @@
 - **Rationale**: A equipe já iniciou o backend com FastAPI e SQLModel. A combinação permite validação com Pydantic, persistência simples e contratos JSON adequados ao frontend React.
 - **Alternativas consideradas**: NestJS e Django foram descartados para evitar trocar a stack ou adicionar complexidade ao MVP.
 
-## Decisão: SQLite no MVP
+## Decisão: PostgreSQL com Alembic
 
-- **Rationale**: O projeto é acadêmico e precisa de execução local simples. SQLite evita configurar um servidor externo e atende ao volume esperado da demonstração.
-- **Alternativas consideradas**: PostgreSQL fica como possível migração futura, fora deste incremento.
+- **Rationale**: A decisão inicial era usar SQLite no MVP. A equipe migrou para PostgreSQL com migrations Alembic e Docker Compose, para aproximar o ambiente de desenvolvimento do ambiente de entrega. SQLite continua sendo usado em memória nos testes automatizados.
+- **Alternativas consideradas**: Manter SQLite em todos os ambientes foi descartado após a adoção do Docker Compose.
 
 ## Decisão: autenticação local com token
 
@@ -34,3 +34,13 @@
 
 - **Rationale**: Editais, fontes institucionais, denúncias e busca unificada foram removidos para concentrar o trabalho no valor principal da Base de Conhecimento e no fluxo de contribuições.
 - **Alternativas consideradas**: Manter um módulo institucional mínimo foi descartado pela equipe nesta entrega.
+
+## Decisão: escopo restrito ao campus do Gama (FCTE)
+
+- **Rationale**: A equipe e o público principal estão no campus do Gama. No SIGAA, os cursos desse campus pertencem à unidade "FCTE - CAMPUS UNB GAMA", identificada pela sigla `FCTE`. Restringir os cursos evita duplicidade de cursos com o mesmo nome em outros campi, como Farmácia e Enfermagem na FCTS (Ceilândia).
+- **Alternativas consideradas**: Atender todos os campi foi descartado por ampliar a moderação e a curadoria além da capacidade da equipe.
+
+## Decisão: cursos e disciplinas obtidos do SIGAA
+
+- **Rationale**: Cursos e disciplinas são coletados das páginas públicas do SIGAA na primeira inicialização da API, evitando cadastro manual e divergência com a fonte oficial.
+- **Alternativas consideradas**: Cadastro manual por administradores foi descartado por exigir manutenção contínua.
