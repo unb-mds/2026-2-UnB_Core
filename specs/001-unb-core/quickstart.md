@@ -3,7 +3,8 @@
 ## Pré-requisitos
 
 - Python 3.12 ou superior.
-- Node.js e npm em versão compatível com React.
+- PostgreSQL local ou Docker Compose.
+- Node.js 20.19+ ou 22.12+ e npm.
 - Repositório clonado localmente.
 
 ## Preparar o backend
@@ -14,11 +15,15 @@ py -m venv .venv
 python -m pip install -r backend\requirements.txt
 ```
 
-Defina uma chave local para os tokens:
+Defina o banco e uma chave local para os tokens, e aplique as migrations:
 
 ```powershell
+$env:DATABASE_URL = "postgresql+psycopg2://USUARIO:SENHA@localhost:5432/NOME_DO_BANCO"
 $env:JWT_SECRET_KEY = "dev-only-change-this-secret-key-32-bytes-minimum"
+.\.venv\Scripts\alembic.exe -c backend\alembic.ini upgrade head
 ```
+
+Na primeira inicialização, a API coleta cursos e disciplinas das páginas públicas do SIGAA.
 
 Inicie a API a partir da raiz:
 
@@ -32,9 +37,11 @@ A API ficará disponível em `http://127.0.0.1:8000` e a documentação interati
 
 ```powershell
 cd frontend
-npm install
+npm ci
 npm run dev
 ```
+
+Se a instalação falhar por conflito de dependências, siga as instruções de reinstalação do `README.md`.
 
 ## Cenários de validação
 
@@ -45,7 +52,7 @@ npm run dev
 3. Selecionar curso, disciplina e tipo.
 4. Abrir os detalhes do conteúdo.
 
-Resultado esperado: somente conteúdos publicados e compatíveis com os filtros aparecem, com autoria ou origem e data de atualização.
+Resultado esperado: somente cursos da FCTE (campus do Gama) aparecem no filtro; somente conteúdos publicados e compatíveis com os filtros aparecem, com autoria ou origem e data de atualização.
 
 ### 2. Cadastro e autenticação
 
@@ -65,8 +72,9 @@ Resultado esperado: a conta é criada, o login retorna um token e a rota protegi
 5. Confirmar o estado `pendente`.
 6. Tentar enviar sem preencher um campo obrigatório.
 7. Tentar enviar sem autenticação.
+8. Editar a contribuição em "Minhas contribuições".
 
-Resultado esperado: a contribuição válida fica pendente; dados incompletos produzem mensagem compreensível; usuário não autenticado não consegue enviar.
+Resultado esperado: a contribuição válida fica pendente; dados incompletos produzem mensagem compreensível; usuário não autenticado não consegue enviar; a contribuição editada volta para `pendente`.
 
 ### 4. Moderação e permissões
 
@@ -85,9 +93,10 @@ Resultado esperado: decisões autorizadas alteram o estado e refletem no conteú
 1. Acessar a administração com um administrador.
 2. Criar um usuário moderador.
 3. Atualizar o perfil ou estado ativo de um usuário.
-4. Repetir a operação com usuário sem perfil de administrador.
+4. Tentar desativar a própria conta de administrador.
+5. Repetir a operação com usuário sem perfil de administrador.
 
-Resultado esperado: somente administradores podem criar ou alterar perfis administrativos.
+Resultado esperado: somente administradores podem criar ou alterar perfis administrativos, e nenhum administrador consegue desativar a própria conta.
 
 ### 6. Acessibilidade e compatibilidade
 
@@ -103,7 +112,10 @@ Resultado esperado: os fluxos principais podem ser concluídos sem mouse e mant�
 Executar a partir da raiz do projeto:
 
 ```powershell
-python -m pytest
+python -m pytest backend\tests\unit
+python -m pytest backend\tests\integration
 ```
+
+As pastas são executadas separadamente porque `unit` e `integration` possuem arquivos `test_errors.py` com o mesmo nome.
 
 Os testes devem cobrir validações de estados, autenticação, permissões, consulta acadêmica, envio de contribuição, aprovação e tratamento de erros.

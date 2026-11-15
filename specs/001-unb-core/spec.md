@@ -21,13 +21,19 @@
 - Q: O que deve acontecer quando uma contribuição for aprovada? → A: Criar novo conteúdo ou atualizar o existente conforme `conteudo_id`.
 - Q: Como os perfis de moderador e administrador serão criados no MVP? → A: Poderão ser pré-cadastrados no banco e também criados por uma tela administrativa.
 
+### Session 2026-11-15
+
+- Q: Quais campi o MVP deve atender? → A: Somente o campus do Gama, ou seja, os cursos da unidade FCTE.
+- Q: O autor pode editar uma contribuição já enviada? → A: Sim; a contribuição editada volta para o estado pendente e passa por nova revisão.
+- Q: Um administrador pode desativar a própria conta? → A: Não; o sistema impede a autodesativação e a remoção do próprio perfil de administrador.
+
 ## User Scenarios & Testing
 
 ### User Story 1 - Consultar conteúdos de uma disciplina (Priority: P1)
 
 Como estudante, quero consultar resumos, dicas, dificuldades, provas, implementações e links organizados por curso e disciplina, para apoiar meus estudos.
 
-**Why this priority**: A Base de Conhecimento é o segundo pilar principal do produto e concentra o conhecimento colaborativo do grupo.
+**Why this priority**: A Base de Conhecimento é o núcleo do produto e concentra o conhecimento colaborativo do grupo.
 
 **Independent Test**: Pode ser testada selecionando um curso, uma disciplina e um tipo, e verificando se os conteúdos publicados aparecem com autoria ou origem e data de atualização.
 
@@ -56,6 +62,8 @@ Como usuário autenticado, quero enviar uma contribuição associada a um curso,
 4. **Given** que faltam informações obrigatórias, **When** o colaborador tenta enviar o formulário, **Then** o sistema informa os campos que precisam ser preenchidos.
 5. **Given** que o usuário não está autenticado, **When** ele tenta enviar uma contribuição, **Then** o sistema impede o envio e informa que é necessário entrar em uma conta.
 6. **Given** que o estudante ainda não possui uma conta, **When** ele realiza o cadastro, **Then** sua conta é criada e ele pode acessar as funções permitidas a usuários autenticados.
+7. **Given** que o autor possui uma contribuição enviada, **When** ele edita o tipo, o título, o conteúdo ou a fonte, **Then** a contribuição é atualizada e volta para o estado pendente para nova revisão.
+8. **Given** que uma contribuição pertence a outro usuário, **When** o usuário tenta editá-la, **Then** o sistema impede a alteração.
 
 ---
 
@@ -105,11 +113,15 @@ Como moderador ou administrador, quero revisar contribuições acadêmicas, para
 - **FR-019**: O sistema MUST impedir que senhas apareçam em respostas da API, mensagens de erro ou registros de operação.
 - **FR-020**: O sistema MUST apresentar nas mensagens de erro a causa do problema e, quando aplicável, a orientação para corrigi-lo ou tentar novamente.
 - **FR-021**: O sistema MUST permitir que administradores criem usuários com perfil de moderador ou administrador por uma tela administrativa, mantendo também a possibilidade de pré-cadastro por banco ou seed de desenvolvimento.
+- **FR-022**: O sistema MUST listar somente os cursos da FCTE (campus do Gama); cursos com o mesmo nome em outros campi não devem aparecer.
+- **FR-023**: O sistema MUST permitir que o autor consulte as próprias contribuições com estado, datas de envio e atualização e justificativa de moderação.
+- **FR-024**: O sistema MUST permitir que o autor edite as próprias contribuições; após a edição, a contribuição MUST voltar para o estado pendente. Usuários não podem editar contribuições de outras pessoas.
+- **FR-025**: O sistema MUST impedir que um administrador desative a própria conta ou remova o próprio perfil de administrador.
 
 ### Key Entities
 
-- **Usuário**: pessoa que consulta informações ou, quando autenticada, pode salvar preferências e enviar contribuições; funções de moderação e administração dependem de autorização específica.
-- **Curso**: agrupamento de disciplinas e referência para organização dos interesses acadêmicos.
+- **Usuário**: pessoa que consulta informações ou, quando autenticada, pode enviar e acompanhar contribuições; funções de moderação e administração dependem de autorização específica.
+- **Curso**: curso de graduação da FCTE (campus do Gama) que agrupa disciplinas e organiza a consulta acadêmica.
 - **Disciplina**: unidade curricular pertencente a um curso.
 - **Conteúdo acadêmico**: material publicado na Base de Conhecimento, como resumo, dica, dificuldade, prova, implementação ou link.
 - **Contribuição**: proposta de criação ou alteração de conteúdo acadêmico que passa por estados de revisão.
@@ -126,10 +138,10 @@ Como moderador ou administrador, quero revisar contribuições acadêmicas, para
 
 ## Assumptions
 
-- O foco inicial da Base de Conhecimento será Engenharia de Software.
+- O MVP atende somente os cursos da FCTE (campus do Gama), com cursos e disciplinas obtidos das páginas públicas do SIGAA.
 - A consulta pública não exige autenticação.
 - A publicação de contribuições depende de revisão humana.
-- Cadastro de conta, verificação de e-mail e recuperação de senha ficam fora do escopo inicial.
+- Verificação de e-mail e recuperação de senha ficam fora do escopo inicial; o cadastro de conta faz parte do MVP (FR-013).
 - O sistema será desenvolvido como projeto acadêmico de escopo reduzido, sem metas de desempenho, capacidade ou infraestrutura avançada.
 - Autenticação e hospedagem serão detalhadas durante o planejamento técnico, sem alterar os fluxos principais desta especificação.
 - Qualquer usuário autenticado será considerado colaborador e poderá enviar contribuições para revisão.

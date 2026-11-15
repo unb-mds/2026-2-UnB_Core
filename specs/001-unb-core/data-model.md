@@ -19,15 +19,18 @@ Regras:
 - Moderadores e administradores podem decidir sobre contribuições.
 - Apenas administradores podem criar usuários com perfil administrativo.
 - Usuários administrativos podem ser preparados por seed ou cadastro inicial no banco.
+- Um administrador não pode desativar a própria conta nem remover o próprio perfil de administrador.
 
 ## Curso
 
-Agrupa disciplinas e organiza a consulta da Base de Conhecimento.
+Agrupa disciplinas e organiza a consulta da Base de Conhecimento. Os cursos são coletados das páginas públicas do SIGAA.
 
 - `id`: identificador único.
 - `nome`: nome do curso.
-- `sigla`: sigla do curso.
-- `ativo`: indica disponibilidade para consulta.
+- `sigla`: sigla da unidade responsável no SIGAA (por exemplo, `FCTE` para o campus do Gama).
+- `grau`: `bacharelado` ou `licenciatura`.
+
+Regra: a consulta do MVP considera somente os cursos com sigla `FCTE`.
 
 ## Disciplina
 
@@ -87,6 +90,8 @@ pendente -> rejeitada
 pendente -> arquivada
 ajustes -> pendente
 ```
+
+As decisões de moderação partem somente do estado `pendente`, e a decisão `ajustes` exige justificativa. A volta para `pendente` acontece quando o autor edita a contribuição; a edição sempre devolve a contribuição para `pendente`.
 
 Uma contribuição aprovada sem `conteudo_id` cria um conteúdo publicado. Uma contribuição aprovada com `conteudo_id` atualiza o conteúdo correspondente.
 

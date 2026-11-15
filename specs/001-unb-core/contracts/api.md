@@ -22,7 +22,9 @@ Retorna os dados públicos do usuário autenticado.
 
 ### `GET /cursos`
 
-Lista cursos ativos para consulta pública.
+Lista cursos para consulta pública. Resposta no formato `{ "itens": [...] }`, com `id`, `nome`, `sigla` e `grau`.
+
+O MVP atende somente o campus do Gama: o cliente exibe apenas os cursos com `sigla` igual a `FCTE`.
 
 ### `GET /cursos/{curso_id}/disciplinas`
 
@@ -63,7 +65,24 @@ Corpo:
 
 ### `GET /contribuicoes/minhas`
 
-Lista as contribuições do usuário autenticado com estado e justificativa de moderação.
+Lista as contribuições do usuário autenticado com estado e justificativa de moderação (`justificativa_moderacao`). A resposta é uma lista JSON, sem o envelope `itens`.
+
+### `PATCH /contribuicoes/minhas/{id_contribuicao}`
+
+Edita uma contribuição do usuário autenticado. Todos os campos são opcionais; somente os campos enviados são alterados.
+
+Corpo:
+
+```json
+{
+  "tipo": "resumo",
+  "titulo": "Resumo da unidade 1 (revisado)",
+  "corpo_ou_url": "Texto revisado pelo estudante",
+  "origem": "Anotações próprias"
+}
+```
+
+Após a edição, o estado volta para `pendente`. Retorna `404` se a contribuição não existir e `422` se ela pertencer a outro usuário.
 
 ## Moderação
 
@@ -111,6 +130,8 @@ Cria um usuário com perfil `usuario`, `moderador` ou `administrador`. Requer pe
 ### `PATCH /usuarios/{id}`
 
 Atualiza perfil ou estado ativo de um usuário. Requer perfil `administrador`.
+
+O administrador não pode desativar a própria conta nem alterar o próprio perfil para outro diferente de `administrador`; nesses casos a API retorna `422` com o código `VALIDACAO`.
 
 ## Erros
 

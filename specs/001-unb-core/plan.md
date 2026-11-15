@@ -12,7 +12,7 @@ O UNB CORE será uma plataforma acadêmica colaborativa para consulta de conteú
 
 **Primary Dependencies**: FastAPI, Pydantic, SQLModel, Uvicorn, React, Vite e cliente HTTP
 
-**Storage**: SQLite no desenvolvimento e MVP; migração para PostgreSQL fica fora deste incremento
+**Storage**: PostgreSQL com migrations Alembic (local ou via Docker Compose); SQLite em memória nos testes automatizados
 
 **Testing**: pytest e httpx para regras e API; Vitest, Testing Library e ESLint no frontend; testes de integração para os fluxos de autenticação, consulta, contribuição e moderação; testes de interface para os fluxos críticos
 
@@ -24,7 +24,7 @@ O UNB CORE será uma plataforma acadêmica colaborativa para consulta de conteú
 
 **Constraints**: Consulta pública; escrita protegida por autenticação e perfil; contribuições sempre começam como pendentes; aprovação cria ou atualiza conteúdo; a matriz de validação cobre Chrome, Edge e Firefox desktop e Chrome Android e Safari iOS nas versões estáveis mais recentes
 
-**Scale/Scope**: MVP acadêmico inicialmente focado em Engenharia de Software, com cursos, disciplinas, conteúdos, autenticação, contribuições, moderação e administração de usuários
+**Scale/Scope**: MVP acadêmico restrito aos cursos da FCTE (campus do Gama), com cursos, disciplinas, conteúdos, autenticação, contribuições, moderação e administração de usuários
 
 ## Constitution Check
 

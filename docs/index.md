@@ -1,9 +1,9 @@
 # UNB CORE
  
-Plataforma que centraliza informações acadêmicas e institucionais da Universidade de Brasília (UnB), combinando duas frentes:
+Plataforma acadêmica colaborativa da Universidade de Brasília (UnB) para os cursos do campus do Gama (FCTE), com conteúdos organizados por curso e disciplina e contribuições submetidas à moderação.
  
-1. **Base de conhecimento colaborativa** resumos, dicas, dificuldades comuns e materiais organizados por curso e disciplina.
-2. **Central de editais e avisos** publicações oficiais da UnB reunidas em um só lugar, com transparência sobre origem e data de atualização.
+1. **Base de conhecimento acadêmica** com resumos, dicas, dificuldades, provas, implementações e links.
+2. **Contribuições moderadas** enviadas por usuários autenticados e revisadas por moderadores ou administradores.
 Projeto desenvolvido para a disciplina de **Métodos de Desenvolvimento de Software (MDS) - 2026/2**, Universidade de Brasília.
 
 ## Status do projeto
