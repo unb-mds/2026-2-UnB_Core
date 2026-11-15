@@ -158,6 +158,30 @@ npm ci
 npm run dev
 ```
 
+Se o `npm ci` ou o `npm install` falhar com `ERESOLVE` / `unable to resolve
+dependency tree` (conflito de peer dependencies), normalmente a pasta
+`node_modules` ainda é de uma versão antiga do projeto (por exemplo, Vite 7.1.7,
+que também gera os alertas de vulnerabilidade do `npm audit`). O projeto usa
+Vite 8; atualize a branch, apague as dependências antigas e instale de novo:
+
+```powershell
+cd frontend
+git pull
+Remove-Item node_modules -Recurse -Force
+npm ci
+```
+
+Se o erro continuar, instale ativando o modo legado de peer dependencies do npm:
+
+```powershell
+npm install --legacy-peer-deps
+```
+
+Use `npm audit` para conferir as vulnerabilidades. Na versão atual das
+dependências o resultado esperado é `found 0 vulnerabilities`. Não rode
+`npm audit fix --force`, pois ele pode trocar versões principais das bibliotecas
+e quebrar o projeto para o restante da equipe.
+
 Comandos de qualidade do frontend:
 
 ```powershell

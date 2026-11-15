@@ -44,6 +44,11 @@ def atualizar(
     usuario_id: int,
     dados: UsuarioAdminAtualizacao,
     session: Session = Depends(get_session),
-    _: Usuario = Depends(exigir_administrador),
+    administrador: Usuario = Depends(exigir_administrador),
 ):
-    return atualizar_usuario(session, usuario_id, **dados.model_dump())
+    return atualizar_usuario(
+        session,
+        usuario_id,
+        **dados.model_dump(),
+        usuario_atual_id=administrador.id,
+    )

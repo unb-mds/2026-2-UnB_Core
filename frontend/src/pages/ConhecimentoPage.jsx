@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { api, ApiError } from '../services/api'
+import { extrairCursos } from '../services/cursos'
 import ErrorMessage from '../components/ErrorMessage'
 import EmptyState from '../components/ui/EmptyState'
 import Button from '../components/ui/Button'
@@ -35,7 +36,7 @@ function ConhecimentoPage({ onContribute = () => {}, onNavigate }) {
 
     api
       .get('/cursos', { signal: controller.signal })
-      .then((response) => setCourses(response?.itens || response?.cursos || []))
+      .then((response) => setCourses(extrairCursos(response)))
       .catch((requestError) => {
         if (requestError.name !== 'AbortError') {
           setError(requestError instanceof ApiError ? requestError.message : 'Não foi possível carregar os cursos.')

@@ -68,13 +68,24 @@ function AdminUsuariosPage({ onNavigate }) {
           <Button type="submit">Criar usuário</Button>
         </form>
         <section className="my-contributions-list" aria-label="Usuários cadastrados">
-          {users.length === 0 ? <EmptyState title="Nenhum usuário cadastrado" /> : users.map((usuario) => (
-            <article className="my-contribution-card" key={usuario.id}>
-              <h2>{usuario.nome}</h2>
-              <p>{usuario.email} · {usuario.perfil}</p>
-              <Button variant="outline" onClick={() => toggleUser(usuario)}>{usuario.ativo ? 'Desativar' : 'Ativar'}</Button>
-            </article>
-          ))}
+          {users.length === 0 ? <EmptyState title="Nenhum usuário cadastrado" /> : users.map((usuario) => {
+            const isOwnAccount = user?.id != null && usuario.id === user.id
+            return (
+              <article className="my-contribution-card" key={usuario.id}>
+                <h2>{usuario.nome}</h2>
+                <p>{usuario.email} · {usuario.perfil}</p>
+                <Button
+                  variant="outline"
+                  onClick={() => toggleUser(usuario)}
+                  disabled={isOwnAccount}
+                  title={isOwnAccount ? 'Você não pode desativar a sua própria conta.' : undefined}
+                >
+                  {usuario.ativo ? 'Desativar' : 'Ativar'}
+                </Button>
+                {isOwnAccount && <p className="my-contribution-card__note">Esta é a sua conta e não pode ser desativada por aqui.</p>}
+              </article>
+            )
+          })}
         </section>
       </main>
       <SiteFooter />

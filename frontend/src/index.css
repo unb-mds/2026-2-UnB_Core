@@ -44,5 +44,8 @@
 }
 
 * { box-sizing: border-box; }
-body { margin: 0; min-width: 320px; }
+body { margin: 0; min-width: 320px; overflow-wrap: break-word; }
+/* Evita que títulos, textos e URLs longos sem espaço saiam das caixas. */
+h1, h2, h3, p, dd, li, td { overflow-wrap: anywhere; }
+input, select, textarea { max-width: 100%; }
 button, input { font-family: inherit; }

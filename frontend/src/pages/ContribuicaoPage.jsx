@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { api, ApiError } from '../services/api'
+import { extrairCursos } from '../services/cursos'
 import { useAuth } from '../state/auth'
 import ErrorMessage from '../components/ErrorMessage'
 import EmptyState from '../components/ui/EmptyState'
@@ -36,7 +37,7 @@ function ContribuicaoPage({ courses = [], disciplines = [], onNavigate }) {
 
   useEffect(() => {
     api.get('/cursos')
-      .then((response) => setAvailableCourses(response?.itens || response?.cursos || []))
+      .then((response) => setAvailableCourses(extrairCursos(response)))
       .catch(() => {})
   }, [])
 
