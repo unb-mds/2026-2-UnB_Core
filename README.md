@@ -84,7 +84,7 @@ automaticamente na inicialização do backend:
 $env:POSTGRES_USER = "postgres"
 $env:POSTGRES_PASSWORD = "postgres"
 $env:POSTGRES_DB = "unb_core"
-$env:DATABASE_URL = "postgresql+psycopg2://postgres:postgres@db:5432/unb_core"
+$env:DATABASE_URL = "postgresql+psycopg2://postgres:postgres@db:5432/unbcore"
 $env:JWT_SECRET_KEY = "troque-por-uma-chave-secreta-com-pelo-menos-32-caracteres"
 
 $env:ADMIN_NAME = "Administrador"
