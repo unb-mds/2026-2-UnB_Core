@@ -10,6 +10,7 @@ from sqlmodel import Session, select
 
 from backend.app.api.errors import configurar_tratamento_de_erros
 from backend.app.api.router import api_router
+from backend.app.crawler.crawlerCurriculo import coletar_e_sincronizar_curriculos
 from backend.app.crawler.crawlerDisciplina import coletar_e_salvar_disciplinas
 from backend.app.crawler.crawlercursos import coletar_e_salvar_cursos
 from backend.app.db import engine
@@ -37,6 +38,11 @@ async def _carregar_dados_iniciais() -> None:
                 quantidade = await coletar_e_salvar_disciplinas(session)
                 logger.info(
                     "Carga inicial de disciplinas concluida: %s disciplinas.",
+                    quantidade,
+                )
+                quantidade = await coletar_e_sincronizar_curriculos(session)
+                logger.info(
+                    "Estruturas curriculares do Gama aplicadas: %s disciplinas.",
                     quantidade,
                 )
     except (httpx.HTTPError, SQLAlchemyError, RuntimeError):

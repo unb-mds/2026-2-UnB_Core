@@ -58,3 +58,32 @@ def test_salvar_disciplinas_associa_curso_pelo_prefixo() -> None:
             ],
         ) == 1
         assert session.exec(select(Disciplina)).one().curso_id == curso.id
+
+
+def test_salvar_disciplinas_do_gama_associa_todos_os_cursos_fcte() -> None:
+    engine = create_engine(
+        "sqlite://",
+        connect_args={"check_same_thread": False},
+        poolclass=StaticPool,
+    )
+    SQLModel.metadata.create_all(engine)
+
+    with Session(engine) as session:
+        software = Curso(nome="ENGENHARIA DE SOFTWARE", sigla="FCTE")
+        eletronica = Curso(nome="ENGENHARIA ELETRÔNICA", sigla="FCTE")
+        session.add_all([software, eletronica])
+        session.commit()
+
+        disciplinas = [
+            DisciplinaColetada("FGA0003", "COMPILADORES 1", None),
+            DisciplinaColetada("FCTE0005", "ALGORITMOS EM GRAFOS", None),
+        ]
+        assert salvar_disciplinas(session, disciplinas) == 4
+        # Rodar de novo não duplica registros.
+        assert salvar_disciplinas(session, disciplinas) == 4
+
+        salvas = session.exec(select(Disciplina)).all()
+        assert len(salvas) == 4
+        for curso in (software, eletronica):
+            codigos = {d.codigo for d in salvas if d.curso_id == curso.id}
+            assert codigos == {"FGA0003", "FCTE0005"}

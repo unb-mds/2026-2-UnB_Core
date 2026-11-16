@@ -165,42 +165,50 @@ async def coletar_disciplinas(
         return disciplinas
 
 
+# Prefixos de código de disciplina que pertencem a outra sigla de unidade.
+# No campus do Gama, a unidade é "FCTE", mas a maior parte das disciplinas
+# ainda usa o prefixo antigo "FGA" (ex.: FGA0003 - COMPILADORES 1).
+SIGLAS_EQUIVALENTES: Final = {"FGA": "FCTE"}
+
+
 def _sigla_por_codigo(codigo: str) -> str:
     match = re.match(r"^([A-Z]+)", codigo)
-    return match.group(1) if match else ""
+    sigla = match.group(1) if match else ""
+    return SIGLAS_EQUIVALENTES.get(sigla, sigla)
 
 
 def salvar_disciplinas(
     session: Session,
     disciplinas: list[DisciplinaColetada],
 ) -> int:
-    cursos = {
-        curso.sigla.upper(): curso
-        for curso in session.exec(select(Curso)).all()
-    }
+    # Vários cursos podem ter a mesma sigla de unidade (os 6 cursos do Gama
+    # são todos "FCTE"). O SIGAA lista as disciplinas por unidade, sem indicar
+    # o curso, então a disciplina é associada a todos os cursos da unidade.
+    cursos_por_sigla: dict[str, list[Curso]] = {}
+    for curso in session.exec(select(Curso)).all():
+        if curso.id is not None:
+            cursos_por_sigla.setdefault(curso.sigla.upper(), []).append(curso)
+
     quantidade = 0
     for disciplina in disciplinas:
-        curso = cursos.get(_sigla_por_codigo(disciplina.codigo))
-        if curso is None:
-            continue
-        if curso.id is None:
-            continue
-        existente = session.exec(
-            select(Disciplina).where(
-                Disciplina.curso_id == curso.id,
-                Disciplina.codigo == disciplina.codigo,
-            )
-        ).first()
-        if existente is None:
-            session.add(
-                Disciplina(
-                    curso_id=curso.id,
-                    codigo=disciplina.codigo,
-                    nome=disciplina.nome,
-                    periodo=disciplina.periodo,
+        cursos = cursos_por_sigla.get(_sigla_por_codigo(disciplina.codigo), [])
+        for curso in cursos:
+            existente = session.exec(
+                select(Disciplina).where(
+                    Disciplina.curso_id == curso.id,
+                    Disciplina.codigo == disciplina.codigo,
                 )
-            )
-        quantidade += 1
+            ).first()
+            if existente is None:
+                session.add(
+                    Disciplina(
+                        curso_id=curso.id,
+                        codigo=disciplina.codigo,
+                        nome=disciplina.nome,
+                        periodo=disciplina.periodo,
+                    )
+                )
+            quantidade += 1
     session.commit()
     return quantidade
 
