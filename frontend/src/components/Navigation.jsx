@@ -45,6 +45,13 @@ function Navigation({ active = 'conhecimento', onNavigate }) {
         {isAuthenticated ? (
           <>
             <a
+              className={active === 'perfil' ? 'topbar__link--active' : ''}
+              href="/perfil"
+              onClick={(event) => handleNavigate(event, '/perfil')}
+            >
+              Meu perfil
+            </a>
+            <a
               className="topbar__login"
               href="/login"
               onClick={(event) => {

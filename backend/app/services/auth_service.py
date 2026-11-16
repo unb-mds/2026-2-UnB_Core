@@ -1,3 +1,5 @@
+from datetime import datetime, timezone
+
 from passlib.context import CryptContext
 from sqlmodel import Session, select
 
@@ -51,6 +53,49 @@ def autenticar_usuario(
         senha, usuario.senha_hash
     ):
         raise ErroValidacao("E-mail ou senha incorretos.")
+    return usuario
+
+
+def atualizar_perfil(
+    session: Session,
+    usuario: Usuario,
+    *,
+    nome: str | None = None,
+    email: str | None = None,
+    senha_atual: str | None = None,
+    nova_senha: str | None = None,
+) -> Usuario:
+    nome = nome.strip() if nome is not None else None
+    email = email.lower() if email is not None else None
+    altera_email = email is not None and email != usuario.email
+    altera_nome = nome is not None and nome != usuario.nome
+
+    if nome is not None and not nome:
+        raise ErroValidacao("Informe o seu nome.")
+    if not (altera_nome or altera_email or nova_senha):
+        raise ErroValidacao("Informe ao menos um dado para alterar.")
+
+    # Trocar e-mail ou senha muda o acesso à conta, então exige a senha atual.
+    if (altera_email or nova_senha) and (
+        not senha_atual or not verificar_senha(senha_atual, usuario.senha_hash)
+    ):
+        raise ErroValidacao("A senha atual está incorreta.")
+
+    if altera_email and session.exec(
+        select(Usuario).where(Usuario.email == email, Usuario.id != usuario.id)
+    ).first():
+        raise ErroValidacao("Já existe uma conta cadastrada com este e-mail.")
+
+    if altera_nome:
+        usuario.nome = nome
+    if altera_email:
+        usuario.email = email
+    if nova_senha:
+        usuario.senha_hash = hash_senha(nova_senha)
+    usuario.atualizado_em = datetime.now(timezone.utc)
+    session.add(usuario)
+    session.commit()
+    session.refresh(usuario)
     return usuario
 
 
