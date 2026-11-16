@@ -5,12 +5,14 @@ from backend.app.api.dependencies import obter_usuario_atual
 from backend.app.api.schemas.auth import (
     CadastroRequest,
     LoginRequest,
+    PerfilAtualizacao,
     TokenResponse,
     UsuarioPublico,
 )
 from backend.app.db import get_session
 from backend.app.domain import Usuario
 from backend.app.services.auth_service import (
+    atualizar_perfil,
     autenticar_usuario,
     cadastrar_usuario,
     criar_sessao,
@@ -47,3 +49,12 @@ def login(
 @router.get("/me", response_model=UsuarioPublico)
 def me(usuario: Usuario = Depends(obter_usuario_atual)):
     return usuario
+
+
+@router.patch("/me", response_model=UsuarioPublico)
+def atualizar_me(
+    dados: PerfilAtualizacao,
+    usuario: Usuario = Depends(obter_usuario_atual),
+    session: Session = Depends(get_session),
+):
+    return atualizar_perfil(session, usuario, **dados.model_dump())

@@ -22,6 +22,13 @@ class UsuarioPublico(BaseModel):
     ativo: bool
 
 
+class PerfilAtualizacao(BaseModel):
+    nome: str | None = Field(default=None, min_length=1, max_length=120)
+    email: EmailStr | None = None
+    senha_atual: str | None = Field(default=None, max_length=128)
+    nova_senha: str | None = Field(default=None, min_length=8, max_length=128)
+
+
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"

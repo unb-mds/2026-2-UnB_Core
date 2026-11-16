@@ -6,6 +6,7 @@ import GuiaContribuicaoPage from './pages/GuiaContribuicaoPage'
 import MinhasContribuicoesPage from './pages/MinhasContribuicoesPage'
 import LoginPage from './pages/LoginPage'
 import ModeracaoPage from './pages/ModeracaoPage'
+import PerfilPage from './pages/PerfilPage'
 import AdminUsuariosPage from './pages/AdminUsuariosPage'
 import AdminPage from './pages/AdminPage'
 
@@ -38,6 +39,10 @@ function getRoute() {
 
   if (path === '/moderacao') {
     return { name: 'moderation' }
+  }
+
+  if (path === '/perfil') {
+    return { name: 'profile' }
   }
 
   if (path === '/admin/usuarios') {
@@ -94,6 +99,10 @@ function App() {
 
   if (route.name === 'moderation') {
     return <ModeracaoPage onNavigate={navigate} />
+  }
+
+  if (route.name === 'profile') {
+    return <PerfilPage onNavigate={navigate} />
   }
 
   if (route.name === 'admin-users') {
