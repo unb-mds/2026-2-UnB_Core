@@ -32,7 +32,7 @@ function Navigation({ active = 'conhecimento', onNavigate }) {
         <a href="/minhas-contribuicoes" onClick={(event) => handleNavigate(event, '/minhas-contribuicoes')}>
           Minhas contribuições
         </a>
-        {isAuthenticated && (
+        {isAuthenticated && ['moderador', 'administrador'].includes(user?.perfil) && (
           <a href="/moderacao" onClick={(event) => handleNavigate(event, '/moderacao')}>
             Moderação
           </a>
