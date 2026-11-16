@@ -3,8 +3,7 @@ import os
 from sqlmodel import Session
 
 from backend.app.db import create_db_and_tables, engine
-from backend.app.domain import PerfilUsuario
-from backend.app.services.usuario_service import criar_usuario_admin
+from backend.app.services.usuario_service import garantir_usuario_admin
 
 
 def main() -> None:
@@ -18,12 +17,11 @@ def main() -> None:
 
     create_db_and_tables()
     with Session(engine) as session:
-        criar_usuario_admin(
+        garantir_usuario_admin(
             session,
             nome=nome,
             email=email,
             senha=senha,
-            perfil=PerfilUsuario.ADMINISTRADOR,
         )
 
 

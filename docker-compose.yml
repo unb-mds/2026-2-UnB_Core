@@ -32,6 +32,9 @@ services:
     environment:
       DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg2://postgres:postgres@db:5432/unb_core}
       JWT_SECRET_KEY: ${JWT_SECRET_KEY:-dev-only-change-this-secret-key-32-bytes-minimum}
+      ADMIN_NAME: ${ADMIN_NAME:-}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
     ports:
       - "8000:8000"
     volumes:

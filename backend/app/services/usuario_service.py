@@ -34,6 +34,34 @@ def criar_usuario_admin(
     return usuario
 
 
+def garantir_usuario_admin(
+    session: Session,
+    *,
+    nome: str,
+    email: str,
+    senha: str,
+) -> Usuario:
+    email_normalizado = email.strip().lower()
+    usuario = session.exec(
+        select(Usuario).where(Usuario.email == email_normalizado)
+    ).first()
+    if usuario is not None:
+        if usuario.perfil != PerfilUsuario.ADMINISTRADOR:
+            raise ErroValidacao(
+                "O e-mail configurado para o administrador já pertence a "
+                "uma conta sem perfil de administrador."
+            )
+        return usuario
+
+    return criar_usuario_admin(
+        session,
+        nome=nome,
+        email=email_normalizado,
+        senha=senha,
+        perfil=PerfilUsuario.ADMINISTRADOR,
+    )
+
+
 def atualizar_usuario(
     session: Session,
     usuario_id: int,

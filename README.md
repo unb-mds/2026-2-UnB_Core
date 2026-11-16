@@ -66,6 +66,64 @@ Projeto desenvolvido para a disciplina de **Métodos de Desenvolvimento de Softw
  
 ## Como rodar localmente
 
+### Docker
+
+Pré-requisitos:
+
+- Docker Desktop instalado e em execução.
+- PowerShell aberto na raiz do repositório.
+
+Configure as variáveis na mesma janela do PowerShell. Os valores do
+administrador são opcionais; quando informados, a conta é criada
+automaticamente na inicialização do backend:
+
+```powershell
+$env:POSTGRES_USER = "postgres"
+$env:POSTGRES_PASSWORD = "postgres"
+$env:POSTGRES_DB = "unb_core"
+$env:DATABASE_URL = "postgresql+psycopg2://postgres:postgres@db:5432/unb_core"
+$env:JWT_SECRET_KEY = "troque-por-uma-chave-secreta-com-pelo-menos-32-caracteres"
+
+$env:ADMIN_NAME = "Administrador"
+$env:ADMIN_EMAIL = "admin@example.com"
+$env:ADMIN_PASSWORD = "troque-esta-senha"
+
+$env:VITE_API_URL = "http://localhost:8000/api/v1"
+```
+
+Inicie os serviços:
+
+```powershell
+docker compose up --build -d
+```
+
+Verifique o estado dos containers e os logs do backend:
+
+```powershell
+docker compose ps
+docker compose logs backend
+```
+
+Quando as variáveis `ADMIN_*` estiverem configuradas, o log deve informar que
+a conta administrativa foi configurada. O frontend estará disponível em
+`http://localhost:5173` e a documentação da API em `http://localhost:8000/docs`.
+
+Para parar os serviços sem apagar os dados:
+
+```powershell
+docker compose down
+```
+
+Para apagar também o banco de desenvolvimento e recriá-lo do zero:
+
+```powershell
+docker compose down -v
+docker compose up --build -d
+```
+
+O comando `docker compose down -v` remove permanentemente o volume local do
+PostgreSQL.
+
 ### Backend
 
 Os comandos abaixo devem ser executados no terminal integrado do VS Code ou no

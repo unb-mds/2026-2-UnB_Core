@@ -1,6 +1,7 @@
 import asyncio
 from contextlib import asynccontextmanager
 import logging
+import os
 
 import httpx
 from fastapi import FastAPI
@@ -15,9 +16,37 @@ from backend.app.crawler.crawlerDisciplina import coletar_e_salvar_disciplinas
 from backend.app.crawler.crawlercursos import coletar_e_salvar_cursos
 from backend.app.db import engine
 from backend.app.domain import Curso, Disciplina
+from backend.app.services.usuario_service import garantir_usuario_admin
 
 
 logger = logging.getLogger(__name__)
+
+
+def _garantir_admin_configurado() -> None:
+    configuracoes = {
+        "ADMIN_NAME": os.getenv("ADMIN_NAME") or None,
+        "ADMIN_EMAIL": os.getenv("ADMIN_EMAIL") or None,
+        "ADMIN_PASSWORD": os.getenv("ADMIN_PASSWORD") or None,
+    }
+    presentes = [valor is not None for valor in configuracoes.values()]
+    if not any(presentes):
+        return
+    if not all(presentes):
+        raise RuntimeError(
+            "ADMIN_NAME, ADMIN_EMAIL e ADMIN_PASSWORD devem ser "
+            "configurados juntos."
+        )
+    if len(configuracoes["ADMIN_PASSWORD"]) < 8:
+        raise RuntimeError("ADMIN_PASSWORD deve ter pelo menos 8 caracteres.")
+
+    with Session(engine) as session:
+        garantir_usuario_admin(
+            session,
+            nome=configuracoes["ADMIN_NAME"],
+            email=configuracoes["ADMIN_EMAIL"],
+            senha=configuracoes["ADMIN_PASSWORD"],
+        )
+    logger.info("Conta administrativa configurada para %s.", configuracoes["ADMIN_EMAIL"])
 
 
 async def _carregar_dados_iniciais() -> None:
@@ -51,6 +80,7 @@ async def _carregar_dados_iniciais() -> None:
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
+    _garantir_admin_configurado()
     tarefa_carga = asyncio.create_task(_carregar_dados_iniciais())
     try:
         yield

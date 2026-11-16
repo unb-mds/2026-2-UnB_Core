@@ -7,6 +7,7 @@ from backend.app.domain import PerfilUsuario, Usuario
 from backend.app.services.usuario_service import (
     atualizar_usuario,
     criar_usuario_admin,
+    garantir_usuario_admin,
     listar_usuarios,
 )
 
@@ -49,6 +50,44 @@ def test_criacao_de_administrador_rejeita_duplicado(session):
             email="admin@example.com",
             senha="senha-segura",
             perfil=PerfilUsuario.ADMINISTRADOR,
+        )
+
+
+def test_garante_administrador_existente_sem_alterar_senha(session):
+    user = Usuario(
+        id=1,
+        nome="Admin",
+        email="admin@example.com",
+        senha_hash="hash",
+        perfil=PerfilUsuario.ADMINISTRADOR,
+    )
+    session.exec.return_value.first.return_value = user
+
+    assert garantir_usuario_admin(
+        session,
+        nome="Outro nome",
+        email="ADMIN@EXAMPLE.COM",
+        senha="nova-senha",
+    ) is user
+    session.commit.assert_not_called()
+
+
+def test_garantia_rejeita_email_de_usuario_comum(session):
+    user = Usuario(
+        id=1,
+        nome="Usuário",
+        email="admin@example.com",
+        senha_hash="hash",
+        perfil=PerfilUsuario.USUARIO,
+    )
+    session.exec.return_value.first.return_value = user
+
+    with pytest.raises(ErroValidacao):
+        garantir_usuario_admin(
+            session,
+            nome="Admin",
+            email="admin@example.com",
+            senha="senha-segura",
         )
 
 
