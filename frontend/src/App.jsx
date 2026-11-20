@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import HomePage from './pages/HomePage'
 import ConhecimentoPage from './pages/ConhecimentoPage'
 import CadastroPage from './pages/CadastroPage'
 import ContribuicaoPage from './pages/ContribuicaoPage'
@@ -14,6 +15,10 @@ import MinhaContribuicaoPage from './pages/MinhaContribuicaoPage'
 
 function getRoute() {
   const path = window.location.pathname.replace(/\/$/, '') || '/'
+
+  if (path === '/') {
+    return { name: 'home' }
+  }
 
   if (path === '/base-de-conhecimentos') {
     return { name: 'knowledge' }
@@ -80,9 +85,14 @@ function App() {
     return () => window.removeEventListener('popstate', handlePopState)
   }, [])
 
-  function navigate(path) {
-    window.history.pushState({}, '', path)
+  // `state` permite levar dados para a próxima página (ex.: a disciplina escolhida na home).
+  function navigate(path, state = {}) {
+    window.history.pushState(state, '', path)
     setRoute(getRoute())
+  }
+
+  if (route.name === 'home') {
+    return <HomePage onNavigate={navigate} />
   }
 
   if (route.name === 'knowledge') {

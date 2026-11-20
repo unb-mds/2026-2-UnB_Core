@@ -20,6 +20,13 @@ function Navigation({ active = 'conhecimento', onNavigate }) {
       </a>
       <div className="topbar__links">
         <a
+          className={active === 'inicio' ? 'topbar__link--active' : ''}
+          href="/"
+          onClick={(event) => handleNavigate(event, '/')}
+        >
+          Início
+        </a>
+        <a
           className={active === 'conhecimento' ? 'topbar__link--active' : ''}
           href="/base-de-conhecimentos"
           onClick={(event) => handleNavigate(event, '/base-de-conhecimentos')}

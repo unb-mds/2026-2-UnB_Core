@@ -39,3 +39,7 @@
   .content-page { padding: var(--spacing-xl) var(--spacing-md) var(--spacing-2xl); }
   .content-detail__heading h1 { font-size: 22px; }
 }
+.knowledge-card > p.knowledge-card__discipline { color: var(--color-primary); font-size: 12px; font-weight: 600; overflow-wrap: anywhere; }
+/* Os rótulos de tipo já vêm escritos certo ("Dica de estudo"); sem isso o .badge deixaria cada palavra em maiúscula. */
+.knowledge-card .badge-category,
+.content-detail .badge-category { text-transform: none; }

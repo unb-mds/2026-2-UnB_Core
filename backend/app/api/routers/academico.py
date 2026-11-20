@@ -12,6 +12,7 @@ from backend.app.db import get_session
 from backend.app.domain import Curso, CursoDisciplina, Disciplina, TipoConteudo
 from backend.app.services.conteudo_service import (
     listar_conteudos_publicados,
+    listar_conteudos_recentes,
     obter_conteudo_publicado,
     validar_disciplina_do_curso,
 )
@@ -91,6 +92,15 @@ def listar_conteudos(
     if session.get(Disciplina, disciplina_id) is None:
         raise NaoEncontrado("A disciplina não foi encontrada.")
     return {"itens": listar_conteudos_publicados(session, disciplina_id, tipo)}
+
+
+@router.get("/conteudos", response_model=ListaResposta[ConteudoPublico])
+def listar_recentes(
+    limite: int = Query(default=6, ge=1, le=20),
+    session: Session = Depends(get_session),
+):
+    """Últimos conteúdos publicados, usados na página inicial."""
+    return {"itens": listar_conteudos_recentes(session, limite)}
 
 
 @router.get("/conteudos/{conteudo_id}", response_model=ConteudoPublico)
