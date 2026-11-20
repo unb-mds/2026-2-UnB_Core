@@ -48,6 +48,10 @@
   --spacing-xl: 2rem;
   --spacing-2xl: 3rem;
   --spacing-3xl: 4rem;
+  /* Largura do site: menu, rodapé e páginas usam a mesma margem lateral,
+     então o conteúdo começa e termina nas mesmas linhas do menu. */
+  --layout-max: 1200px;
+  --layout-gutter: max(16px, calc((100% - var(--layout-max)) / 2));
   font-family: var(--font-body);
   color: var(--color-text);
   background: var(--color-bg);

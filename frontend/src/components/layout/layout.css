@@ -1,0 +1,67 @@
+/* ---------- Layout padrão das páginas ----------
+   .page-container usa a mesma margem lateral do menu e do rodapé (--layout-gutter),
+   então o conteúdo de todas as páginas fica alinhado ao logo e ao último botão do menu. */
+.page-container { width: 100%; box-sizing: border-box; padding-inline: var(--layout-gutter); }
+
+/* Faixa de largura total: preenche as laterais com uma superfície, em vez de fundo liso. */
+.page-band { border-bottom: 1px solid var(--color-border); background: var(--color-surface); }
+
+/* ---------- Cabeçalho da página ---------- */
+.page-header { display: grid; gap: var(--spacing-md); padding-block: var(--spacing-2xl) var(--spacing-xl); }
+.page-header__back { width: fit-content; color: var(--color-primary); font-size: 14px; font-weight: 600; text-decoration: none; }
+.page-header__back:hover { text-decoration: underline; }
+.page-header__row { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--spacing-md) var(--spacing-xl); }
+.page-header__text { min-width: 0; max-width: 760px; }
+.page-header__eyebrow { margin: 0 0 var(--spacing-sm); color: var(--color-primary); font-size: 12px; font-weight: 600; }
+.page-header h1 { margin: 0; color: var(--color-text); font-family: var(--font-display); font-size: clamp(26px, 4vw, 34px); line-height: 1.2; }
+.page-header__description { max-width: 68ch; margin: var(--spacing-sm) 0 0; color: var(--color-text-muted); font-size: 15px; line-height: 1.6; }
+.page-header__actions { display: flex; flex-wrap: wrap; gap: var(--spacing-sm); }
+.page-header__content { min-width: 0; margin-top: var(--spacing-sm); }
+
+/* ---------- Corpo ---------- */
+.page-body { padding-block: var(--spacing-xl) var(--spacing-3xl); }
+/* Largura de leitura (~75 caracteres), para textos e formulários sem coluna lateral. */
+.page-narrow { max-width: 760px; }
+
+/* Conteúdo principal + coluna lateral de 320px. */
+.page-columns { display: grid; grid-template-columns: minmax(0, 1fr) 320px; align-items: start; gap: var(--spacing-xl) var(--spacing-2xl); }
+.page-columns__main { display: grid; gap: var(--spacing-lg); min-width: 0; }
+.page-columns__aside { position: sticky; top: var(--spacing-lg); display: grid; gap: var(--spacing-md); min-width: 0; }
+
+/* ---------- Cartões da coluna lateral ---------- */
+.aside-card { display: grid; gap: var(--spacing-sm); padding: var(--spacing-lg); border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-surface); box-shadow: var(--shadow-sm); }
+.aside-card h2 { margin: 0; color: var(--color-text); font-family: var(--font-display); font-size: 16px; }
+.aside-card p { margin: 0; color: var(--color-text-muted); font-size: 14px; line-height: 1.6; }
+.aside-card ul,
+.aside-card ol { display: grid; gap: 6px; margin: 0; padding-left: 18px; color: var(--color-text-muted); font-size: 14px; line-height: 1.5; }
+.aside-card li::marker { color: var(--color-primary); }
+.aside-card a { color: var(--color-primary); font-weight: 600; }
+.aside-card .btn { width: 100%; }
+
+/* Lista de números (ex.: resumo por estado). */
+.aside-stats { display: grid; gap: 6px; margin: 0; }
+.aside-stats div { display: flex; align-items: baseline; justify-content: space-between; gap: var(--spacing-sm); }
+.aside-stats dt { color: var(--color-text-muted); font-size: 14px; }
+.aside-stats dd { margin: 0; color: var(--color-text); font-family: var(--font-display); font-size: 16px; font-weight: 700; }
+
+/* ---------- Grade de cards ----------
+   Três colunas na largura do site, duas em telas médias e uma no celular. */
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: var(--spacing-md); transition: opacity var(--transition-fast); }
+/* Lista anterior esmaecida enquanto a nova carrega. */
+.cards-grid[aria-busy="true"] { opacity: 0.55; pointer-events: none; }
+
+@media (max-width: 960px) {
+  .page-columns { grid-template-columns: minmax(0, 1fr); }
+  .page-columns__aside { position: static; }
+}
+
+@media (max-width: 700px) {
+  .page-header { padding-block: var(--spacing-xl) var(--spacing-lg); }
+  .page-body { padding-block: var(--spacing-lg) var(--spacing-2xl); }
+}
+
+/* Formulário dentro de um cartão lateral: sem moldura dupla. */
+.aside-card .contribution-form { gap: var(--spacing-md); padding: 0; border: 0; background: transparent; box-shadow: none; }
+
+/* Mensagens de andamento ("Carregando...") em qualquer página. */
+.page-status { margin: 0; color: var(--color-text-muted); font-size: 14px; }
