@@ -6,7 +6,7 @@ from sqlalchemy.pool import StaticPool
 from sqlmodel import Session, SQLModel, create_engine
 
 from backend.app.db import get_session
-from backend.app.domain import Curso, Disciplina
+from backend.app.domain import Curso, CursoDisciplina, Disciplina
 from backend.app.main import app
 
 
@@ -45,14 +45,11 @@ def setup_function() -> None:
     SQLModel.metadata.drop_all(engine)
     SQLModel.metadata.create_all(engine)
     with Session(engine) as session:
-        session.add(Curso(nome="Engenharia de Software", sigla="ES"))
-        session.add(
-            Disciplina(
-                curso_id=1,
-                codigo="CIC-0001",
-                nome="Fundamentos",
-            )
-        )
+        curso = Curso(nome="Engenharia de Software", sigla="ES")
+        disciplina = Disciplina(codigo="CIC-0001", nome="Fundamentos")
+        session.add_all([curso, disciplina])
+        session.flush()
+        session.add(CursoDisciplina(curso_id=curso.id, disciplina_id=disciplina.id))
         session.commit()
 
 

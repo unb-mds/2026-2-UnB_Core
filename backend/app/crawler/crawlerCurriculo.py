@@ -18,7 +18,13 @@ from sqlmodel import Session, select
 
 from backend.app.crawler.crawlerDisciplina import DisciplinaColetada
 from backend.app.crawler.crawlercursos import URL_CURSOS_GRADUACAO
-from backend.app.domain import ConteudoAcademico, Contribuicao, Curso, Disciplina
+from backend.app.domain import (
+    ConteudoAcademico,
+    Contribuicao,
+    Curso,
+    CursoDisciplina,
+    Disciplina,
+)
 
 
 SIGLA_CAMPUS_GAMA: Final = "FCTE"
@@ -159,26 +165,68 @@ def sincronizar_disciplinas_por_curriculo(
         existentes = {
             disciplina.codigo: disciplina
             for disciplina in session.exec(
-                select(Disciplina).where(Disciplina.curso_id == curso.id)
+                select(Disciplina)
+                .join(
+                    CursoDisciplina,
+                    CursoDisciplina.disciplina_id == Disciplina.id,
+                )
+                .where(CursoDisciplina.curso_id == curso.id)
             ).all()
         }
 
         for componente in componentes:
             if componente.codigo not in existentes:
-                session.add(
-                    Disciplina(
-                        curso_id=curso.id,
+                disciplina = session.exec(
+                    select(Disciplina).where(
+                        Disciplina.codigo == componente.codigo
+                    )
+                ).first()
+                if disciplina is None:
+                    disciplina = Disciplina(
                         codigo=componente.codigo,
                         nome=componente.nome,
                         periodo=componente.periodo,
                     )
-                )
+                    session.add(disciplina)
+                    session.flush()
+                if disciplina.id is not None:
+                    session.add(
+                        CursoDisciplina(
+                            curso_id=curso.id,
+                            disciplina_id=disciplina.id,
+                        )
+                    )
+                existentes[componente.codigo] = disciplina
+            else:
+                disciplina = existentes[componente.codigo]
+                if disciplina.id is not None:
+                    session.merge(
+                        CursoDisciplina(
+                            curso_id=curso.id,
+                            disciplina_id=disciplina.id,
+                        )
+                    )
             quantidade += 1
 
         for codigo, disciplina in existentes.items():
             if codigo in codigos or _disciplina_em_uso(session, disciplina.id):
                 continue
-            session.delete(disciplina)
+            vinculo = session.exec(
+                select(CursoDisciplina).where(
+                    CursoDisciplina.curso_id == curso.id,
+                    CursoDisciplina.disciplina_id == disciplina.id,
+                )
+            ).first()
+            if vinculo is not None:
+                session.delete(vinculo)
+                session.flush()
+                outro_vinculo = session.exec(
+                    select(CursoDisciplina).where(
+                        CursoDisciplina.disciplina_id == disciplina.id
+                    )
+                ).first()
+                if outro_vinculo is None:
+                    session.delete(disciplina)
     session.commit()
     return quantidade
 

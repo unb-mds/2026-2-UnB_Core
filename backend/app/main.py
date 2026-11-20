@@ -14,7 +14,7 @@ from backend.app.api.router import api_router
 from backend.app.crawler.crawlerCurriculo import coletar_e_sincronizar_curriculos
 from backend.app.crawler.crawlerDisciplina import coletar_e_salvar_disciplinas
 from backend.app.crawler.crawlercursos import coletar_e_salvar_cursos
-from backend.app.db import engine
+from backend.app.db import create_db_and_tables, engine
 from backend.app.domain import Curso, Disciplina
 from backend.app.services.usuario_service import garantir_usuario_admin
 
@@ -80,6 +80,7 @@ async def _carregar_dados_iniciais() -> None:
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
+    create_db_and_tables()
     _garantir_admin_configurado()
     tarefa_carga = asyncio.create_task(_carregar_dados_iniciais())
     try:

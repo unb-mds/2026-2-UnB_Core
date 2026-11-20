@@ -9,6 +9,7 @@ from backend.app.db import get_session
 from backend.app.domain import (
     ConteudoAcademico,
     Curso,
+    CursoDisciplina,
     Disciplina,
     EstadoConteudo,
     TipoConteudo,
@@ -47,17 +48,15 @@ def setup_function() -> None:
     SQLModel.metadata.create_all(engine)
     with Session(engine) as session:
         curso = Curso(nome="Engenharia de Software", sigla="ES")
-        disciplina = Disciplina(
-            curso_id=1,
-            codigo="CIC-0001",
-            nome="Fundamentos",
-        )
+        disciplina = Disciplina(codigo="CIC-0001", nome="Fundamentos")
         autor = Usuario(
             nome="Estudante",
             email="estudante@example.com",
             senha_hash="hash",
         )
         session.add_all([curso, disciplina, autor])
+        session.flush()
+        session.add(CursoDisciplina(curso_id=curso.id, disciplina_id=disciplina.id))
         session.commit()
         session.add(
             ConteudoAcademico(

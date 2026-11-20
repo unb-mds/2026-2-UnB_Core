@@ -20,6 +20,7 @@ def create_db_and_tables() -> None:
         ConteudoAcademico,
         Contribuicao,
         Curso,
+        CursoDisciplina,
         Disciplina,
         Usuario,
     )

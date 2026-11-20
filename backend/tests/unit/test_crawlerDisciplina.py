@@ -6,7 +6,7 @@ from backend.app.crawler.crawlerDisciplina import (
     extrair_disciplinas_html,
     salvar_disciplinas,
 )
-from backend.app.domain import Curso, Disciplina
+from backend.app.domain import Curso, CursoDisciplina, Disciplina
 
 
 def test_extrair_disciplinas_html_deduplica_turmas() -> None:
@@ -57,7 +57,13 @@ def test_salvar_disciplinas_associa_curso_pelo_prefixo() -> None:
                 )
             ],
         ) == 1
-        assert session.exec(select(Disciplina)).one().curso_id == curso.id
+        disciplina = session.exec(select(Disciplina)).one()
+        assert session.exec(
+            select(CursoDisciplina).where(
+                CursoDisciplina.curso_id == curso.id,
+                CursoDisciplina.disciplina_id == disciplina.id,
+            )
+        ).one()
 
 
 def test_salvar_disciplinas_do_gama_associa_todos_os_cursos_fcte() -> None:
@@ -83,7 +89,14 @@ def test_salvar_disciplinas_do_gama_associa_todos_os_cursos_fcte() -> None:
         assert salvar_disciplinas(session, disciplinas) == 4
 
         salvas = session.exec(select(Disciplina)).all()
-        assert len(salvas) == 4
+        assert len(salvas) == 2
         for curso in (software, eletronica):
-            codigos = {d.codigo for d in salvas if d.curso_id == curso.id}
+            disciplina_ids = session.exec(
+                select(CursoDisciplina.disciplina_id).where(
+                    CursoDisciplina.curso_id == curso.id
+                )
+            ).all()
+            codigos = {
+                d.codigo for d in salvas if d.id in disciplina_ids
+            }
             assert codigos == {"FGA0003", "FCTE0005"}
