@@ -59,9 +59,16 @@ class Curso(SQLModel, table=True):
     grau: GrauCurso = Field(default=GrauCurso.BACHARELADO)
 
 
+class CursoDisciplina(SQLModel, table=True):
+    curso_id: int = Field(foreign_key="curso.id", primary_key=True)
+    disciplina_id: int = Field(
+        foreign_key="disciplina.id",
+        primary_key=True,
+    )
+
+
 class Disciplina(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
-    curso_id: int = Field(foreign_key="curso.id", index=True)
     codigo: str
     nome: str
     periodo: str | None = None

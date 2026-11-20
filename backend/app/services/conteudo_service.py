@@ -3,6 +3,7 @@ from sqlmodel import Session, select
 from backend.app.api.errors import NaoEncontrado
 from backend.app.domain import (
     ConteudoAcademico,
+    CursoDisciplina,
     Disciplina,
     EstadoConteudo,
     TipoConteudo,
@@ -46,7 +47,13 @@ def validar_disciplina_do_curso(
     curso_id: int,
 ) -> Disciplina:
     disciplina = session.get(Disciplina, disciplina_id)
-    if disciplina is None or not disciplina.ativo or disciplina.curso_id != curso_id:
+    pertence_ao_curso = session.exec(
+        select(CursoDisciplina).where(
+            CursoDisciplina.disciplina_id == disciplina_id,
+            CursoDisciplina.curso_id == curso_id,
+        )
+    ).first()
+    if disciplina is None or not disciplina.ativo or pertence_ao_curso is None:
         raise NaoEncontrado(
             "A disciplina não pertence ao curso selecionado ou está indisponível."
         )

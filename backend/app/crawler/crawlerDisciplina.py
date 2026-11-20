@@ -10,7 +10,7 @@ import httpx
 from bs4 import BeautifulSoup
 from sqlmodel import Session, select
 
-from backend.app.domain import Curso, Disciplina
+from backend.app.domain import Curso, CursoDisciplina, Disciplina
 
 
 URL_TURMAS_GRADUACAO: Final = (
@@ -192,22 +192,42 @@ def salvar_disciplinas(
     quantidade = 0
     for disciplina in disciplinas:
         cursos = cursos_por_sigla.get(_sigla_por_codigo(disciplina.codigo), [])
-        for curso in cursos:
-            existente = session.exec(
-                select(Disciplina).where(
-                    Disciplina.curso_id == curso.id,
-                    Disciplina.codigo == disciplina.codigo,
+        if not cursos:
+            continue
+        existente = session.exec(
+            select(Disciplina).where(
+                Disciplina.codigo == disciplina.codigo,
+            )
+        ).first()
+        if existente is None:
+            existente = Disciplina(
+                codigo=disciplina.codigo,
+                nome=disciplina.nome,
+                periodo=disciplina.periodo,
+            )
+            session.add(existente)
+            session.flush()
+        if existente.id is None:
+            continue
+        vinculados = {
+            vinculo.curso_id
+            for vinculo in session.exec(
+                select(CursoDisciplina).where(
+                    CursoDisciplina.disciplina_id == existente.id
                 )
-            ).first()
-            if existente is None:
+            ).all()
+        }
+        for curso in cursos:
+            if curso.id is None:
+                continue
+            if curso.id not in vinculados:
                 session.add(
-                    Disciplina(
+                    CursoDisciplina(
                         curso_id=curso.id,
-                        codigo=disciplina.codigo,
-                        nome=disciplina.nome,
-                        periodo=disciplina.periodo,
+                        disciplina_id=existente.id,
                     )
                 )
+                vinculados.add(curso.id)
             quantidade += 1
     session.commit()
     return quantidade

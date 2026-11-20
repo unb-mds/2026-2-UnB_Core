@@ -1,6 +1,6 @@
 from sqlmodel import Session, select
 
-from backend.app.domain import Curso, Disciplina
+from backend.app.domain import Curso, CursoDisciplina, Disciplina
 
 
 def listar_cursos(session: Session) -> list[Curso]:
@@ -21,7 +21,14 @@ def listar_disciplinas_ativas(
     return list(
         session.exec(
             select(Disciplina)
-            .where(Disciplina.curso_id == curso_id, Disciplina.ativo)
+            .join(
+                CursoDisciplina,
+                CursoDisciplina.disciplina_id == Disciplina.id,
+            )
+            .where(
+                CursoDisciplina.curso_id == curso_id,
+                Disciplina.ativo,
+            )
             .order_by(Disciplina.nome)
         ).all()
     )

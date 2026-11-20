@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, Query
-from sqlmodel import Session
+from sqlmodel import Session, select
 
 from backend.app.api.errors import NaoEncontrado
 from backend.app.api.schemas.academico import (
@@ -9,7 +9,7 @@ from backend.app.api.schemas.academico import (
     ListaResposta,
 )
 from backend.app.db import get_session
-from backend.app.domain import Curso, Disciplina, TipoConteudo
+from backend.app.domain import Curso, CursoDisciplina, Disciplina, TipoConteudo
 from backend.app.services.conteudo_service import (
     listar_conteudos_publicados,
     obter_conteudo_publicado,
@@ -39,7 +39,23 @@ def listar_disciplinas(
     if session.get(Curso, curso_id) is None:
         raise NaoEncontrado("O curso não foi encontrado.")
     disciplinas = listar_disciplinas_ativas(session, curso_id)
-    return {"itens": disciplinas}
+    itens = []
+    for disciplina in disciplinas:
+        curso_ids = session.exec(
+            select(CursoDisciplina.curso_id).where(
+                CursoDisciplina.disciplina_id == disciplina.id
+            )
+        ).all()
+        itens.append(
+            {
+                "id": disciplina.id,
+                "curso_id": list(curso_ids),
+                "codigo": disciplina.codigo,
+                "nome": disciplina.nome,
+                "periodo": disciplina.periodo,
+            }
+        )
+    return {"itens": itens}
 
 
 @router.get(

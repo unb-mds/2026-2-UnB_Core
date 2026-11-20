@@ -11,6 +11,7 @@ from backend.app.crawler.crawlerDisciplina import DisciplinaColetada
 from backend.app.domain import (
     ConteudoAcademico,
     Curso,
+    CursoDisciplina,
     Disciplina,
     TipoConteudo,
     Usuario,
@@ -108,14 +109,23 @@ def test_sincronizar_disciplinas_por_curriculo_separa_os_cursos_do_gama() -> Non
                 ("FGA0003", "COMPILADORES 1"),
                 ("FGA0109", "DINÂMICA DOS FLUIDOS"),
             ):
-                session.add(Disciplina(curso_id=curso.id, codigo=codigo, nome=nome))
+                disciplina = Disciplina(codigo=codigo, nome=nome)
+                session.add(disciplina)
+                session.flush()
+                session.add(
+                    CursoDisciplina(
+                        curso_id=curso.id,
+                        disciplina_id=disciplina.id,
+                    )
+                )
         session.commit()
         session.refresh(autor)
 
         def disciplina(curso: Curso, codigo: str) -> Disciplina:
             return session.exec(
                 select(Disciplina).where(
-                    Disciplina.curso_id == curso.id,
+                    CursoDisciplina.disciplina_id == Disciplina.id,
+                    CursoDisciplina.curso_id == curso.id,
                     Disciplina.codigo == codigo,
                 )
             ).one()
@@ -151,7 +161,12 @@ def test_sincronizar_disciplinas_por_curriculo_separa_os_cursos_do_gama() -> Non
             return {
                 disciplina.codigo
                 for disciplina in session.exec(
-                    select(Disciplina).where(Disciplina.curso_id == curso.id)
+                    select(Disciplina)
+                    .join(
+                        CursoDisciplina,
+                        CursoDisciplina.disciplina_id == Disciplina.id,
+                    )
+                    .where(CursoDisciplina.curso_id == curso.id)
                 ).all()
             }
 

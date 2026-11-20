@@ -3,13 +3,14 @@ from contextlib import asynccontextmanager
 
 from fastapi.testclient import TestClient
 from sqlalchemy.pool import StaticPool
-from sqlmodel import Session, SQLModel, create_engine
+from sqlmodel import Session, SQLModel, create_engine, select
 
 from backend.app.db import get_session
 from backend.app.domain import (
     ConteudoAcademico,
     Contribuicao,
     Curso,
+    CursoDisciplina,
     Disciplina,
     EstadoContribuicao,
     Usuario,
@@ -48,7 +49,7 @@ def setup_function() -> None:
         session.add_all(
             [
                 Curso(nome="Engenharia de Software", sigla="ES"),
-                Disciplina(curso_id=1, codigo="CIC-0001", nome="Fundamentos"),
+                Disciplina(codigo="CIC-0001", nome="Fundamentos"),
                 Usuario(
                     nome="Moderador",
                     email="moderador@example.com",
@@ -62,6 +63,10 @@ def setup_function() -> None:
                 ),
             ]
         )
+        session.flush()
+        disciplina = session.exec(select(Disciplina)).first()
+        curso = session.exec(select(Curso)).first()
+        session.add(CursoDisciplina(curso_id=curso.id, disciplina_id=disciplina.id))
         session.commit()
         session.add(
             Contribuicao(

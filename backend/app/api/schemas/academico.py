@@ -18,7 +18,7 @@ class DisciplinaPublica(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     id: int
-    curso_id: int
+    curso_id: list[int]
     codigo: str
     nome: str
     periodo: str | None

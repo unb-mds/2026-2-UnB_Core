@@ -7,7 +7,7 @@ from backend.app.api.schemas.auth import LoginRequest
 from backend.app.api.schemas.contribuicao import ContribuicaoCriacao
 from backend.app.api.schemas.moderacao import DecisaoModeracao, DecisaoRequest
 from backend.app.api.schemas.usuarios import UsuarioAdminAtualizacao
-from backend.app.domain import PerfilUsuario, TipoConteudo
+from backend.app.domain import Disciplina, PerfilUsuario, TipoConteudo
 
 
 def test_rotas_auth_delegam_para_servicos(monkeypatch, usuario):
@@ -57,10 +57,13 @@ def test_rotas_academicas_listam_cursos(monkeypatch, session):
 
 def test_rotas_academicas_listam_disciplinas(monkeypatch, session):
     session.get.return_value = object()
-    expected = [object()]
+    expected = [Disciplina(id=5, codigo="CIC0001", nome="Fundamentos")]
+    session.exec.return_value.all.return_value = [1, 2]
     monkeypatch.setattr(academico, "listar_disciplinas_ativas", lambda *_: expected)
 
-    assert academico.listar_disciplinas(1, session) == {"itens": expected}
+    resposta = academico.listar_disciplinas(1, session)
+    assert resposta["itens"][0]["curso_id"] == [1, 2]
+    assert resposta["itens"][0]["id"] == 5
 
 
 def test_rotas_academicas_listam_conteudo(monkeypatch, session):
