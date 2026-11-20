@@ -145,7 +145,11 @@ function ConhecimentoPage({ onContribute = () => {}, onNavigate }) {
               {contents.map((content) => <ConteudoCard key={content.id} content={content} onOpen={setSelectedContent} />)}
             </div>
           )}
-          <ConteudoDetalhe content={selectedContent} onClose={() => setSelectedContent(null)} />
+          <ConteudoDetalhe
+            content={selectedContent}
+            onClose={() => setSelectedContent(null)}
+            onOpenPage={(content) => onNavigate?.(`/conteudos/${content.id}`)}
+          />
         </section>
       </main>
       <SiteFooter />

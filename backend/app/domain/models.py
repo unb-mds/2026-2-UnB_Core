@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 from enum import StrEnum
 
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, Relationship, SQLModel
 
 
 def agora_utc() -> datetime:
@@ -91,6 +91,10 @@ class ConteudoAcademico(SQLModel, table=True):
     criado_em: datetime = Field(default_factory=agora_utc)
     atualizado_em: datetime = Field(default_factory=agora_utc)
 
+    # Só para leitura dos nomes nas respostas da API; não muda o banco.
+    disciplina: Disciplina | None = Relationship()
+    autor: Usuario | None = Relationship()
+
 
 class Contribuicao(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
@@ -105,3 +109,6 @@ class Contribuicao(SQLModel, table=True):
     justificativa_moderacao: str | None = None
     criado_em: datetime = Field(default_factory=agora_utc)
     atualizado_em: datetime = Field(default_factory=agora_utc)
+
+    # Só para leitura do nome da disciplina nas respostas da API; não muda o banco.
+    disciplina: Disciplina | None = Relationship()
