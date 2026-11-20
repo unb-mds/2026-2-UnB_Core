@@ -2,7 +2,7 @@
 .home-page { display: grid; gap: var(--spacing-2xl); width: min(1120px, 100%); margin: 0 auto; padding: var(--spacing-xl) var(--spacing-3xl) var(--spacing-3xl); box-sizing: border-box; }
 
 /* ---------- Topo ---------- */
-.home-hero { padding: var(--spacing-3xl) var(--spacing-2xl); border-radius: var(--radius-sm); color: #fff; background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%); box-shadow: var(--shadow-md); }
+.home-hero { padding: var(--spacing-3xl) var(--spacing-2xl); border-radius: var(--radius-sm); color: #fff; background: linear-gradient(135deg, var(--color-brand-deep) 0%, var(--color-brand) 100%); box-shadow: var(--shadow-md); }
 .home-hero__content { display: grid; gap: var(--spacing-md); max-width: 720px; min-width: 0; }
 .home-hero__eyebrow { margin: 0; color: var(--color-accent); font-family: var(--font-display); font-size: 13px; font-weight: 700; letter-spacing: 0.02em; }
 .home-hero h1 { margin: 0; color: #fff; font-family: var(--font-display); font-size: clamp(28px, 5vw, 40px); line-height: 1.2; }
@@ -27,7 +27,7 @@
 /* ---------- Como funciona ---------- */
 .home-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--spacing-md); margin: 0; padding: 0; list-style: none; }
 .home-steps__item { display: grid; align-content: start; gap: var(--spacing-sm); min-width: 0; padding: var(--spacing-lg); border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-surface); box-shadow: var(--shadow-sm); }
-.home-steps__number { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; color: #fff; background: var(--color-primary); font-family: var(--font-display); font-size: 14px; font-weight: 700; }
+.home-steps__number { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; color: var(--color-on-primary); background: var(--color-primary); font-family: var(--font-display); font-size: 14px; font-weight: 700; }
 .home-steps__item h3 { margin: 0; color: var(--color-text); font-size: 16px; }
 .home-steps__item > p { margin: 0; color: var(--color-text-muted); font-size: 14px; line-height: 1.6; }
 /* Lista simples (e não chips), para não parecer clicável. */
