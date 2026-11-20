@@ -1,4 +1,6 @@
-from sqlmodel import Session, select
+from enum import StrEnum
+
+from sqlmodel import Session, func, select
 
 from backend.app.api.errors import NaoEncontrado
 from backend.app.domain import (
@@ -31,22 +33,68 @@ def listar_conteudos_publicados(
     )
 
 
-def listar_conteudos_recentes(
+class OrdemConteudos(StrEnum):
+    RECENTES = "recentes"
+    ANTIGOS = "antigos"
+    TITULO = "titulo"
+
+
+ORDENACOES = {
+    OrdemConteudos.RECENTES: (
+        ConteudoAcademico.atualizado_em.desc(),
+        ConteudoAcademico.id.desc(),
+    ),
+    OrdemConteudos.ANTIGOS: (
+        ConteudoAcademico.atualizado_em.asc(),
+        ConteudoAcademico.id.asc(),
+    ),
+    OrdemConteudos.TITULO: (
+        func.lower(ConteudoAcademico.titulo).asc(),
+        ConteudoAcademico.id.asc(),
+    ),
+}
+
+
+def filtrar_conteudos(
     session: Session,
+    *,
+    tipo: TipoConteudo | None = None,
+    curso_id: int | None = None,
+    disciplina_id: int | None = None,
+    ordem: OrdemConteudos = OrdemConteudos.RECENTES,
     limite: int = 6,
-) -> list[ConteudoAcademico]:
-    """Últimos conteúdos publicados, de todas as disciplinas."""
-    return list(
-        session.exec(
-            select(ConteudoAcademico)
-            .where(ConteudoAcademico.estado == EstadoConteudo.PUBLICADO)
-            .order_by(
-                ConteudoAcademico.atualizado_em.desc(),
-                ConteudoAcademico.id.desc(),
+    deslocamento: int = 0,
+) -> tuple[list[ConteudoAcademico], int]:
+    """Conteúdos publicados de todas as disciplinas, com filtros opcionais.
+
+    Retorna a página pedida e o total de conteúdos que atendem aos filtros.
+    """
+    filtros = [ConteudoAcademico.estado == EstadoConteudo.PUBLICADO]
+    if tipo is not None:
+        filtros.append(ConteudoAcademico.tipo == tipo)
+    if disciplina_id is not None:
+        filtros.append(ConteudoAcademico.disciplina_id == disciplina_id)
+    if curso_id is not None:
+        # Conteúdos das disciplinas que o curso oferece (vínculo em curso_disciplina).
+        filtros.append(
+            ConteudoAcademico.disciplina_id.in_(
+                select(CursoDisciplina.disciplina_id).where(
+                    CursoDisciplina.curso_id == curso_id
+                )
             )
-            .limit(limite)
-        ).all()
-    )
+        )
+
+    total = session.exec(
+        select(func.count()).select_from(ConteudoAcademico).where(*filtros)
+    ).one()
+    itens = session.exec(
+        select(ConteudoAcademico)
+        .where(*filtros)
+        .order_by(*ORDENACOES[ordem])
+        .offset(deslocamento)
+        .limit(limite)
+    ).all()
+    return list(itens), total
 
 
 def obter_conteudo_publicado(

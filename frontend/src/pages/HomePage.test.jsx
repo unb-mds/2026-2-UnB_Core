@@ -160,6 +160,6 @@ describe('ConhecimentoPage aberta pela home', () => {
 
     expect(screen.getByRole('combobox', { name: 'Disciplina' })).toHaveValue('FGA0003 - COMPILADORES 1')
     expect(await screen.findByText('Dica de parser')).toBeInTheDocument()
-    expect(api.get).toHaveBeenCalledWith('/disciplinas/3/conteudos', expect.anything())
+    expect(api.get).toHaveBeenCalledWith(expect.stringContaining('disciplina_id=3'), expect.anything())
   })
 })
