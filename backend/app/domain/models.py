@@ -60,6 +60,10 @@ class Curso(SQLModel, table=True):
 
 
 class CursoDisciplina(SQLModel, table=True):
+    # Mesmo nome criado pela migration 0004. Sem isso, o SQLModel usaria
+    # "cursodisciplina" e a API leria uma tabela vazia.
+    __tablename__ = "curso_disciplina"
+
     curso_id: int = Field(foreign_key="curso.id", primary_key=True)
     disciplina_id: int = Field(
         foreign_key="disciplina.id",
