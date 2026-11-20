@@ -2,7 +2,7 @@
 import '@testing-library/jest-dom/vitest'
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import Navigation from './Navigation'
+import Navigation, { secaoAtiva } from './Navigation'
 import { CHAVE_TEMA, iniciarTema } from '../state/theme'
 
 function simularSistema(escuro) {
@@ -17,6 +17,39 @@ beforeEach(() => {
 afterEach(() => {
   cleanup()
   delete window.matchMedia
+})
+
+describe('item ativo do menu', () => {
+  it.each([
+    ['/', 'inicio'],
+    ['/base-de-conhecimentos', 'conhecimento'],
+    ['/conteudos/7', 'conhecimento'],
+    ['/contribuicao', 'contribuir'],
+    ['/guia-de-contribuicao', 'contribuir'],
+    ['/minhas-contribuicoes', 'minhas'],
+    ['/minhas-contribuicoes/5', 'minhas'],
+    ['/moderacao', 'moderacao'],
+    ['/admin/usuarios', 'usuarios'],
+    ['/perfil', 'perfil'],
+    ['/perfil/', 'perfil'],
+    ['/endereco-que-nao-existe', 'conhecimento'],
+  ])('%s acende "%s"', (caminho, esperado) => {
+    expect(secaoAtiva(caminho)).toBe(esperado)
+  })
+
+  it('marca só o link da página atual, com aria-current', () => {
+    window.history.replaceState({}, '', '/minhas-contribuicoes/5')
+
+    render(<Navigation onNavigate={() => {}} />)
+
+    const atual = screen.getByRole('link', { name: 'Minhas contribuições' })
+    expect(atual).toHaveAttribute('aria-current', 'page')
+    expect(atual).toHaveClass('topbar__link--active')
+    expect(screen.getByRole('link', { name: 'Base de conhecimento' })).not.toHaveAttribute('aria-current')
+    expect(document.querySelectorAll('[aria-current="page"]')).toHaveLength(1)
+
+    window.history.replaceState({}, '', '/')
+  })
 })
 
 describe('tema claro/escuro', () => {
