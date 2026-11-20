@@ -28,6 +28,9 @@
   --color-text: #1B1F2A;
   --color-text-muted: #5A5F6E;
   --color-border: #E2E4EA;
+  /* Campos de texto e seleção. No tema claro são iguais à superfície; no escuro ficam mais claros que ela. */
+  --color-field: #FFFFFF;
+  --color-field-border: #E2E4EA;
   --color-neutral-10: #F0F1F4;
   --color-neutral-50: #9AA0AE;
   --font-display: 'JetBrains Mono', monospace;
@@ -74,11 +77,16 @@
   --color-text: #E6E9F2;
   --color-text-muted: #A3AABD;
   --color-border: #2A3248;
+  --color-field: #222B44;
+  --color-field-border: #46506D;
   --color-neutral-10: #232A3D;
   --color-neutral-50: #6B7389;
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
   --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.5);
 }
+
+/* Placeholder legível sobre --color-field no escuro (contraste 4,6:1). */
+:root[data-theme="dark"] ::placeholder { color: #8C93A8; opacity: 1; }
 
 * { box-sizing: border-box; }
 body { margin: 0; min-width: 320px; overflow-wrap: break-word; }

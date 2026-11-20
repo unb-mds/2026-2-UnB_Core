@@ -3,7 +3,7 @@
 .discipline-search > label.discipline-search__label { display: block; color: var(--color-text); font-size: 13px; font-weight: 600; }
 .discipline-search__control { position: relative; min-width: 0; }
 /* Dois níveis de classe para vencer ".contribution-form input", que tiraria o espaço do botão "×". */
-.discipline-search .discipline-search__input { width: 100%; min-width: 0; min-height: 44px; box-sizing: border-box; padding: 8px 42px 8px 10px; border: 1px solid var(--color-border); border-radius: var(--radius-sm); color: var(--color-text); background: var(--color-surface); font: inherit; font-size: 14px; }
+.discipline-search .discipline-search__input { width: 100%; min-width: 0; min-height: 44px; box-sizing: border-box; padding: 8px 42px 8px 10px; border: 1px solid var(--color-field-border); border-radius: var(--radius-sm); color: var(--color-text); background: var(--color-field); font: inherit; font-size: 14px; }
 .discipline-search__input::-webkit-search-cancel-button { display: none; }
 .discipline-search__clear { position: absolute; top: 50%; right: 4px; display: grid; width: 34px; height: 34px; place-items: center; padding: 0; border: 0; border-radius: var(--radius-sm); color: var(--color-text-muted); background: transparent; font-size: 20px; line-height: 1; cursor: pointer; transform: translateY(-50%); }
 .discipline-search__clear:hover { color: var(--color-text); background: var(--color-bg-soft); }
