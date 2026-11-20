@@ -18,16 +18,16 @@ const tiposDeConteudo = ['Resumos', 'Dicas de estudo', 'Dificuldades comuns', 'P
 const passos = [
   {
     titulo: 'Encontre a disciplina',
-    descricao: 'Busque pelo nome ou pelo código. Não precisa escolher o curso: a mesma disciplina reúne o material de todos os cursos que a oferecem.',
+    descricao: 'Busque pelo nome ou pelo código, sem precisar escolher o curso. Cada disciplina reúne o material de todos os cursos que a oferecem.',
   },
   {
     titulo: 'Estude com o material da comunidade',
-    descricao: 'Veja o que outros estudantes já compartilharam sobre a disciplina.',
+    descricao: 'Veja o que outros estudantes já compartilharam sobre a disciplina:',
     tipos: true,
   },
   {
     titulo: 'Contribua com o que você sabe',
-    descricao: 'Envie o seu material. A moderação revisa antes de publicar, e você acompanha o andamento em Minhas contribuições.',
+    descricao: 'Envie o seu material. A moderação revisa antes de publicar, e você acompanha tudo em Minhas contribuições.',
   },
 ]
 
@@ -122,11 +122,11 @@ function HomePage({ onNavigate }) {
           )}
         </section>
 
-        <section className="home-section" aria-labelledby="home-how-title">
-          <div className="home-section__heading">
+        <section className="home-section home-how" aria-labelledby="home-how-title">
+          <header className="home-how__header">
             <h2 id="home-how-title">Como funciona</h2>
-            <a href="/guia-de-contribuicao" onClick={goTo('/guia-de-contribuicao')}>Guia de contribuição</a>
-          </div>
+            <p>Três passos para estudar e compartilhar com a comunidade.</p>
+          </header>
           <ol className="home-steps">
             {passos.map((passo, index) => (
               <li key={passo.titulo} className="home-steps__item">
@@ -141,6 +141,9 @@ function HomePage({ onNavigate }) {
               </li>
             ))}
           </ol>
+          <a className="home-how__link" href="/guia-de-contribuicao" onClick={goTo('/guia-de-contribuicao')}>
+            Ler o guia de contribuição →
+          </a>
         </section>
 
         <section className="home-cta" aria-labelledby="home-cta-title">
