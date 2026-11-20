@@ -31,6 +31,24 @@ def listar_conteudos_publicados(
     )
 
 
+def listar_conteudos_recentes(
+    session: Session,
+    limite: int = 6,
+) -> list[ConteudoAcademico]:
+    """Últimos conteúdos publicados, de todas as disciplinas."""
+    return list(
+        session.exec(
+            select(ConteudoAcademico)
+            .where(ConteudoAcademico.estado == EstadoConteudo.PUBLICADO)
+            .order_by(
+                ConteudoAcademico.atualizado_em.desc(),
+                ConteudoAcademico.id.desc(),
+            )
+            .limit(limite)
+        ).all()
+    )
+
+
 def obter_conteudo_publicado(
     session: Session,
     conteudo_id: int,

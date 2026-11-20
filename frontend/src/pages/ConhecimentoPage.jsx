@@ -24,11 +24,12 @@ const contentTypes = [
 function ConhecimentoPage({ onContribute = () => {}, onNavigate }) {
   const [courses, setCourses] = useState([])
   const [selectedCourseId, setSelectedCourseId] = useState('')
-  const [selectedDiscipline, setSelectedDiscipline] = useState(null)
+  // A home pode abrir esta página com uma disciplina já escolhida (history.state).
+  const [selectedDiscipline, setSelectedDiscipline] = useState(() => window.history.state?.disciplina || null)
   const [selectedType, setSelectedType] = useState('')
   const [contents, setContents] = useState([])
   const [selectedContent, setSelectedContent] = useState(null)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(() => Boolean(window.history.state?.disciplina))
   const [error, setError] = useState(null)
   const selectedDisciplineId = selectedDiscipline?.id || ''
 
@@ -82,6 +83,8 @@ function ConhecimentoPage({ onContribute = () => {}, onNavigate }) {
 
   function selectDiscipline(discipline) {
     setSelectedDiscipline(discipline)
+    // Guarda a escolha no histórico para mantê-la ao recarregar ou voltar para a página.
+    window.history.replaceState({ ...window.history.state, disciplina: discipline }, '')
     setContents([])
     setSelectedContent(null)
     setError(null)
