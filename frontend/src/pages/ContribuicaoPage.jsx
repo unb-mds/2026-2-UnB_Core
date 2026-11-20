@@ -7,6 +7,7 @@ import EmptyState from '../components/ui/EmptyState'
 import Button from '../components/ui/Button'
 import SiteHeader from '../components/SiteHeader'
 import SiteFooter from '../components/SiteFooter'
+import DisciplinaBusca from '../components/conteudos/DisciplinaBusca'
 import './ContribuicaoPage.css'
 
 const contentTypes = [
@@ -26,14 +27,14 @@ const initialForm = {
   url: '',
 }
 
-function ContribuicaoPage({ courses = [], disciplines = [], onNavigate }) {
+function ContribuicaoPage({ courses = [], onNavigate }) {
   const { isAuthenticated } = useAuth()
   const [form, setForm] = useState(initialForm)
+  const [selectedDiscipline, setSelectedDiscipline] = useState(null)
   const [error, setError] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [availableCourses, setAvailableCourses] = useState(courses)
-  const [availableDisciplines, setAvailableDisciplines] = useState(disciplines)
 
   useEffect(() => {
     api.get('/cursos')
@@ -41,32 +42,31 @@ function ContribuicaoPage({ courses = [], disciplines = [], onNavigate }) {
       .catch(() => {})
   }, [])
 
-  useEffect(() => {
-    if (!form.curso_id) {
-      setAvailableDisciplines([])
-      return undefined
-    }
-
-    const controller = new AbortController()
-    api.get(`/cursos/${form.curso_id}/disciplinas`, { signal: controller.signal })
-      .then((response) => setAvailableDisciplines(response?.itens || response?.disciplinas || []))
-      .catch((requestError) => {
-        if (requestError.name !== 'AbortError') setAvailableDisciplines([])
-      })
-
-    return () => controller.abort()
-  }, [form.curso_id])
-
   function updateField(event) {
     const { name, value } = event.target
     setForm((currentForm) => ({ ...currentForm, [name]: value }))
     setError(null)
   }
 
+  function selectDiscipline(discipline) {
+    setSelectedDiscipline(discipline)
+    setForm((currentForm) => ({ ...currentForm, disciplina_id: discipline?.id || '' }))
+    setError(null)
+  }
+
+  function selectCourse(event) {
+    updateField(event)
+    // O curso só filtra a busca: a disciplina continua se o curso também a oferece.
+    const courseId = event.target.value
+    const courseIds = Array.isArray(selectedDiscipline?.curso_id) ? selectedDiscipline.curso_id.map(Number) : []
+    if (courseId && selectedDiscipline && !courseIds.includes(Number(courseId))) {
+      selectDiscipline(null)
+    }
+  }
+
   function validateForm() {
     const missingFields = []
 
-    if (!form.curso_id) missingFields.push('curso')
     if (!form.disciplina_id) missingFields.push('disciplina')
     if (!form.tipo) missingFields.push('tipo de conteúdo')
     if (!form.titulo.trim()) missingFields.push('título')
@@ -147,23 +147,19 @@ function ContribuicaoPage({ courses = [], disciplines = [], onNavigate }) {
         <form className="contribution-form" onSubmit={submitContribution} noValidate>
           <div className="contribution-form__grid">
             <label>
-              Curso <span aria-hidden="true">*</span>
-              {availableCourses.length > 0 ? (
-                <select name="curso_id" value={form.curso_id} onChange={updateField}>
-                  <option value="">Selecione um curso</option>
-                  {availableCourses.map((course) => <option key={course.id} value={course.id}>{course.nome || course.name}</option>)}
-                </select>
-              ) : <input name="curso_id" value={form.curso_id} onChange={updateField} placeholder="Código do curso" />}
+              Curso <span className="contribution-form__hint">(opcional, filtra as disciplinas)</span>
+              <select name="curso_id" value={form.curso_id} onChange={selectCourse}>
+                <option value="">Todos os cursos</option>
+                {availableCourses.map((course) => <option key={course.id} value={course.id}>{course.nome || course.name}</option>)}
+              </select>
             </label>
-            <label>
-              Disciplina <span aria-hidden="true">*</span>
-              {availableDisciplines.length > 0 ? (
-                <select name="disciplina_id" value={form.disciplina_id} onChange={updateField}>
-                  <option value="">Selecione uma disciplina</option>
-                  {availableDisciplines.map((discipline) => <option key={discipline.id} value={discipline.id}>{discipline.nome || discipline.name}</option>)}
-                </select>
-              ) : <input name="disciplina_id" value={form.disciplina_id} onChange={updateField} placeholder="Código da disciplina" />}
-            </label>
+            <DisciplinaBusca
+              label={<>Disciplina <span aria-hidden="true">*</span></>}
+              cursoId={form.curso_id}
+              cursos={availableCourses}
+              value={selectedDiscipline}
+              onChange={selectDiscipline}
+            />
           </div>
           <fieldset className="contribution-form__type">
             <legend>Tipo de conteúdo <span aria-hidden="true">*</span></legend>

@@ -16,6 +16,7 @@ from backend.app.services.conteudo_service import (
     validar_disciplina_do_curso,
 )
 from backend.app.services.curso_service import (
+    buscar_disciplinas,
     listar_cursos_ativos,
     listar_disciplinas_ativas,
 )
@@ -39,23 +40,43 @@ def listar_disciplinas(
     if session.get(Curso, curso_id) is None:
         raise NaoEncontrado("O curso não foi encontrado.")
     disciplinas = listar_disciplinas_ativas(session, curso_id)
-    itens = []
-    for disciplina in disciplinas:
-        curso_ids = session.exec(
-            select(CursoDisciplina.curso_id).where(
-                CursoDisciplina.disciplina_id == disciplina.id
-            )
-        ).all()
-        itens.append(
-            {
-                "id": disciplina.id,
-                "curso_id": list(curso_ids),
-                "codigo": disciplina.codigo,
-                "nome": disciplina.nome,
-                "periodo": disciplina.periodo,
-            }
+    return {
+        "itens": [
+            _disciplina_com_cursos(session, disciplina)
+            for disciplina in disciplinas
+        ]
+    }
+
+
+@router.get("/disciplinas", response_model=ListaResposta[DisciplinaPublica])
+def buscar(
+    busca: str = Query(min_length=2, max_length=100),
+    limite: int = Query(default=20, ge=1, le=50),
+    session: Session = Depends(get_session),
+):
+    """Busca disciplinas pelo código ou nome, sem precisar escolher o curso."""
+    disciplinas = buscar_disciplinas(session, busca, limite)
+    return {
+        "itens": [
+            _disciplina_com_cursos(session, disciplina)
+            for disciplina in disciplinas
+        ]
+    }
+
+
+def _disciplina_com_cursos(session: Session, disciplina: Disciplina) -> dict:
+    curso_ids = session.exec(
+        select(CursoDisciplina.curso_id).where(
+            CursoDisciplina.disciplina_id == disciplina.id
         )
-    return {"itens": itens}
+    ).all()
+    return {
+        "id": disciplina.id,
+        "curso_id": list(curso_ids),
+        "codigo": disciplina.codigo,
+        "nome": disciplina.nome,
+        "periodo": disciplina.periodo,
+    }
 
 
 @router.get(
