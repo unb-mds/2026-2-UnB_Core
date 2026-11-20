@@ -1,36 +1,37 @@
+import ConteudoCorpo, { TextoOuLink } from './ConteudoCorpo'
+import { formatarData, rotuloDisciplinaDoConteudo, rotuloTipo } from './formatacao'
 import './conteudos.css'
 
-function formatDate(value) {
-  if (!value) {
-    return 'Data não informada'
-  }
-
-  const date = new Date(value)
-  return Number.isNaN(date.getTime())
-    ? value
-    : new Intl.DateTimeFormat('pt-BR', { dateStyle: 'long' }).format(date)
-}
-
-function ConteudoDetalhe({ content, onClose }) {
+/**
+ * Detalhe de um conteúdo publicado.
+ * - Painel lateral (padrão): mostra o botão de fechar e, com `onOpenPage`, o link para a página.
+ * - Página (`isPage`): vira um <article> com <h1> e sem botão de fechar.
+ */
+function ConteudoDetalhe({ content, onClose, onOpenPage, isPage = false }) {
   if (!content) {
     return null
   }
 
+  const Container = isPage ? 'article' : 'aside'
+  const Title = isPage ? 'h1' : 'h2'
+
   return (
-    <aside className="content-detail" aria-labelledby="content-detail-title">
+    <Container className="content-detail" aria-labelledby="content-detail-title">
       <div className="content-detail__heading">
         <div>
-          <span className="badge badge-category">{content.tipo || 'Conteúdo'}</span>
-          <h2 id="content-detail-title">{content.titulo}</h2>
+          <span className="badge badge-category">{rotuloTipo(content.tipo)}</span>
+          <Title id="content-detail-title">{content.titulo}</Title>
         </div>
-        <button type="button" className="content-detail__close" onClick={onClose} aria-label="Fechar detalhes">
-          ×
-        </button>
+        {!isPage && onClose && (
+          <button type="button" className="content-detail__close" onClick={onClose} aria-label="Fechar detalhes">
+            ×
+          </button>
+        )}
       </div>
       <dl className="content-detail__metadata">
         <div>
           <dt>Disciplina</dt>
-          <dd>{content.disciplina_nome || content.disciplina || 'Não informada'}</dd>
+          <dd>{rotuloDisciplinaDoConteudo(content)}</dd>
         </div>
         <div>
           <dt>Autoria</dt>
@@ -38,12 +39,12 @@ function ConteudoDetalhe({ content, onClose }) {
         </div>
         <div>
           <dt>Atualizado em</dt>
-          <dd>{formatDate(content.atualizado_em || content.data_atualizacao)}</dd>
+          <dd>{formatarData(content.atualizado_em || content.data_atualizacao)}</dd>
         </div>
         {content.origem && (
           <div>
             <dt>Origem</dt>
-            <dd>{content.origem}</dd>
+            <dd><TextoOuLink texto={content.origem} /></dd>
           </div>
         )}
       </dl>
@@ -55,10 +56,22 @@ function ConteudoDetalhe({ content, onClose }) {
             {content.orientacao_link_oficial && <a href={content.orientacao_link_oficial} target="_blank" rel="noreferrer">Abrir documento oficial</a>}
           </div>
         )}
-        <p>{content.conteudo || content.descricao || content.resumo || 'Este conteúdo não possui texto disponível.'}</p>
+        {/* A API envia o texto em corpo_ou_url; os outros nomes ficam por compatibilidade. */}
+        <ConteudoCorpo texto={content.corpo_ou_url || content.conteudo || content.descricao || content.resumo} />
       </div>
       {content.url && <a href={content.url} target="_blank" rel="noreferrer">Abrir material original</a>}
-    </aside>
+      {!isPage && onOpenPage && content.id && (
+        <a
+          href={`/conteudos/${content.id}`}
+          onClick={(event) => {
+            event.preventDefault()
+            onOpenPage(content)
+          }}
+        >
+          Abrir página do conteúdo
+        </a>
+      )}
+    </Container>
   )
 }
 

@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import AliasPath, BaseModel, ConfigDict, Field
 
 from backend.app.domain import GrauCurso, TipoConteudo
 
@@ -35,6 +35,19 @@ class ConteudoPublico(BaseModel):
     autor_id: int
     origem: str | None
     atualizado_em: datetime
+    # Lidos dos relacionamentos do model; ficam vazios se não houver.
+    disciplina_codigo: str | None = Field(
+        default=None,
+        validation_alias=AliasPath("disciplina", "codigo"),
+    )
+    disciplina_nome: str | None = Field(
+        default=None,
+        validation_alias=AliasPath("disciplina", "nome"),
+    )
+    autor_nome: str | None = Field(
+        default=None,
+        validation_alias=AliasPath("autor", "nome"),
+    )
 
 
 class ListaResposta[T](BaseModel):

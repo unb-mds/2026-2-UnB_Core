@@ -9,6 +9,8 @@ import ModeracaoPage from './pages/ModeracaoPage'
 import PerfilPage from './pages/PerfilPage'
 import AdminUsuariosPage from './pages/AdminUsuariosPage'
 import AdminPage from './pages/AdminPage'
+import ConteudoPage from './pages/ConteudoPage'
+import MinhaContribuicaoPage from './pages/MinhaContribuicaoPage'
 
 function getRoute() {
   const path = window.location.pathname.replace(/\/$/, '') || '/'
@@ -51,6 +53,16 @@ function getRoute() {
 
   if (path === '/admin') {
     return { name: 'admin' }
+  }
+
+  const contentMatch = path.match(/^\/conteudos\/(\d+)$/)
+  if (contentMatch) {
+    return { name: 'content', id: contentMatch[1] }
+  }
+
+  const myContributionMatch = path.match(/^\/minhas-contribuicoes\/(\d+)$/)
+  if (myContributionMatch) {
+    return { name: 'my-contribution', id: myContributionMatch[1] }
   }
 
   return { name: 'knowledge' }
@@ -111,6 +123,15 @@ function App() {
 
   if (route.name === 'admin') {
     return <AdminPage onNavigate={navigate} />
+  }
+
+  // A key recria a página ao trocar de id, sem reaproveitar o estado anterior.
+  if (route.name === 'content') {
+    return <ConteudoPage key={route.id} conteudoId={route.id} onNavigate={navigate} />
+  }
+
+  if (route.name === 'my-contribution') {
+    return <MinhaContribuicaoPage key={route.id} contribuicaoId={route.id} onNavigate={navigate} />
   }
 
   return <ConhecimentoPage onNavigate={navigate} onContribute={() => navigate('/contribuicao')} />

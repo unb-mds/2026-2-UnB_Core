@@ -42,6 +42,18 @@ def minhas(
     return listar_contribuicoes_do_usuario(session, usuario)
 
 
+@router.get(
+    "/minhas/{id_contribuicao}",
+    response_model=ContribuicaoPublica,
+)
+def detalhar_minha_contribuicao(
+    id_contribuicao: int,
+    session: Session = Depends(get_session),
+    usuario: Usuario = Depends(obter_usuario_atual),
+):
+    return obter_contribuicao_do_usuario(session, usuario, id_contribuicao)
+
+
 @router.patch(
     "/minhas/{id_contribuicao}",
     response_model=ContribuicaoPublica,

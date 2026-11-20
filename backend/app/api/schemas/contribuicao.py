@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import AliasPath, BaseModel, ConfigDict, Field
 
 from backend.app.domain import EstadoContribuicao, TipoConteudo
 
@@ -29,6 +29,15 @@ class ContribuicaoPublica(BaseModel):
     justificativa_moderacao: str | None
     criado_em: datetime
     atualizado_em: datetime
+    # Lidos do relacionamento com a disciplina; ficam vazios se não houver.
+    disciplina_codigo: str | None = Field(
+        default=None,
+        validation_alias=AliasPath("disciplina", "codigo"),
+    )
+    disciplina_nome: str | None = Field(
+        default=None,
+        validation_alias=AliasPath("disciplina", "nome"),
+    )
 
 
 class ContribuicaoUpdate(BaseModel):
