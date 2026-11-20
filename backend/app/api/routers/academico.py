@@ -6,13 +6,15 @@ from backend.app.api.schemas.academico import (
     ConteudoPublico,
     CursoPublico,
     DisciplinaPublica,
+    ListaPaginada,
     ListaResposta,
 )
 from backend.app.db import get_session
 from backend.app.domain import Curso, CursoDisciplina, Disciplina, TipoConteudo
 from backend.app.services.conteudo_service import (
+    OrdemConteudos,
+    filtrar_conteudos,
     listar_conteudos_publicados,
-    listar_conteudos_recentes,
     obter_conteudo_publicado,
     validar_disciplina_do_curso,
 )
@@ -94,13 +96,30 @@ def listar_conteudos(
     return {"itens": listar_conteudos_publicados(session, disciplina_id, tipo)}
 
 
-@router.get("/conteudos", response_model=ListaResposta[ConteudoPublico])
-def listar_recentes(
-    limite: int = Query(default=6, ge=1, le=20),
+@router.get("/conteudos", response_model=ListaPaginada[ConteudoPublico])
+def listar_todos(
+    tipo: TipoConteudo | None = Query(default=None),
+    curso_id: int | None = Query(default=None),
+    disciplina_id: int | None = Query(default=None),
+    ordem: OrdemConteudos = Query(default=OrdemConteudos.RECENTES),
+    limite: int = Query(default=6, ge=1, le=50),
+    pagina: int = Query(default=1, ge=1),
     session: Session = Depends(get_session),
 ):
-    """Últimos conteúdos publicados, usados na página inicial."""
-    return {"itens": listar_conteudos_recentes(session, limite)}
+    """Conteúdos publicados de todas as disciplinas, com filtros e paginação.
+
+    Usada pela base de conhecimento e, sem filtros, pelos recentes da home.
+    """
+    itens, total = filtrar_conteudos(
+        session,
+        tipo=tipo,
+        curso_id=curso_id,
+        disciplina_id=disciplina_id,
+        ordem=ordem,
+        limite=limite,
+        deslocamento=(pagina - 1) * limite,
+    )
+    return {"itens": itens, "total": total}
 
 
 @router.get("/conteudos/{conteudo_id}", response_model=ConteudoPublico)

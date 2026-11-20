@@ -52,3 +52,9 @@ class ConteudoPublico(BaseModel):
 
 class ListaResposta[T](BaseModel):
     itens: list[T]
+
+
+class ListaPaginada[T](BaseModel):
+    itens: list[T]
+    # Total de itens que atendem aos filtros, somando todas as páginas.
+    total: int
