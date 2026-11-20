@@ -8,6 +8,7 @@ import SiteHeader from '../components/SiteHeader'
 import SiteFooter from '../components/SiteFooter'
 import ConteudoCard from '../components/conteudos/ConteudoCard'
 import ConteudoDetalhe from '../components/conteudos/ConteudoDetalhe'
+import DisciplinaBusca from '../components/conteudos/DisciplinaBusca'
 import './ConhecimentoPage.css'
 
 const contentTypes = [
@@ -23,13 +24,13 @@ const contentTypes = [
 function ConhecimentoPage({ onContribute = () => {}, onNavigate }) {
   const [courses, setCourses] = useState([])
   const [selectedCourseId, setSelectedCourseId] = useState('')
-  const [selectedDisciplineId, setSelectedDisciplineId] = useState('')
+  const [selectedDiscipline, setSelectedDiscipline] = useState(null)
   const [selectedType, setSelectedType] = useState('')
-  const [disciplines, setDisciplines] = useState([])
   const [contents, setContents] = useState([])
   const [selectedContent, setSelectedContent] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
+  const selectedDisciplineId = selectedDiscipline?.id || ''
 
   useEffect(() => {
     const controller = new AbortController()
@@ -45,26 +46,6 @@ function ConhecimentoPage({ onContribute = () => {}, onNavigate }) {
 
     return () => controller.abort()
   }, [])
-
-  useEffect(() => {
-    if (!selectedCourseId) {
-      return undefined
-    }
-
-    const controller = new AbortController()
-
-    api
-      .get(`/cursos/${selectedCourseId}/disciplinas`, { signal: controller.signal })
-      .then((response) => setDisciplines(response?.itens || response?.disciplinas || []))
-      .catch((requestError) => {
-        if (requestError.name !== 'AbortError') {
-          setError(requestError instanceof ApiError ? requestError.message : 'Não foi possível carregar as disciplinas.')
-        }
-      })
-      .finally(() => setIsLoading(false))
-
-    return () => controller.abort()
-  }, [selectedCourseId])
 
   useEffect(() => {
     if (!selectedDisciplineId) {
@@ -88,22 +69,23 @@ function ConhecimentoPage({ onContribute = () => {}, onNavigate }) {
   }, [selectedDisciplineId, selectedType])
 
   function selectCourse(event) {
-    setSelectedCourseId(event.target.value)
-    setSelectedDisciplineId('')
-    setDisciplines([])
-    setContents([])
-    setSelectedContent(null)
+    const courseId = event.target.value
+    setSelectedCourseId(courseId)
     setError(null)
-    setIsLoading(Boolean(event.target.value))
+
+    // O curso é só um filtro: a disciplina escolhida continua se o novo curso também a oferece.
+    const courseIds = Array.isArray(selectedDiscipline?.curso_id) ? selectedDiscipline.curso_id.map(Number) : []
+    if (courseId && selectedDiscipline && !courseIds.includes(Number(courseId))) {
+      selectDiscipline(null)
+    }
   }
 
-  function selectDiscipline(event) {
-    setSelectedDisciplineId(event.target.value)
+  function selectDiscipline(discipline) {
+    setSelectedDiscipline(discipline)
     setContents([])
     setSelectedContent(null)
     setError(null)
-    setSelectedContent(null)
-    setIsLoading(Boolean(event.target.value))
+    setIsLoading(Boolean(discipline))
   }
 
   function selectType(event) {
@@ -126,17 +108,16 @@ function ConhecimentoPage({ onContribute = () => {}, onNavigate }) {
           <label>
             Curso
             <select value={selectedCourseId} onChange={selectCourse}>
-              <option value="">Selecione um curso</option>
+              <option value="">Todos os cursos</option>
               {courses.map((course) => <option key={course.id} value={course.id}>{course.nome || course.name}</option>)}
             </select>
           </label>
-          <label>
-            Disciplina
-            <select value={selectedDisciplineId} onChange={selectDiscipline} disabled={!selectedCourseId}>
-              <option value="">Selecione uma disciplina</option>
-              {disciplines.map((discipline) => <option key={discipline.id} value={discipline.id}>{discipline.nome || discipline.name}</option>)}
-            </select>
-          </label>
+          <DisciplinaBusca
+            cursoId={selectedCourseId}
+            cursos={courses}
+            value={selectedDiscipline}
+            onChange={selectDiscipline}
+          />
           <label>
             Tipo de conteúdo
             <select value={selectedType} onChange={selectType} disabled={!selectedDisciplineId}>
@@ -146,9 +127,9 @@ function ConhecimentoPage({ onContribute = () => {}, onNavigate }) {
         </section>
 
         <section className="knowledge-results" aria-live="polite">
-          {!selectedCourseId && (
-            <EmptyState title="Escolha um curso para começar">
-              Selecione um curso e uma disciplina para consultar os conteúdos publicados.
+          {!selectedDisciplineId && (
+            <EmptyState title="Escolha uma disciplina para começar">
+              Busque a disciplina pelo nome ou código. Se quiser, filtre antes pelo curso.
             </EmptyState>
           )}
           {isLoading && <p className="knowledge-results__status">Carregando conteúdos...</p>}
