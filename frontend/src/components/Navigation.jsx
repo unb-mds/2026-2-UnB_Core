@@ -2,9 +2,42 @@ import './ui/ui.css'
 import { logout, useAuth } from '../state/auth'
 import { alternarTema, useTema } from '../state/theme'
 
-function Navigation({ active = 'conhecimento', onNavigate }) {
+// Qual item do menu fica aceso em cada endereço. Páginas internas acendem a seção
+// a que pertencem (ex.: a página de um conteúdo acende a Base de conhecimento).
+const SECOES = [
+  { chave: 'inicio', caminhos: ['/'] },
+  { chave: 'conhecimento', caminhos: ['/base-de-conhecimentos', '/conteudos/'] },
+  { chave: 'contribuir', caminhos: ['/contribuicao', '/guia-de-contribuicao'] },
+  { chave: 'minhas', caminhos: ['/minhas-contribuicoes'] },
+  { chave: 'moderacao', caminhos: ['/moderacao'] },
+  { chave: 'usuarios', caminhos: ['/admin'] },
+  { chave: 'perfil', caminhos: ['/perfil'] },
+]
+
+export function secaoAtiva(pathname) {
+  const caminho = pathname.replace(/\/$/, '') || '/'
+  const secao = SECOES.find(({ caminhos }) => caminhos.some((prefixo) => (
+    prefixo === '/' ? caminho === '/' : caminho === prefixo || caminho.startsWith(prefixo.endsWith('/') ? prefixo : `${prefixo}/`)
+  )))
+  // Endereços desconhecidos abrem a base de conhecimento (ver App.jsx).
+  return secao?.chave || 'conhecimento'
+}
+
+function Navigation({ onNavigate }) {
   const { isAuthenticated, user } = useAuth()
   const tema = useTema()
+  const ativa = secaoAtiva(window.location.pathname)
+  const podeModerar = isAuthenticated && ['moderador', 'administrador'].includes(user?.perfil)
+
+  const links = [
+    { chave: 'inicio', href: '/', texto: 'Início' },
+    { chave: 'conhecimento', href: '/base-de-conhecimentos', texto: 'Base de conhecimento' },
+    { chave: 'contribuir', href: '/contribuicao', texto: 'Contribuir' },
+    { chave: 'minhas', href: '/minhas-contribuicoes', texto: 'Minhas contribuições' },
+    { chave: 'moderacao', href: '/moderacao', texto: 'Moderação', visivel: podeModerar },
+    { chave: 'usuarios', href: '/admin/usuarios', texto: 'Usuários', visivel: user?.perfil === 'administrador' },
+    { chave: 'perfil', href: '/perfil', texto: 'Meu perfil', visivel: isAuthenticated },
+  ].filter((link) => link.visivel !== false)
 
   function handleNavigate(event, path) {
     if (!onNavigate) {
@@ -21,57 +54,29 @@ function Navigation({ active = 'conhecimento', onNavigate }) {
         unb<span className="topbar__logo-accent">core</span>
       </a>
       <div className="topbar__links">
-        <a
-          className={active === 'inicio' ? 'topbar__link--active' : ''}
-          href="/"
-          onClick={(event) => handleNavigate(event, '/')}
-        >
-          Início
-        </a>
-        <a
-          className={active === 'conhecimento' ? 'topbar__link--active' : ''}
-          href="/base-de-conhecimentos"
-          onClick={(event) => handleNavigate(event, '/base-de-conhecimentos')}
-        >
-          Base de conhecimento
-        </a>
-        <a href="/contribuicao" onClick={(event) => handleNavigate(event, '/contribuicao')}>
-          Contribuir
-        </a>
-        <a href="/minhas-contribuicoes" onClick={(event) => handleNavigate(event, '/minhas-contribuicoes')}>
-          Minhas contribuições
-        </a>
-        {isAuthenticated && ['moderador', 'administrador'].includes(user?.perfil) && (
-          <a href="/moderacao" onClick={(event) => handleNavigate(event, '/moderacao')}>
-            Moderação
+        {links.map((link) => (
+          <a
+            key={link.chave}
+            className={link.chave === ativa ? 'topbar__link--active' : undefined}
+            aria-current={link.chave === ativa ? 'page' : undefined}
+            href={link.href}
+            onClick={(event) => handleNavigate(event, link.href)}
+          >
+            {link.texto}
           </a>
-        )}
-        {user?.perfil === 'administrador' && (
-          <a href="/admin/usuarios" onClick={(event) => handleNavigate(event, '/admin/usuarios')}>
-            Usuários
-          </a>
-        )}
+        ))}
         {isAuthenticated ? (
-          <>
-            <a
-              className={active === 'perfil' ? 'topbar__link--active' : ''}
-              href="/perfil"
-              onClick={(event) => handleNavigate(event, '/perfil')}
-            >
-              Meu perfil
-            </a>
-            <a
-              className="topbar__login"
-              href="/login"
-              onClick={(event) => {
-                event.preventDefault()
-                logout()
-                onNavigate?.('/login')
-              }}
-            >
-              Sair
-            </a>
-          </>
+          <a
+            className="topbar__login"
+            href="/login"
+            onClick={(event) => {
+              event.preventDefault()
+              logout()
+              onNavigate?.('/login')
+            }}
+          >
+            Sair
+          </a>
         ) : (
           <>
             <a className="topbar__login" href="/login" onClick={(event) => handleNavigate(event, '/login')}>
