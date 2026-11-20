@@ -15,14 +15,30 @@ function resumoDoConteudo(content) {
   return corpo.length > TAMANHO_TRECHO ? `${corpo.slice(0, TAMANHO_TRECHO).trimEnd()}…` : corpo
 }
 
-function ConteudoCard({ content, onOpen, showDiscipline = false }) {
+// Clique normal abre pelo onOpen (painel ou navegação interna). Ctrl/Cmd/Shift ou botão
+// do meio deixam o navegador abrir o link em outra aba, como em qualquer link.
+function abrirSemRecarregar(event, content, onOpen) {
+  if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return
+  event.preventDefault()
+  onOpen(content)
+}
+
+function ConteudoCard({ content, onOpen, showDiscipline = false, headingLevel = 2 }) {
+  const Titulo = headingLevel === 3 ? 'h3' : 'h2'
+
   return (
     <article className="knowledge-card">
       <div className="knowledge-card__topline">
         <span className="badge badge-category">{rotuloTipo(content.tipo)}</span>
         <span>{formatarData(content.atualizado_em || content.data_atualizacao, 'medium')}</span>
       </div>
-      <h2>{content.titulo}</h2>
+      <Titulo className="knowledge-card__title">
+        {content.id ? (
+          <a href={`/conteudos/${content.id}`} onClick={(event) => abrirSemRecarregar(event, content, onOpen)}>
+            {content.titulo}
+          </a>
+        ) : content.titulo}
+      </Titulo>
       {showDiscipline && <p className="knowledge-card__discipline">{rotuloDisciplinaDoConteudo(content)}</p>}
       <p>{resumoDoConteudo(content)}</p>
       {content.nao_pesquisavel && (

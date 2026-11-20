@@ -8,6 +8,7 @@ import SiteHeader from '../components/SiteHeader'
 import SiteFooter from '../components/SiteFooter'
 import DecisaoModal from '../components/moderacao/DecisaoModal'
 import StatusBadge from '../components/moderacao/StatusBadge'
+import { rotuloTipo } from '../components/conteudos/formatacao'
 import './MinhasContribuicoesPage.css'
 import './governance.css'
 
@@ -69,7 +70,7 @@ function ModeracaoPage({ onNavigate }) {
             <section className="my-contributions-list" aria-label="Contribuições para moderação">
               {contributions.map((contribution) => (
                 <article className="my-contribution-card" key={contribution.id}>
-                  <div className="my-contribution-card__heading"><span className="badge badge-category">{contribution.tipo}</span><StatusBadge status={contribution.estado} /></div>
+                  <div className="my-contribution-card__heading"><span className="badge badge-category">{rotuloTipo(contribution.tipo)}</span><StatusBadge status={contribution.estado} /></div>
                   <h2>{contribution.titulo}</h2>
                   <p>{contribution.corpo_ou_url}</p>
                   <Button variant="outline" onClick={() => setSelectedContribution(contribution)}>Tomar decisão</Button>

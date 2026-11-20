@@ -140,7 +140,7 @@ function ConhecimentoPage({ onContribute = () => {}, onNavigate }) {
           {!isLoading && !error && selectedDisciplineId && contents.length === 0 && (
             <EmptyState title="Nenhum conteúdo encontrado">
               Ainda não há conteúdo para este filtro. Você pode contribuir com a comunidade.
-              <span className="knowledge-results__action"><Button variant="accent" onClick={onContribute}>Quero contribuir</Button></span>
+              <span className="knowledge-results__action"><Button onClick={onContribute}>Quero contribuir</Button></span>
             </EmptyState>
           )}
           {!isLoading && !error && contents.length > 0 && (

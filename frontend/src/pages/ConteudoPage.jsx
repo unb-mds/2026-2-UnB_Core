@@ -71,7 +71,7 @@ function ConteudoPage({ conteudoId, onNavigate }) {
             <ConteudoDetalhe content={content} isPage />
             <div className="content-page__actions">
               <Button variant="outline" onClick={copyLink}>Copiar link</Button>
-              <Button variant="accent" onClick={() => onNavigate?.('/contribuicao')}>Enviar uma contribuição</Button>
+              <Button onClick={() => onNavigate?.('/contribuicao')}>Enviar uma contribuição</Button>
               {copyFeedback && <span className="content-page__feedback" role="status">{copyFeedback}</span>}
             </div>
           </>

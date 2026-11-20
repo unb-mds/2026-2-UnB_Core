@@ -8,7 +8,7 @@ import Button from '../components/ui/Button'
 import SiteHeader from '../components/SiteHeader'
 import SiteFooter from '../components/SiteFooter'
 import EditarContribuicaoForm from '../components/contribuicoes/EditarContribuicaoForm'
-import { rotuloDisciplinaDoConteudo } from '../components/conteudos/formatacao'
+import { rotuloDisciplinaDoConteudo, rotuloTipo } from '../components/conteudos/formatacao'
 import './ContribuicaoPage.css'
 import './MinhasContribuicoesPage.css'
 
@@ -31,7 +31,7 @@ function ContributionCard({ contribution, onUpdated, onNavigate }) {
   return (
     <article className="my-contribution-card">
       <div className="my-contribution-card__heading">
-        <span className="badge badge-category">{contribution.tipo || 'Contribuição'}</span>
+        <span className="badge badge-category">{contribution.tipo ? rotuloTipo(contribution.tipo) : 'Contribuição'}</span>
         <StatusBadge status={contribution.estado || contribution.status || 'pendente'} />
       </div>
       <h2>{contribution.titulo || 'Contribuição sem título'}</h2>
