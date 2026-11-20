@@ -31,15 +31,20 @@
 .content-detail__url { display: block; margin-top: 4px; color: var(--color-text-muted); font-size: 13px; overflow-wrap: anywhere; }
 .content-detail__body a,
 .content-detail__metadata a { color: var(--color-primary); font-weight: 600; overflow-wrap: anywhere; }
-.content-page { width: min(900px, 100%); margin: 0 auto; padding: var(--spacing-2xl) var(--spacing-xl) var(--spacing-3xl); }
-.content-page__back { display: inline-block; margin-bottom: var(--spacing-md); color: var(--color-primary); font-size: 14px; font-weight: 600; text-decoration: none; }
-.content-page__back:hover { text-decoration: underline; }
 .content-page__actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--spacing-sm); margin-top: var(--spacing-lg); }
 .content-page__feedback { color: var(--color-success); font-size: 13px; font-weight: 600; }
-.content-page__status { color: var(--color-text-muted); }
 
 @media (max-width: 700px) {
-  .content-page { padding: var(--spacing-xl) var(--spacing-md) var(--spacing-2xl); }
   .content-detail__heading h1 { font-size: 22px; }
 }
 .knowledge-card > p.knowledge-card__discipline { color: var(--color-primary); font-size: 12px; font-weight: 600; overflow-wrap: anywhere; }
+/* ---------- Coluna lateral da página do conteúdo ----------
+   Seletores com .aside-card para vencer as regras gerais de p e ul do cartão lateral. */
+.aside-card .content-aside__code { color: var(--color-primary); font-family: var(--font-display); font-size: 14px; font-weight: 700; }
+.aside-card .content-aside__name { color: var(--color-text); font-weight: 600; overflow-wrap: anywhere; }
+.aside-card .content-aside__list { display: grid; gap: var(--spacing-sm); margin: 0; padding: 0; list-style: none; }
+.content-aside__list li { display: grid; gap: 2px; min-width: 0; padding-bottom: var(--spacing-sm); border-bottom: 1px solid var(--color-border); }
+.content-aside__list li:last-child { padding-bottom: 0; border-bottom: 0; }
+.content-aside__list a { overflow-wrap: anywhere; text-decoration: none; }
+.content-aside__list a:hover { text-decoration: underline; }
+.content-aside__list span { color: var(--color-text-muted); font-size: 12px; }

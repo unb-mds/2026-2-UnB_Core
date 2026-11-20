@@ -4,8 +4,7 @@ import { useAuth } from '../state/auth'
 import ErrorMessage from '../components/ErrorMessage'
 import EmptyState from '../components/ui/EmptyState'
 import Button from '../components/ui/Button'
-import SiteHeader from '../components/SiteHeader'
-import SiteFooter from '../components/SiteFooter'
+import PageLayout, { AsideCard } from '../components/layout/PageLayout'
 import DecisaoModal from '../components/moderacao/DecisaoModal'
 import StatusBadge from '../components/moderacao/StatusBadge'
 import { rotuloTipo } from '../components/conteudos/formatacao'
@@ -51,38 +50,58 @@ function ModeracaoPage({ onNavigate }) {
     }
   }
 
+  const pendentes = contributions.filter((item) => item.estado === 'pendente').length
+  const aguardandoAjustes = contributions.filter((item) => item.estado === 'ajustes').length
+
+  const aside = isAuthenticated && canModerate && (
+    <>
+      <AsideCard title="Fila de revisão">
+        <dl className="aside-stats">
+          <div><dt>Para revisar</dt><dd>{pendentes}</dd></div>
+          <div><dt>Aguardando ajustes do autor</dt><dd>{aguardandoAjustes}</dd></div>
+        </dl>
+      </AsideCard>
+      <AsideCard title="Boas práticas">
+        <ul>
+          <li>Ao pedir ajustes, explique o que mudar: o autor vê a justificativa.</li>
+          <li>Prefira ajustes a rejeitar quando o material puder ser aproveitado.</li>
+          <li>Confira a fonte de materiais de terceiros antes de aprovar.</li>
+        </ul>
+      </AsideCard>
+    </>
+  )
+
   return (
-    <div className="my-contributions-shell page-shell">
-      <SiteHeader active="conhecimento" onNavigate={onNavigate} />
-      <main className="my-contributions-page">
-        <header className="my-contributions-page__header">
-          <p className="my-contributions-page__eyebrow">Equipe de moderação</p>
-          <h1>Revisar contribuições</h1>
-          <p>Avalie as contribuições pendentes antes da publicação.</p>
-        </header>
-        {!isAuthenticated || !canModerate ? (
-          <EmptyState title="Acesso restrito">Somente moderadores e administradores podem acessar esta área.</EmptyState>
-        ) : (
-          <>
-            {isLoading && <p className="my-contributions__status">Carregando contribuições...</p>}
-            {error && <ErrorMessage>{error}</ErrorMessage>}
-            {!isLoading && !error && contributions.length === 0 && <EmptyState title="Nenhuma contribuição pendente">Todas as contribuições foram revisadas.</EmptyState>}
-            <section className="my-contributions-list" aria-label="Contribuições para moderação">
-              {contributions.map((contribution) => (
-                <article className="my-contribution-card" key={contribution.id}>
-                  <div className="my-contribution-card__heading"><span className="badge badge-category">{rotuloTipo(contribution.tipo)}</span><StatusBadge status={contribution.estado} /></div>
-                  <h2>{contribution.titulo}</h2>
-                  <p>{contribution.corpo_ou_url}</p>
-                  <Button variant="outline" onClick={() => setSelectedContribution(contribution)}>Tomar decisão</Button>
-                </article>
-              ))}
-            </section>
-          </>
-        )}
-        <DecisaoModal item={selectedContribution} onClose={() => setSelectedContribution(null)} onSubmit={(decision) => decide(selectedContribution.id, decision)} isSubmitting={isSubmitting} />
-      </main>
-      <SiteFooter />
-    </div>
+    <PageLayout
+      onNavigate={onNavigate}
+      eyebrow="Equipe de moderação"
+      title="Revisar contribuições"
+      description="Avalie as contribuições pendentes antes da publicação."
+      aside={aside}
+      asideLabel="Fila de revisão"
+      width="narrow"
+    >
+      {!isAuthenticated || !canModerate ? (
+        <EmptyState title="Acesso restrito">Somente moderadores e administradores podem acessar esta área.</EmptyState>
+      ) : (
+        <>
+          {isLoading && <p className="page-status">Carregando contribuições...</p>}
+          {error && <ErrorMessage>{error}</ErrorMessage>}
+          {!isLoading && !error && contributions.length === 0 && <EmptyState title="Nenhuma contribuição pendente">Todas as contribuições foram revisadas.</EmptyState>}
+          <section className="my-contributions-list" aria-label="Contribuições para moderação">
+            {contributions.map((contribution) => (
+              <article className="my-contribution-card" key={contribution.id}>
+                <div className="my-contribution-card__heading"><span className="badge badge-category">{rotuloTipo(contribution.tipo)}</span><StatusBadge status={contribution.estado} /></div>
+                <h2>{contribution.titulo}</h2>
+                <p>{contribution.corpo_ou_url}</p>
+                <Button variant="outline" onClick={() => setSelectedContribution(contribution)}>Tomar decisão</Button>
+              </article>
+            ))}
+          </section>
+        </>
+      )}
+      <DecisaoModal item={selectedContribution} onClose={() => setSelectedContribution(null)} onSubmit={(decision) => decide(selectedContribution.id, decision)} isSubmitting={isSubmitting} />
+    </PageLayout>
   )
 }
 

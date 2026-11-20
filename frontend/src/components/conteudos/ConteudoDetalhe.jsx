@@ -13,14 +13,14 @@ function ConteudoDetalhe({ content, onClose, onOpenPage, isPage = false }) {
   }
 
   const Container = isPage ? 'article' : 'aside'
-  const Title = isPage ? 'h1' : 'h2'
 
   return (
-    <Container className="content-detail" aria-labelledby="content-detail-title">
+    // Na página, o título fica no cabeçalho do PageLayout (h1); aqui só o tipo.
+    <Container className="content-detail" aria-labelledby={isPage ? undefined : 'content-detail-title'} aria-label={isPage ? content.titulo : undefined}>
       <div className="content-detail__heading">
         <div>
           <span className="badge badge-category">{rotuloTipo(content.tipo)}</span>
-          <Title id="content-detail-title">{content.titulo}</Title>
+          {!isPage && <h2 id="content-detail-title">{content.titulo}</h2>}
         </div>
         {!isPage && onClose && (
           <button type="button" className="content-detail__close" onClick={onClose} aria-label="Fechar detalhes">

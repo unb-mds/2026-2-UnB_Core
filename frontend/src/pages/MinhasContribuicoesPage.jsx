@@ -5,12 +5,20 @@ import ErrorMessage from '../components/ErrorMessage'
 import EmptyState from '../components/ui/EmptyState'
 import StatusBadge from '../components/ui/StatusBadge'
 import Button from '../components/ui/Button'
-import SiteHeader from '../components/SiteHeader'
-import SiteFooter from '../components/SiteFooter'
+import PageLayout, { AsideCard } from '../components/layout/PageLayout'
 import EditarContribuicaoForm from '../components/contribuicoes/EditarContribuicaoForm'
 import { rotuloDisciplinaDoConteudo, rotuloTipo } from '../components/conteudos/formatacao'
 import './ContribuicaoPage.css'
 import './MinhasContribuicoesPage.css'
+
+// Ordem e rótulos do resumo na coluna lateral.
+const ESTADOS_RESUMO = [
+  { estado: 'pendente', rotulo: 'Em revisão' },
+  { estado: 'ajustes', rotulo: 'Com ajustes solicitados' },
+  { estado: 'aprovada', rotulo: 'Publicadas' },
+  { estado: 'rejeitada', rotulo: 'Rejeitadas' },
+  { estado: 'arquivada', rotulo: 'Arquivadas' },
+]
 
 function formatDate(value) {
   if (!value) return 'Data não informada'
@@ -109,40 +117,69 @@ function MinhasContribuicoesPage({ onNavigate }) {
     setContributions((current) => current.map((item) => (item.id === updated.id ? updated : item)))
   }
 
-  return (
-    <div className="my-contributions-shell page-shell">
-      <SiteHeader active="conhecimento" onNavigate={onNavigate} />
-      <main className="my-contributions-page">
-        <header className="my-contributions-page__header">
-          <p className="my-contributions-page__eyebrow">Área do colaborador</p>
-          <h1>Minhas contribuições</h1>
-          <p>Acompanhe o estado dos conteúdos que você enviou para a comunidade.</p>
-        </header>
+  const contagem = ESTADOS_RESUMO.map(({ estado, rotulo }) => ({
+    estado,
+    rotulo,
+    total: contributions.filter((item) => (item.estado || 'pendente') === estado).length,
+  }))
+  const comAjustes = contagem.find((item) => item.estado === 'ajustes')?.total || 0
 
-        {!isAuthenticated && (
-          <EmptyState title="Entre para acompanhar seus envios">
-            Sua lista de contribuições fica disponível somente para usuários autenticados.
-            <span className="my-contributions__action"><Button onClick={() => onNavigate('/login')}>Entrar</Button></span>
-          </EmptyState>
-        )}
-        {isAuthenticated && isLoading && <p className="my-contributions__status">Carregando contribuições...</p>}
-        {error && <ErrorMessage>{error}</ErrorMessage>}
-        {!isLoading && !error && isAuthenticated && contributions.length === 0 && (
-          <EmptyState title="Você ainda não enviou contribuições">
-            Compartilhe um resumo, uma dica ou um material útil com outros estudantes.
-            <span className="my-contributions__action"><Button onClick={() => onNavigate('/contribuicao')}>Enviar contribuição</Button></span>
-          </EmptyState>
-        )}
-        {!isLoading && !error && contributions.length > 0 && (
-          <section className="my-contributions-list" aria-label="Lista de contribuições">
-            {contributions.map((contribution) => (
-              <ContributionCard key={contribution.id} contribution={contribution} onUpdated={replaceContribution} onNavigate={onNavigate} />
-            ))}
-          </section>
-        )}
-      </main>
-      <SiteFooter />
-    </div>
+  const aside = isAuthenticated && !isLoading && !error && contributions.length > 0 && (
+    <>
+      <AsideCard title="Resumo">
+        <dl className="aside-stats">
+          {contagem.map(({ estado, rotulo, total }) => (
+            <div key={estado}>
+              <dt>{rotulo}</dt>
+              <dd>{total}</dd>
+            </div>
+          ))}
+        </dl>
+      </AsideCard>
+      {comAjustes > 0 && (
+        <AsideCard title="Ajustes solicitados">
+          <p>
+            {comAjustes === 1 ? 'Uma contribuição precisa' : `${comAjustes} contribuições precisam`} de ajustes.
+            Abra, leia a orientação da moderação e edite para enviar de novo.
+          </p>
+        </AsideCard>
+      )}
+    </>
+  )
+
+  return (
+    <PageLayout
+      onNavigate={onNavigate}
+      eyebrow="Área do colaborador"
+      title="Minhas contribuições"
+      description="Acompanhe o estado dos conteúdos que você enviou para a comunidade."
+      actions={isAuthenticated && <Button onClick={() => onNavigate?.('/contribuicao')}>Enviar contribuição</Button>}
+      aside={aside}
+      asideLabel="Resumo das contribuições"
+      width="narrow"
+    >
+      {!isAuthenticated && (
+        <EmptyState title="Entre para acompanhar seus envios">
+          Sua lista de contribuições fica disponível somente para usuários autenticados.
+          <span className="empty-state__action"><Button onClick={() => onNavigate('/login')}>Entrar</Button></span>
+        </EmptyState>
+      )}
+      {isAuthenticated && isLoading && <p className="page-status">Carregando contribuições...</p>}
+      {error && <ErrorMessage>{error}</ErrorMessage>}
+      {!isLoading && !error && isAuthenticated && contributions.length === 0 && (
+        <EmptyState title="Você ainda não enviou contribuições">
+          Compartilhe um resumo, uma dica ou um material útil com outros estudantes.
+          <span className="empty-state__action"><Button onClick={() => onNavigate('/contribuicao')}>Enviar contribuição</Button></span>
+        </EmptyState>
+      )}
+      {!isLoading && !error && contributions.length > 0 && (
+        <section className="my-contributions-list" aria-label="Lista de contribuições">
+          {contributions.map((contribution) => (
+            <ContributionCard key={contribution.id} contribution={contribution} onUpdated={replaceContribution} onNavigate={onNavigate} />
+          ))}
+        </section>
+      )}
+    </PageLayout>
   )
 }
 

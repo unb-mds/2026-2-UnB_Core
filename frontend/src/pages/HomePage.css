@@ -1,9 +1,10 @@
-/* ---------- Layout ---------- */
-.home-page { display: grid; gap: var(--spacing-2xl); width: min(1120px, 100%); margin: 0 auto; padding: var(--spacing-xl) var(--spacing-3xl) var(--spacing-3xl); box-sizing: border-box; }
+/* A home é feita de faixas de largura total; o conteúdo de cada faixa usa .page-container
+   (components/layout/layout.css), alinhado ao menu. */
 
-/* ---------- Topo ---------- */
-.home-hero { padding: var(--spacing-3xl) var(--spacing-2xl); border-radius: var(--radius-sm); color: #fff; background: linear-gradient(135deg, var(--color-brand-deep) 0%, var(--color-brand) 100%); box-shadow: var(--shadow-md); }
-.home-hero__content { display: grid; gap: var(--spacing-md); max-width: 720px; min-width: 0; }
+/* ---------- Topo (faixa azul de ponta a ponta) ---------- */
+.home-hero { color: #fff; background: linear-gradient(135deg, var(--color-brand-deep) 0%, var(--color-brand) 100%); }
+.home-hero__content { display: grid; gap: var(--spacing-md); padding-block: var(--spacing-3xl); }
+.home-hero__content > * { max-width: 720px; }
 .home-hero__eyebrow { margin: 0; color: var(--color-accent); font-family: var(--font-display); font-size: 13px; font-weight: 700; letter-spacing: 0.02em; }
 .home-hero h1 { margin: 0; color: #fff; font-family: var(--font-display); font-size: clamp(28px, 5vw, 40px); line-height: 1.2; }
 .home-hero__lead { max-width: 60ch; margin: 0; color: rgba(255, 255, 255, 0.86); font-size: 16px; line-height: 1.6; }
@@ -17,12 +18,13 @@
 .home-hero .btn-outline:hover { background: rgba(255, 255, 255, 0.1); }
 
 /* ---------- Seções ---------- */
-.home-section { display: grid; gap: var(--spacing-md); min-width: 0; }
+.home-section { display: grid; gap: var(--spacing-md); min-width: 0; padding-block: var(--spacing-2xl); }
+/* Faixa clara de largura total para "Como funciona". */
+.home-how-band { border-top: 1px solid var(--color-border); }
 .home-section__heading { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--spacing-sm) var(--spacing-md); }
 .home-section__heading h2 { margin: 0; color: var(--color-text); font-family: var(--font-display); font-size: 20px; }
 .home-section__heading a { color: var(--color-primary); font-size: 14px; font-weight: 600; text-decoration: none; }
 .home-section__heading a:hover { text-decoration: underline; }
-.home-section__status { margin: 0; color: var(--color-text-muted); }
 
 /* ---------- Como funciona ---------- */
 .home-how { justify-items: center; text-align: center; }
@@ -57,7 +59,7 @@
 }
 
 @media (max-width: 700px) {
-  .home-page { gap: var(--spacing-xl); padding: var(--spacing-md) var(--spacing-md) var(--spacing-2xl); }
-  .home-hero { padding: var(--spacing-xl) var(--spacing-lg); }
+  .home-hero__content { padding-block: var(--spacing-xl); }
+  .home-section { padding-block: var(--spacing-xl); }
   .home-cta { padding: var(--spacing-lg); }
 }
