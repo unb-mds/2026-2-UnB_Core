@@ -103,4 +103,10 @@ def publicar_conteudo(
         conteudo.atualizado_em = datetime.now(timezone.utc)
 
     session.add(conteudo)
+    if contribuicao.conteudo_id is None:
+        # Liga a contribuição ao conteúdo criado. Sem isso, aprovar de novo
+        # depois de uma edição criava um segundo conteúdo e o antigo
+        # continuava publicado.
+        session.flush()
+        contribuicao.conteudo_id = conteudo.id
     return conteudo
