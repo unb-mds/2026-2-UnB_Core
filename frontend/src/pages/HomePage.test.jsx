@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import '@testing-library/jest-dom/vitest'
-import { cleanup, fireEvent, render, screen } from '@testing-library/react'
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { api } from '../services/api'
 import { useAuth } from '../state/auth'
@@ -91,6 +91,50 @@ describe('HomePage', () => {
     fireEvent.mouseDown(opcao)
 
     expect(onNavigate).toHaveBeenCalledWith('/base-de-conhecimentos', { disciplina: compiladores })
+  })
+
+  it('Enter escolhe o primeiro resultado, mesmo se apertado antes de a busca terminar', async () => {
+    respostas()
+    const onNavigate = vi.fn()
+
+    render(<HomePage onNavigate={onNavigate} />)
+
+    const busca = screen.getByRole('combobox', { name: 'Qual disciplina você quer estudar?' })
+    fireEvent.focus(busca)
+    fireEvent.change(busca, { target: { value: 'compi' } })
+    // Enter antes do resultado chegar: fica pendente e escolhe quando a resposta vier.
+    fireEvent.keyDown(busca, { key: 'Enter' })
+
+    await waitFor(() => expect(onNavigate).toHaveBeenCalledWith('/base-de-conhecimentos', { disciplina: compiladores }))
+  })
+
+  it('Enter com os resultados na tela escolhe o primeiro', async () => {
+    respostas()
+    const onNavigate = vi.fn()
+
+    render(<HomePage onNavigate={onNavigate} />)
+
+    const busca = screen.getByRole('combobox', { name: 'Qual disciplina você quer estudar?' })
+    fireEvent.focus(busca)
+    fireEvent.change(busca, { target: { value: 'compi' } })
+    await screen.findByRole('option', { name: /FGA0003 - COMPILADORES 1/ })
+    fireEvent.keyDown(busca, { key: 'Enter' })
+
+    expect(onNavigate).toHaveBeenCalledWith('/base-de-conhecimentos', { disciplina: compiladores })
+  })
+
+  it('o título do card é um link para a página do conteúdo', async () => {
+    respostas()
+    const onNavigate = vi.fn()
+
+    render(<HomePage onNavigate={onNavigate} />)
+
+    const link = await screen.findByRole('link', { name: 'Dica de parser' })
+    expect(link).toHaveAttribute('href', '/conteudos/7')
+    expect(screen.getByRole('heading', { level: 3, name: 'Dica de parser' })).toBeInTheDocument()
+
+    fireEvent.click(link)
+    expect(onNavigate).toHaveBeenCalledWith('/conteudos/7')
   })
 
   it('mostra a chamada certa para quem não está logado e para quem está', async () => {

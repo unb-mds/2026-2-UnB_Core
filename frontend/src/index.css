@@ -1,8 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap');
 
 :root {
+  color-scheme: light;
   --color-primary: #1B3A8F;
+  /* Texto de destaque (logo, títulos da marca). No tema escuro vira um tom claro. */
   --color-primary-dark: #0B1638;
+  /* Cores da marca para fundos (rodapé, topo da home, cartão de login): iguais nos dois temas. */
+  --color-brand: #1B3A8F;
+  --color-brand-deep: #0B1638;
+  /* Texto sobre botões e elementos preenchidos com a cor primária ou de destaque. */
+  --color-on-primary: #FFFFFF;
+  --color-on-accent: #0B1638;
+  /* Texto escuro fixo, para campos que têm fundo claro nos dois temas. */
+  --color-ink: #1B1F2A;
   --color-accent: #33D6F6;
   --color-warning: #EFB43A;
   --color-warning-bg: #FDF0DA;
@@ -18,6 +28,9 @@
   --color-text: #1B1F2A;
   --color-text-muted: #5A5F6E;
   --color-border: #E2E4EA;
+  /* Campos de texto e seleção. No tema claro são iguais à superfície; no escuro ficam mais claros que ela. */
+  --color-field: #FFFFFF;
+  --color-field-border: #E2E4EA;
   --color-neutral-10: #F0F1F4;
   --color-neutral-50: #9AA0AE;
   --font-display: 'JetBrains Mono', monospace;
@@ -42,6 +55,38 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
+
+/* ---------- Tema escuro ----------
+   Ativado por data-theme="dark" no <html> (botão no menu ou preferência do sistema).
+   Contraste de texto acima de 4,5:1 (WCAG AA) sobre --color-surface e --color-bg. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-primary: #8AA8FF;
+  --color-primary-dark: #DCE4FF;
+  --color-on-primary: #0B1638;
+  --color-warning-bg: #3A2C10;
+  --color-warning-text: #F5C46B;
+  --color-error: #F97066;
+  --color-error-bg: #3B1714;
+  --color-error-text: #FFB4AB;
+  --color-success: #6FD08C;
+  --color-success-bg: #12301D;
+  --color-bg: #0E1220;
+  --color-bg-soft: #1C2A4D;
+  --color-surface: #161B2E;
+  --color-text: #E6E9F2;
+  --color-text-muted: #A3AABD;
+  --color-border: #2A3248;
+  --color-field: #222B44;
+  --color-field-border: #46506D;
+  --color-neutral-10: #232A3D;
+  --color-neutral-50: #6B7389;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.5);
+}
+
+/* Placeholder legível sobre --color-field no escuro (contraste 4,6:1). */
+:root[data-theme="dark"] ::placeholder { color: #8C93A8; opacity: 1; }
 
 * { box-sizing: border-box; }
 body { margin: 0; min-width: 320px; overflow-wrap: break-word; }

@@ -86,7 +86,7 @@ function HomePage({ onNavigate }) {
               />
             </div>
             <div className="home-hero__actions">
-              <Button variant="accent" onClick={goTo('/base-de-conhecimentos')}>Explorar a base de conhecimento</Button>
+              <Button variant="outline" onClick={goTo('/base-de-conhecimentos')}>Explorar a base de conhecimento</Button>
               <Button variant="outline" onClick={goTo('/contribuicao')}>Enviar uma contribuição</Button>
             </div>
           </div>
@@ -104,7 +104,7 @@ function HomePage({ onNavigate }) {
           {recentes.status === 'pronto' && recentes.itens.length === 0 && (
             <EmptyState title="Ainda não há conteúdos publicados">
               Seja a primeira pessoa a compartilhar um material com a comunidade.
-              <span className="knowledge-results__action"><Button variant="accent" onClick={goTo('/contribuicao')}>Quero contribuir</Button></span>
+              <span className="knowledge-results__action"><Button onClick={goTo('/contribuicao')}>Quero contribuir</Button></span>
             </EmptyState>
           )}
           {recentes.itens.length > 0 && (
@@ -114,6 +114,7 @@ function HomePage({ onNavigate }) {
                   key={content.id}
                   content={content}
                   showDiscipline
+                  headingLevel={3}
                   onOpen={(item) => onNavigate?.(`/conteudos/${item.id}`)}
                 />
               ))}
@@ -134,7 +135,7 @@ function HomePage({ onNavigate }) {
                 <p>{passo.descricao}</p>
                 {passo.tipos && (
                   <ul className="home-steps__types" aria-label="Tipos de conteúdo">
-                    {tiposDeConteudo.map((tipo) => <li key={tipo} className="badge badge-category">{tipo}</li>)}
+                    {tiposDeConteudo.map((tipo) => <li key={tipo}>{tipo}</li>)}
                   </ul>
                 )}
               </li>
@@ -150,7 +151,7 @@ function HomePage({ onNavigate }) {
                 <p>Um resumo bem feito pode ajudar a próxima turma inteira.</p>
               </div>
               <div className="home-cta__actions">
-                <Button variant="accent" onClick={goTo('/contribuicao')}>Enviar contribuição</Button>
+                <Button onClick={goTo('/contribuicao')}>Enviar contribuição</Button>
                 <Button variant="outline" onClick={goTo('/minhas-contribuicoes')}>Minhas contribuições</Button>
               </div>
             </>
@@ -161,7 +162,7 @@ function HomePage({ onNavigate }) {
                 <p>Crie uma conta para enviar materiais e acompanhar a revisão das suas contribuições.</p>
               </div>
               <div className="home-cta__actions">
-                <Button variant="accent" onClick={goTo('/cadastro')}>Criar conta</Button>
+                <Button onClick={goTo('/cadastro')}>Criar conta</Button>
                 <Button variant="outline" onClick={goTo('/login')}>Entrar</Button>
               </div>
             </>

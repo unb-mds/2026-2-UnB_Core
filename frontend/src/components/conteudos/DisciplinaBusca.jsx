@@ -1,4 +1,4 @@
-import { useEffect, useId, useMemo, useState } from 'react'
+import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { api, ApiError } from '../../services/api'
 import './DisciplinaBusca.css'
 
@@ -44,6 +44,9 @@ function DisciplinaBusca({ label = 'Disciplina', cursoId = '', cursos = [], valu
   const [activeIndex, setActiveIndex] = useState(-1)
   const [courseDisciplines, setCourseDisciplines] = useState({ cursoId: '', itens: [] })
   const [remote, setRemote] = useState({ termo: '', itens: [], erro: null })
+  // Enter apertado enquanto a busca ainda carrega: escolhe o primeiro resultado quando ele chegar.
+  const enterPendenteRef = useRef(false)
+  const selecionarRef = useRef(null)
 
   const termo = normalizar(query)
 
@@ -66,7 +69,14 @@ function DisciplinaBusca({ label = 'Disciplina', cursoId = '', cursos = [], valu
     const controller = new AbortController()
     const timer = setTimeout(() => {
       api.get(`/disciplinas?busca=${encodeURIComponent(termo)}`, { signal: controller.signal })
-        .then((response) => setRemote({ termo, itens: response?.itens || [], erro: null }))
+        .then((response) => {
+          const itens = response?.itens || []
+          setRemote({ termo, itens, erro: null })
+          if (enterPendenteRef.current) {
+            enterPendenteRef.current = false
+            if (itens[0]) selecionarRef.current?.(itens[0])
+          }
+        })
         .catch((requestError) => {
           if (requestError.name === 'AbortError') return
           const mensagem = requestError instanceof ApiError ? requestError.message : 'Não foi possível buscar as disciplinas.'
@@ -105,11 +115,17 @@ function DisciplinaBusca({ label = 'Disciplina', cursoId = '', cursos = [], valu
   const showList = isOpen && !value
 
   function select(disciplina) {
+    enterPendenteRef.current = false
     onChange(disciplina)
     setQuery('')
     setIsOpen(false)
     setActiveIndex(-1)
   }
+
+  // Mantém a versão mais recente de select() para o retorno assíncrono da busca.
+  useEffect(() => {
+    selecionarRef.current = select
+  })
 
   function clear() {
     onChange(null)
@@ -119,6 +135,7 @@ function DisciplinaBusca({ label = 'Disciplina', cursoId = '', cursos = [], valu
   }
 
   function handleInput(event) {
+    enterPendenteRef.current = false
     if (value) onChange(null)
     setQuery(event.target.value)
     setIsOpen(true)
@@ -133,10 +150,13 @@ function DisciplinaBusca({ label = 'Disciplina', cursoId = '', cursos = [], valu
     } else if (event.key === 'ArrowUp') {
       event.preventDefault()
       setActiveIndex((index) => Math.max(index - 1, 0))
-    } else if (event.key === 'Enter' && showList) {
-      // Evita enviar o formulário ao escolher uma opção com Enter.
+    } else if (event.key === 'Enter' && !value) {
+      // Evita enviar o formulário. Sem opção destacada, escolhe o primeiro resultado;
+      // se a busca ainda estiver carregando, escolhe assim que o resultado chegar.
       event.preventDefault()
-      if (results[activeIndex]) select(results[activeIndex])
+      const escolhida = results[activeIndex] || results[0]
+      if (escolhida) select(escolhida)
+      else if (isSearching) enterPendenteRef.current = true
     } else if (event.key === 'Escape') {
       setIsOpen(false)
     }

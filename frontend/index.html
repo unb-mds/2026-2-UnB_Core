@@ -5,6 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#1B3A8F" />
     <title>UNB CORE</title>
+    <script>
+      // Aplica o tema antes de a página aparecer, para não piscar em branco no tema escuro.
+      // A mesma regra fica em src/state/theme.js.
+      (function () {
+        try {
+          var tema = localStorage.getItem('unb-core-tema')
+          if (tema !== 'dark' && tema !== 'light') {
+            tema = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+          }
+          document.documentElement.dataset.theme = tema
+        } catch (erro) {
+          document.documentElement.dataset.theme = 'light'
+        }
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>

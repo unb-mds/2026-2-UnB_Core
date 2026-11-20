@@ -1,7 +1,10 @@
 .knowledge-card { display: grid; grid-template-columns: minmax(0, 1fr); min-width: 0; gap: var(--spacing-md); padding: var(--spacing-md); border: 1px solid var(--color-border); border-left: 3px solid var(--color-primary); border-radius: var(--radius-sm); background: var(--color-surface); box-shadow: var(--shadow-sm); }
 .knowledge-card__topline,
 .knowledge-card__footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--spacing-sm); color: var(--color-text-muted); font-size: 12px; }
-.knowledge-card h2 { margin: 0; color: var(--color-text); font-size: 18px; }
+.knowledge-card h2,
+.knowledge-card h3 { margin: 0; color: var(--color-text); font-size: 18px; }
+.knowledge-card__title a { color: inherit; text-decoration: none; }
+.knowledge-card__title a:hover { color: var(--color-primary); text-decoration: underline; }
 .knowledge-card > p { margin: 0; color: var(--color-text-muted); font-size: 14px; line-height: 1.6; }
 .knowledge-card__footer { padding-top: var(--spacing-sm); border-top: 1px solid var(--color-border); }
 
@@ -40,6 +43,3 @@
   .content-detail__heading h1 { font-size: 22px; }
 }
 .knowledge-card > p.knowledge-card__discipline { color: var(--color-primary); font-size: 12px; font-weight: 600; overflow-wrap: anywhere; }
-/* Os rótulos de tipo já vêm escritos certo ("Dica de estudo"); sem isso o .badge deixaria cada palavra em maiúscula. */
-.knowledge-card .badge-category,
-.content-detail .badge-category { text-transform: none; }

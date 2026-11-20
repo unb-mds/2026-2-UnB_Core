@@ -11,15 +11,18 @@
 .contribution-form__type { margin: 0; padding: 0; border: 0; }
 .contribution-form__type legend { padding: 0; margin: 0 0 var(--spacing-sm); color: var(--color-text); font-size: 13px; font-weight: 600; }
 .contribution-form__type-options { display: flex; flex-wrap: wrap; gap: 8px; }
-.tag-toggle { padding: 6px 12px; border: 1px solid var(--color-border); border-radius: var(--radius-full); color: var(--color-text-muted); background: var(--color-surface); font: inherit; font-size: 12px; font-weight: 500; cursor: pointer; }
-.tag-toggle--active { border-color: var(--color-primary); color: #fff; background: var(--color-primary); }
+.tag-toggle { padding: 6px 12px; border: 1px solid var(--color-field-border); border-radius: var(--radius-full); color: var(--color-text-muted); background: var(--color-field); font: inherit; font-size: 12px; font-weight: 500; cursor: pointer; }
+.tag-toggle--active { border-color: var(--color-primary); color: var(--color-on-primary); background: var(--color-primary); }
 .contribution-form { display: grid; gap: var(--spacing-lg); padding: var(--spacing-xl); border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-surface); box-shadow: var(--shadow-sm); }
-.contribution-form__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--spacing-md); }
-.contribution-form label { display: grid; min-width: 0; gap: var(--spacing-sm); color: var(--color-text); font-size: 13px; font-weight: 600; }
+/* align-items: end mantém os campos lado a lado alinhados mesmo quando um rótulo quebra em duas linhas. */
+.contribution-form__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: end; gap: var(--spacing-md); }
+/* Flex com quebra: o texto do rótulo, o "*" e a dica ficam na mesma linha, e o campo vai para a linha de baixo. */
+.contribution-form label { display: flex; flex-wrap: wrap; align-items: baseline; min-width: 0; column-gap: 4px; row-gap: var(--spacing-sm); color: var(--color-text); font-size: 13px; font-weight: 600; }
+.contribution-form label > :where(input, select, textarea) { flex: 1 0 100%; }
 .contribution-form label > span:not(.contribution-form__hint) { color: var(--color-primary); }
 .contribution-form input,
 .contribution-form select,
-.contribution-form textarea { width: 100%; box-sizing: border-box; padding: 10px 12px; border: 1px solid var(--color-border); border-radius: var(--radius-sm); color: var(--color-text); background: var(--color-surface); font: inherit; font-size: 14px; }
+.contribution-form textarea { width: 100%; box-sizing: border-box; padding: 10px 12px; border: 1px solid var(--color-field-border); border-radius: var(--radius-sm); color: var(--color-text); background: var(--color-field); font: inherit; font-size: 14px; font-weight: 400; }
 .contribution-form input,
 .contribution-form select { min-height: 44px; }
 .contribution-form textarea { resize: vertical; line-height: 1.6; }
