@@ -66,11 +66,12 @@ function HomePage({ onNavigate }) {
   }
 
   return (
-    <div className="knowledge-shell page-shell">
-      <SiteHeader active="inicio" onNavigate={onNavigate} />
-      <main className="home-page">
+    <div className="page-shell">
+      <SiteHeader onNavigate={onNavigate} />
+      <main>
+        {/* Faixas de largura total; o conteúdo de cada uma fica alinhado ao menu (.page-container). */}
         <section className="home-hero" aria-labelledby="home-title">
-          <div className="home-hero__content">
+          <div className="page-container home-hero__content">
             <p className="home-hero__eyebrow">FCTE · Campus Gama</p>
             <h1 id="home-title">O conhecimento da FCTE, organizado por disciplina</h1>
             <p className="home-hero__lead">
@@ -92,23 +93,23 @@ function HomePage({ onNavigate }) {
           </div>
         </section>
 
-        <section className="home-section" aria-labelledby="home-recent-title">
+        <section className="page-container home-section" aria-labelledby="home-recent-title">
           <div className="home-section__heading">
             <h2 id="home-recent-title">Publicados recentemente</h2>
             <a href="/base-de-conhecimentos" onClick={goTo('/base-de-conhecimentos')}>Ver a base completa</a>
           </div>
-          {recentes.status === 'carregando' && <p className="home-section__status">Carregando conteúdos...</p>}
+          {recentes.status === 'carregando' && <p className="page-status">Carregando conteúdos...</p>}
           {recentes.status === 'erro' && (
-            <p className="home-section__status">Não foi possível carregar os conteúdos agora.</p>
+            <p className="page-status">Não foi possível carregar os conteúdos agora.</p>
           )}
           {recentes.status === 'pronto' && recentes.itens.length === 0 && (
             <EmptyState title="Ainda não há conteúdos publicados">
               Seja a primeira pessoa a compartilhar um material com a comunidade.
-              <span className="knowledge-results__action"><Button onClick={goTo('/contribuicao')}>Quero contribuir</Button></span>
+              <span className="empty-state__action"><Button onClick={goTo('/contribuicao')}>Quero contribuir</Button></span>
             </EmptyState>
           )}
           {recentes.itens.length > 0 && (
-            <div className="knowledge-grid">
+            <div className="cards-grid">
               {recentes.itens.map((content) => (
                 <ConteudoCard
                   key={content.id}
@@ -122,55 +123,59 @@ function HomePage({ onNavigate }) {
           )}
         </section>
 
-        <section className="home-section home-how" aria-labelledby="home-how-title">
-          <header className="home-how__header">
-            <h2 id="home-how-title">Como funciona</h2>
-            <p>Três passos para estudar e compartilhar com a comunidade.</p>
-          </header>
-          <ol className="home-steps">
-            {passos.map((passo, index) => (
-              <li key={passo.titulo} className="home-steps__item">
-                <span className="home-steps__number" aria-hidden="true">{index + 1}</span>
-                <h3>{passo.titulo}</h3>
-                <p>{passo.descricao}</p>
-                {passo.tipos && (
-                  <ul className="home-steps__types" aria-label="Tipos de conteúdo">
-                    {tiposDeConteudo.map((tipo) => <li key={tipo}>{tipo}</li>)}
-                  </ul>
-                )}
-              </li>
-            ))}
-          </ol>
-          <a className="home-how__link" href="/guia-de-contribuicao" onClick={goTo('/guia-de-contribuicao')}>
-            Ler o guia de contribuição →
-          </a>
+        <section className="page-band home-how-band" aria-labelledby="home-how-title">
+          <div className="page-container home-section home-how">
+            <header className="home-how__header">
+              <h2 id="home-how-title">Como funciona</h2>
+              <p>Três passos para estudar e compartilhar com a comunidade.</p>
+            </header>
+            <ol className="home-steps">
+              {passos.map((passo, index) => (
+                <li key={passo.titulo} className="home-steps__item">
+                  <span className="home-steps__number" aria-hidden="true">{index + 1}</span>
+                  <h3>{passo.titulo}</h3>
+                  <p>{passo.descricao}</p>
+                  {passo.tipos && (
+                    <ul className="home-steps__types" aria-label="Tipos de conteúdo">
+                      {tiposDeConteudo.map((tipo) => <li key={tipo}>{tipo}</li>)}
+                    </ul>
+                  )}
+                </li>
+              ))}
+            </ol>
+            <a className="home-how__link" href="/guia-de-contribuicao" onClick={goTo('/guia-de-contribuicao')}>
+              Ler o guia de contribuição →
+            </a>
+          </div>
         </section>
 
-        <section className="home-cta" aria-labelledby="home-cta-title">
-          {isAuthenticated ? (
-            <>
-              <div>
-                <h2 id="home-cta-title">Compartilhe o que você aprendeu</h2>
-                <p>Um resumo bem feito pode ajudar a próxima turma inteira.</p>
-              </div>
-              <div className="home-cta__actions">
-                <Button onClick={goTo('/contribuicao')}>Enviar contribuição</Button>
-                <Button variant="outline" onClick={goTo('/minhas-contribuicoes')}>Minhas contribuições</Button>
-              </div>
-            </>
-          ) : (
-            <>
-              <div>
-                <h2 id="home-cta-title">Faça parte da comunidade</h2>
-                <p>Crie uma conta para enviar materiais e acompanhar a revisão das suas contribuições.</p>
-              </div>
-              <div className="home-cta__actions">
-                <Button onClick={goTo('/cadastro')}>Criar conta</Button>
-                <Button variant="outline" onClick={goTo('/login')}>Entrar</Button>
-              </div>
-            </>
-          )}
-        </section>
+        <div className="page-container home-section">
+          <section className="home-cta" aria-labelledby="home-cta-title">
+            {isAuthenticated ? (
+              <>
+                <div>
+                  <h2 id="home-cta-title">Compartilhe o que você aprendeu</h2>
+                  <p>Um resumo bem feito pode ajudar a próxima turma inteira.</p>
+                </div>
+                <div className="home-cta__actions">
+                  <Button onClick={goTo('/contribuicao')}>Enviar contribuição</Button>
+                  <Button variant="outline" onClick={goTo('/minhas-contribuicoes')}>Minhas contribuições</Button>
+                </div>
+              </>
+            ) : (
+              <>
+                <div>
+                  <h2 id="home-cta-title">Faça parte da comunidade</h2>
+                  <p>Crie uma conta para enviar materiais e acompanhar a revisão das suas contribuições.</p>
+                </div>
+                <div className="home-cta__actions">
+                  <Button onClick={goTo('/cadastro')}>Criar conta</Button>
+                  <Button variant="outline" onClick={goTo('/login')}>Entrar</Button>
+                </div>
+              </>
+            )}
+          </section>
+        </div>
       </main>
       <SiteFooter />
     </div>

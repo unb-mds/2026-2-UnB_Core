@@ -5,8 +5,7 @@ import { useAuth } from '../state/auth'
 import ErrorMessage from '../components/ErrorMessage'
 import EmptyState from '../components/ui/EmptyState'
 import Button from '../components/ui/Button'
-import SiteHeader from '../components/SiteHeader'
-import SiteFooter from '../components/SiteFooter'
+import PageLayout, { AsideCard } from '../components/layout/PageLayout'
 import DisciplinaBusca from '../components/conteudos/DisciplinaBusca'
 import './ContribuicaoPage.css'
 
@@ -111,92 +110,109 @@ function ContribuicaoPage({ courses = [], onNavigate }) {
     }
   }
 
+  function goTo(path) {
+    return (event) => {
+      event?.preventDefault()
+      onNavigate?.(path)
+    }
+  }
+
   if (submitted) {
     return (
-      <div className="contribution-shell page-shell">
-        <SiteHeader active="conhecimento" onNavigate={onNavigate} />
-        <main className="contribution-page">
-          <EmptyState title="Contribuição enviada">
-            Sua contribuição foi registrada como pendente e será analisada pela moderação.
-            <span className="contribution-page__action"><Button variant="outline" onClick={() => onNavigate('/base-de-conhecimentos')}>Voltar para a base</Button></span>
-          </EmptyState>
-        </main>
-        <SiteFooter />
-      </div>
+      <PageLayout onNavigate={onNavigate} eyebrow="Colaboração acadêmica" title="Contribuição enviada" width="narrow">
+        <EmptyState title="Recebemos a sua contribuição">
+          Ela foi registrada como pendente e será analisada pela moderação. Você acompanha o andamento em Minhas contribuições.
+          <span className="empty-state__action">
+            <Button onClick={goTo('/minhas-contribuicoes')}>Acompanhar em Minhas contribuições</Button>
+            <Button variant="outline" onClick={() => { setForm(initialForm); setSelectedDiscipline(null); setSubmitted(false) }}>Enviar outra</Button>
+            <Button variant="outline" onClick={goTo('/base-de-conhecimentos')}>Voltar para a base</Button>
+          </span>
+        </EmptyState>
+      </PageLayout>
     )
   }
 
+  const aside = (
+    <>
+      <AsideCard title="Antes de enviar">
+        <ul>
+          <li>Cite a fonte quando o material vier de terceiros.</li>
+          <li>Seja objetivo: um bom resumo vale mais que um texto longo.</li>
+          <li>Se for uma correção de algo publicado, diga o que mudou.</li>
+        </ul>
+        <a href="/guia-de-contribuicao" onClick={goTo('/guia-de-contribuicao')}>Ler o guia de primeira contribuição</a>
+      </AsideCard>
+      <AsideCard title="Depois do envio">
+        <p>A contribuição fica pendente até a moderação revisar. Você acompanha tudo em Minhas contribuições.</p>
+      </AsideCard>
+    </>
+  )
+
   return (
-    <div className="contribution-shell page-shell">
-      <SiteHeader active="conhecimento" onNavigate={onNavigate} />
-      <main className="contribution-page">
-        <header className="contribution-page__header">
-          <p className="contribution-page__eyebrow">Colaboração acadêmica</p>
-          <h1>Envie uma contribuição</h1>
-          <p>Compartilhe um material útil. A publicação acontece somente após a revisão da equipe.</p>
-        </header>
-        {!isAuthenticated && (
-          <div className="contribution-page__tip">
-            <p>Você pode preencher e conhecer o fluxo sem login. Para enviar, <a href="/login" onClick={(event) => { event.preventDefault(); onNavigate?.('/login') }}>entre na sua conta</a>.</p>
-          </div>
-        )}
+    <PageLayout
+      onNavigate={onNavigate}
+      eyebrow="Colaboração acadêmica"
+      title="Envie uma contribuição"
+      description="Compartilhe um material útil. A publicação acontece somente após a revisão da equipe."
+      aside={aside}
+      asideLabel="Dicas para contribuir"
+    >
+      {!isAuthenticated && (
         <div className="contribution-page__tip">
-          <span aria-hidden="true">💡</span>
-          <p>Primeira vez por aqui? <a href="/guia-de-contribuicao" onClick={(event) => { event.preventDefault(); onNavigate?.('/guia-de-contribuicao') }}>Veja o guia de primeira contribuição</a> antes de enviar.</p>
+          <p>Você pode preencher e conhecer o fluxo sem login. Para enviar, <a href="/login" onClick={goTo('/login')}>entre na sua conta</a>.</p>
         </div>
-        <form className="contribution-form" onSubmit={submitContribution} noValidate>
-          <div className="contribution-form__grid">
-            <label>
-              Curso <span className="contribution-form__hint">(opcional, filtra as disciplinas)</span>
-              <select name="curso_id" value={form.curso_id} onChange={selectCourse}>
-                <option value="">Todos os cursos</option>
-                {availableCourses.map((course) => <option key={course.id} value={course.id}>{course.nome || course.name}</option>)}
-              </select>
-            </label>
-            <DisciplinaBusca
-              label={<>Disciplina <span aria-hidden="true">*</span></>}
-              cursoId={form.curso_id}
-              cursos={availableCourses}
-              value={selectedDiscipline}
-              onChange={selectDiscipline}
-            />
+      )}
+      <form className="contribution-form" onSubmit={submitContribution} noValidate>
+        <div className="contribution-form__grid">
+          <label>
+            Curso <span className="contribution-form__hint">(opcional, filtra as disciplinas)</span>
+            <select name="curso_id" value={form.curso_id} onChange={selectCourse}>
+              <option value="">Todos os cursos</option>
+              {availableCourses.map((course) => <option key={course.id} value={course.id}>{course.nome || course.name}</option>)}
+            </select>
+          </label>
+          <DisciplinaBusca
+            label={<>Disciplina <span aria-hidden="true">*</span></>}
+            cursoId={form.curso_id}
+            cursos={availableCourses}
+            value={selectedDiscipline}
+            onChange={selectDiscipline}
+          />
+        </div>
+        <fieldset className="contribution-form__type">
+          <legend>Tipo de conteúdo <span aria-hidden="true">*</span></legend>
+          <div className="contribution-form__type-options">
+            {contentTypes.map((type) => (
+              <button
+                key={type.value}
+                type="button"
+                className={`tag-toggle ${form.tipo === type.value ? 'tag-toggle--active' : ''}`}
+                onClick={() => updateField({ target: { name: 'tipo', value: type.value } })}
+              >
+                {type.label}
+              </button>
+            ))}
           </div>
-          <fieldset className="contribution-form__type">
-            <legend>Tipo de conteúdo <span aria-hidden="true">*</span></legend>
-            <div className="contribution-form__type-options">
-              {contentTypes.map((type) => (
-                <button
-                  key={type.value}
-                  type="button"
-                  className={`tag-toggle ${form.tipo === type.value ? 'tag-toggle--active' : ''}`}
-                  onClick={() => updateField({ target: { name: 'tipo', value: type.value } })}
-                >
-                  {type.label}
-                </button>
-              ))}
-            </div>
-          </fieldset>
-          <label>
-            Título <span aria-hidden="true">*</span>
-            <input name="titulo" value={form.titulo} onChange={updateField} placeholder="Ex.: Resumo da unidade 1" />
-          </label>
-          <label>
-            Conteúdo
-            <textarea name="conteudo" value={form.conteudo} onChange={updateField} rows="8" placeholder="Escreva ou cole o conteúdo aqui..." />
-          </label>
-          <label>
-            Fonte / referência <span className="contribution-form__hint">(opcional, ou preencha a URL do material)</span>
-            <input name="url" type="url" value={form.url} onChange={updateField} placeholder="Link ou nome da referência usada" />
-          </label>
-          {error && <ErrorMessage>{error}</ErrorMessage>}
-          <div className="contribution-form__footer">
-            <p><strong>Revisão:</strong> novas contribuições começam com estado pendente.</p>
-            <Button type="submit" disabled={isSubmitting}>{isSubmitting ? 'Enviando...' : 'Enviar contribuição'}</Button>
-          </div>
-        </form>
-      </main>
-      <SiteFooter />
-    </div>
+        </fieldset>
+        <label>
+          Título <span aria-hidden="true">*</span>
+          <input name="titulo" value={form.titulo} onChange={updateField} placeholder="Ex.: Resumo da unidade 1" />
+        </label>
+        <label>
+          Conteúdo
+          <textarea name="conteudo" value={form.conteudo} onChange={updateField} rows="8" placeholder="Escreva ou cole o conteúdo aqui..." />
+        </label>
+        <label>
+          Fonte / referência <span className="contribution-form__hint">(opcional, ou preencha a URL do material)</span>
+          <input name="url" type="url" value={form.url} onChange={updateField} placeholder="Link ou nome da referência usada" />
+        </label>
+        {error && <ErrorMessage>{error}</ErrorMessage>}
+        <div className="contribution-form__footer">
+          <p><strong>Revisão:</strong> novas contribuições começam com estado pendente.</p>
+          <Button type="submit" disabled={isSubmitting}>{isSubmitting ? 'Enviando...' : 'Enviar contribuição'}</Button>
+        </div>
+      </form>
+    </PageLayout>
   )
 }
 

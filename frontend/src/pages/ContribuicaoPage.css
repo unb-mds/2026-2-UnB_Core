@@ -1,10 +1,4 @@
-.contribution-shell { min-height: 100svh; background: var(--color-bg); }
-.contribution-page { width: min(900px, 100%); margin: 0 auto; padding: var(--spacing-2xl) var(--spacing-xl) var(--spacing-3xl); }
-.contribution-page__header { max-width: 680px; margin-bottom: var(--spacing-xl); }
-.contribution-page__eyebrow { margin: 0 0 var(--spacing-sm); color: var(--color-primary); font-size: 12px; font-weight: 600; }
-.contribution-page__header h1 { margin: 0 0 var(--spacing-sm); color: var(--color-text); font-family: var(--font-display); font-size: 30px; line-height: 1.25; }
-.contribution-page__header p:last-child { color: var(--color-text-muted); font-size: 15px; line-height: 1.6; }
-.contribution-page__action { display: block; margin-top: var(--spacing-md); }
+/* Layout e cabeçalho vêm de components/layout/layout.css. */
 .contribution-page__tip { display: flex; align-items: flex-start; gap: 8px; margin-bottom: var(--spacing-lg); padding: 12px 14px; border-radius: var(--radius-sm); background: var(--color-bg-soft); }
 .contribution-page__tip p { margin: 0; color: var(--color-primary); font-size: 12px; line-height: 1.5; }
 .contribution-page__tip a { color: var(--color-primary); font-weight: 600; text-decoration: underline; }
@@ -33,7 +27,6 @@
 .contribution-form button:disabled { cursor: wait; opacity: 0.7; }
 
 @media (max-width: 680px) {
-  .contribution-page { padding: var(--spacing-xl) var(--spacing-md) var(--spacing-2xl); }
   .contribution-form { padding: var(--spacing-md); }
   .contribution-form__grid { grid-template-columns: 1fr; }
   .contribution-form__footer { align-items: stretch; flex-direction: column; }

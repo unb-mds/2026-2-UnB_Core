@@ -5,13 +5,21 @@ import ErrorMessage from '../components/ErrorMessage'
 import EmptyState from '../components/ui/EmptyState'
 import StatusBadge from '../components/ui/StatusBadge'
 import Button from '../components/ui/Button'
-import SiteHeader from '../components/SiteHeader'
-import SiteFooter from '../components/SiteFooter'
+import PageLayout, { AsideCard } from '../components/layout/PageLayout'
 import ConteudoCorpo, { TextoOuLink } from '../components/conteudos/ConteudoCorpo'
 import EditarContribuicaoForm from '../components/contribuicoes/EditarContribuicaoForm'
 import { formatarData, rotuloDisciplinaDoConteudo, rotuloTipo } from '../components/conteudos/formatacao'
 import '../components/conteudos/conteudos.css'
 import './MinhasContribuicoesPage.css'
+
+// O que cada estado significa para quem enviou, na coluna lateral.
+const SITUACOES = {
+  pendente: 'Aguardando a revisão da moderação. Enquanto isso, você ainda pode editar.',
+  ajustes: 'A moderação pediu ajustes. Leia a orientação, edite a contribuição e ela volta para revisão.',
+  aprovada: 'Aprovada e publicada na base de conhecimento.',
+  rejeitada: 'Não foi publicada. Veja a orientação da moderação para entender o motivo.',
+  arquivada: 'Arquivada pela moderação e fora da base de conhecimento.',
+}
 
 function MinhaContribuicaoPage({ contribuicaoId, onNavigate }) {
   const { isAuthenticated } = useAuth()
@@ -53,104 +61,118 @@ function MinhaContribuicaoPage({ contribuicaoId, onNavigate }) {
   const justificativa = contribution?.justificativa_moderacao
   const hasPublishedVersion = Boolean(contribution?.conteudo_id)
 
-  return (
-    <div className="my-contributions-shell page-shell">
-      <SiteHeader active="conhecimento" onNavigate={onNavigate} />
-      <main className="content-page">
-        <a className="content-page__back" href="/minhas-contribuicoes" onClick={goToList}>
-          ← Voltar para minhas contribuições
+  const situacao = SITUACOES[contribution?.estado]
+
+  const aside = contribution && (
+    <>
+      <AsideCard title="Situação">
+        <p>{situacao || 'Estado da contribuição não informado.'}</p>
+      </AsideCard>
+      <AsideCard title="Como funciona a revisão">
+        <ol>
+          <li>Você envia ou edita a contribuição.</li>
+          <li>A moderação aprova, pede ajustes ou rejeita.</li>
+          <li>Depois de aprovada, ela aparece na base de conhecimento.</li>
+        </ol>
+        <a href="/guia-de-contribuicao" onClick={(event) => { event.preventDefault(); onNavigate?.('/guia-de-contribuicao') }}>
+          Ler o guia de contribuição
         </a>
+      </AsideCard>
+    </>
+  )
 
-        {!isAuthenticated && (
-          <EmptyState title="Entre para ver esta contribuição">
-            Os detalhes das suas contribuições ficam disponíveis somente para você.
-            <span className="my-contributions__action"><Button onClick={() => onNavigate?.('/login')}>Entrar</Button></span>
-          </EmptyState>
-        )}
-        {isAuthenticated && isLoading && <p className="content-page__status">Carregando contribuição...</p>}
-        {error && <ErrorMessage>{error}</ErrorMessage>}
-        {notFound && (
-          <EmptyState title="Contribuição não encontrada">
-            Ela não existe ou não foi enviada pela sua conta.
-            <span className="my-contributions__action"><Button variant="outline" onClick={goToList}>Ver minhas contribuições</Button></span>
-          </EmptyState>
-        )}
+  return (
+    <PageLayout
+      onNavigate={onNavigate}
+      back={{ href: '/minhas-contribuicoes', label: 'Voltar para minhas contribuições' }}
+      eyebrow="Minha contribuição"
+      title={contribution?.titulo || 'Minha contribuição'}
+      aside={aside}
+      asideLabel="Situação da contribuição"
+    >
+      {!isAuthenticated && (
+        <EmptyState title="Entre para ver esta contribuição">
+          Os detalhes das suas contribuições ficam disponíveis somente para você.
+          <span className="empty-state__action"><Button onClick={() => onNavigate?.('/login')}>Entrar</Button></span>
+        </EmptyState>
+      )}
+      {isAuthenticated && isLoading && <p className="page-status">Carregando contribuição...</p>}
+      {error && <ErrorMessage>{error}</ErrorMessage>}
+      {notFound && (
+        <EmptyState title="Contribuição não encontrada">
+          Ela não existe ou não foi enviada pela sua conta.
+          <span className="empty-state__action"><Button variant="outline" onClick={goToList}>Ver minhas contribuições</Button></span>
+        </EmptyState>
+      )}
 
-        {contribution && (
-          <article className="content-detail" aria-labelledby="contribution-title">
-            <div className="my-contribution-card__heading">
-              <span className="badge badge-category">{rotuloTipo(contribution.tipo)}</span>
-              <StatusBadge status={contribution.estado} />
+      {contribution && (
+        <article className="content-detail" aria-label={contribution.titulo}>
+          <div className="my-contribution-card__heading">
+            <span className="badge badge-category">{rotuloTipo(contribution.tipo)}</span>
+            <StatusBadge status={contribution.estado} />
+          </div>
+          <dl className="content-detail__metadata">
+            <div>
+              <dt>Disciplina</dt>
+              <dd>{rotuloDisciplinaDoConteudo(contribution)}</dd>
             </div>
-            <div className="content-detail__heading">
-              <div>
-                <h1 id="contribution-title">{contribution.titulo}</h1>
-              </div>
+            <div>
+              <dt>Enviada em</dt>
+              <dd>{formatarData(contribution.criado_em)}</dd>
             </div>
-            <dl className="content-detail__metadata">
+            <div>
+              <dt>Atualizada em</dt>
+              <dd>{formatarData(contribution.atualizado_em)}</dd>
+            </div>
+            {contribution.origem && (
               <div>
-                <dt>Disciplina</dt>
-                <dd>{rotuloDisciplinaDoConteudo(contribution)}</dd>
-              </div>
-              <div>
-                <dt>Enviada em</dt>
-                <dd>{formatarData(contribution.criado_em)}</dd>
-              </div>
-              <div>
-                <dt>Atualizada em</dt>
-                <dd>{formatarData(contribution.atualizado_em)}</dd>
-              </div>
-              {contribution.origem && (
-                <div>
-                  <dt>Fonte / referência</dt>
-                  <dd><TextoOuLink texto={contribution.origem} /></dd>
-                </div>
-              )}
-            </dl>
-
-            {justificativa && (
-              <div className="my-contribution-card__feedback">
-                <strong>Orientação da moderação</strong>
-                <p>{justificativa}</p>
+                <dt>Fonte / referência</dt>
+                <dd><TextoOuLink texto={contribution.origem} /></dd>
               </div>
             )}
-            {savedMessage && <p className="content-page__feedback" role="status">{savedMessage}</p>}
+          </dl>
 
-            {isEditing ? (
-              <EditarContribuicaoForm
-                contribution={contribution}
-                onCancel={() => setIsEditing(false)}
-                onSaved={(updated) => {
-                  setContribution(updated)
-                  setIsEditing(false)
-                  setSavedMessage('Alterações salvas. A contribuição voltou para revisão.')
-                }}
-              />
-            ) : (
-              <>
-                <div className="content-detail__body">
-                  <ConteudoCorpo texto={contribution.corpo_ou_url} />
-                </div>
-                <div className="content-page__actions">
-                  <Button variant="outline" onClick={() => { setSavedMessage(''); setIsEditing(true) }}>Editar</Button>
-                  {hasPublishedVersion && (
-                    <Button variant="outline" onClick={() => onNavigate?.(`/conteudos/${contribution.conteudo_id}`)}>
-                      {contribution.estado === 'aprovada' ? 'Ver publicação' : 'Ver versão publicada'}
-                    </Button>
-                  )}
-                </div>
-                {hasPublishedVersion && ['pendente', 'ajustes'].includes(contribution.estado) && (
-                  <p className="my-contribution-card__note">
-                    A versão aprovada antes continua publicada até a moderação aprovar esta edição.
-                  </p>
+          {justificativa && (
+            <div className="my-contribution-card__feedback">
+              <strong>Orientação da moderação</strong>
+              <p>{justificativa}</p>
+            </div>
+          )}
+          {savedMessage && <p className="content-page__feedback" role="status">{savedMessage}</p>}
+
+          {isEditing ? (
+            <EditarContribuicaoForm
+              contribution={contribution}
+              onCancel={() => setIsEditing(false)}
+              onSaved={(updated) => {
+                setContribution(updated)
+                setIsEditing(false)
+                setSavedMessage('Alterações salvas. A contribuição voltou para revisão.')
+              }}
+            />
+          ) : (
+            <>
+              <div className="content-detail__body">
+                <ConteudoCorpo texto={contribution.corpo_ou_url} />
+              </div>
+              <div className="content-page__actions">
+                <Button variant="outline" onClick={() => { setSavedMessage(''); setIsEditing(true) }}>Editar</Button>
+                {hasPublishedVersion && (
+                  <Button variant="outline" onClick={() => onNavigate?.(`/conteudos/${contribution.conteudo_id}`)}>
+                    {contribution.estado === 'aprovada' ? 'Ver publicação' : 'Ver versão publicada'}
+                  </Button>
                 )}
-              </>
-            )}
-          </article>
-        )}
-      </main>
-      <SiteFooter />
-    </div>
+              </div>
+              {hasPublishedVersion && ['pendente', 'ajustes'].includes(contribution.estado) && (
+                <p className="my-contribution-card__note">
+                  A versão aprovada antes continua publicada até a moderação aprovar esta edição.
+                </p>
+              )}
+            </>
+          )}
+        </article>
+      )}
+    </PageLayout>
   )
 }
 

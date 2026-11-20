@@ -4,8 +4,7 @@ import { useAuth } from '../state/auth'
 import ErrorMessage from '../components/ErrorMessage'
 import EmptyState from '../components/ui/EmptyState'
 import Button from '../components/ui/Button'
-import SiteHeader from '../components/SiteHeader'
-import SiteFooter from '../components/SiteFooter'
+import PageLayout, { AsideCard } from '../components/layout/PageLayout'
 import './MinhasContribuicoesPage.css'
 
 function AdminUsuariosPage({ onNavigate }) {
@@ -46,50 +45,57 @@ function AdminUsuariosPage({ onNavigate }) {
     }
   }
 
-  if (!isAuthenticated || !canAdminister) {
-    return <EmptyState title="Acesso restrito">Somente administradores podem acessar esta área.</EmptyState>
+  const cabecalho = {
+    onNavigate,
+    eyebrow: 'Administração',
+    title: 'Usuários administrativos',
+    description: 'Crie moderadores e administradores e controle o acesso às funções protegidas.',
   }
 
+  if (!isAuthenticated || !canAdminister) {
+    return (
+      <PageLayout {...cabecalho} width="narrow">
+        <EmptyState title="Acesso restrito">Somente administradores podem acessar esta área.</EmptyState>
+      </PageLayout>
+    )
+  }
+
+  const aside = (
+    <AsideCard title="Novo usuário">
+      <form className="contribution-form" onSubmit={createUser}>
+        <label>Nome<input value={form.nome} onChange={(event) => setForm({ ...form, nome: event.target.value })} required /></label>
+        <label>E-mail<input type="email" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} required /></label>
+        <label>Senha<input type="password" value={form.senha} onChange={(event) => setForm({ ...form, senha: event.target.value })} minLength="8" required /></label>
+        <label>Perfil<select value={form.perfil} onChange={(event) => setForm({ ...form, perfil: event.target.value })}><option value="moderador">Moderador</option><option value="administrador">Administrador</option></select></label>
+        <Button type="submit">Criar usuário</Button>
+      </form>
+    </AsideCard>
+  )
+
   return (
-    <div className="my-contributions-shell page-shell">
-      <SiteHeader active="conhecimento" onNavigate={onNavigate} />
-      <main className="my-contributions-page">
-        <header className="my-contributions-page__header">
-          <p className="my-contributions-page__eyebrow">Administração</p>
-          <h1>Usuários administrativos</h1>
-          <p>Crie moderadores e administradores e controle o acesso às funções protegidas.</p>
-        </header>
-        {error && <ErrorMessage>{error}</ErrorMessage>}
-        <form className="contribution-form" onSubmit={createUser}>
-          <label>Nome<input value={form.nome} onChange={(event) => setForm({ ...form, nome: event.target.value })} required /></label>
-          <label>E-mail<input type="email" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} required /></label>
-          <label>Senha<input type="password" value={form.senha} onChange={(event) => setForm({ ...form, senha: event.target.value })} minLength="8" required /></label>
-          <label>Perfil<select value={form.perfil} onChange={(event) => setForm({ ...form, perfil: event.target.value })}><option value="moderador">Moderador</option><option value="administrador">Administrador</option></select></label>
-          <Button type="submit">Criar usuário</Button>
-        </form>
-        <section className="my-contributions-list" aria-label="Usuários cadastrados">
-          {users.length === 0 ? <EmptyState title="Nenhum usuário cadastrado" /> : users.map((usuario) => {
-            const isOwnAccount = user?.id != null && usuario.id === user.id
-            return (
-              <article className="my-contribution-card" key={usuario.id}>
-                <h2>{usuario.nome}</h2>
-                <p>{usuario.email} · {usuario.perfil}</p>
-                <Button
-                  variant="outline"
-                  onClick={() => toggleUser(usuario)}
-                  disabled={isOwnAccount}
-                  title={isOwnAccount ? 'Você não pode desativar a sua própria conta.' : undefined}
-                >
-                  {usuario.ativo ? 'Desativar' : 'Ativar'}
-                </Button>
-                {isOwnAccount && <p className="my-contribution-card__note">Esta é a sua conta e não pode ser desativada por aqui.</p>}
-              </article>
-            )
-          })}
-        </section>
-      </main>
-      <SiteFooter />
-    </div>
+    <PageLayout {...cabecalho} aside={aside} asideLabel="Criar usuário">
+      {error && <ErrorMessage>{error}</ErrorMessage>}
+      <section className="my-contributions-list" aria-label="Usuários cadastrados">
+        {users.length === 0 ? <EmptyState title="Nenhum usuário cadastrado" /> : users.map((usuario) => {
+          const isOwnAccount = user?.id != null && usuario.id === user.id
+          return (
+            <article className="my-contribution-card" key={usuario.id}>
+              <h2>{usuario.nome}</h2>
+              <p>{usuario.email} · {usuario.perfil}</p>
+              <Button
+                variant="outline"
+                onClick={() => toggleUser(usuario)}
+                disabled={isOwnAccount}
+                title={isOwnAccount ? 'Você não pode desativar a sua própria conta.' : undefined}
+              >
+                {usuario.ativo ? 'Desativar' : 'Ativar'}
+              </Button>
+              {isOwnAccount && <p className="my-contribution-card__note">Esta é a sua conta e não pode ser desativada por aqui.</p>}
+            </article>
+          )
+        })}
+      </section>
+    </PageLayout>
   )
 }
 

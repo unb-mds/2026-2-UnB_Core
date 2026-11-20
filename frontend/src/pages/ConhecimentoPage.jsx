@@ -4,8 +4,7 @@ import { extrairCursos } from '../services/cursos'
 import ErrorMessage from '../components/ErrorMessage'
 import EmptyState from '../components/ui/EmptyState'
 import Button from '../components/ui/Button'
-import SiteHeader from '../components/SiteHeader'
-import SiteFooter from '../components/SiteFooter'
+import PageLayout from '../components/layout/PageLayout'
 import ConteudoCard from '../components/conteudos/ConteudoCard'
 import DisciplinaBusca from '../components/conteudos/DisciplinaBusca'
 import './ConhecimentoPage.css'
@@ -157,16 +156,7 @@ function ConhecimentoPage({ onContribute = () => {}, onNavigate }) {
       : `${result.total} ${nome}`
   }
 
-  return (
-    <div className="knowledge-shell page-shell">
-      <SiteHeader active="conhecimento" onNavigate={onNavigate} />
-      <main className="knowledge-page">
-        <header className="knowledge-page__header">
-          <p className="knowledge-page__eyebrow">Base de conhecimento</p>
-          <h1>Aprenda com quem já passou por aqui</h1>
-          <p>Resumos, dicas e materiais da comunidade. Filtre por curso, disciplina ou tipo, ou veja tudo.</p>
-        </header>
-
+  const filtros = (
         <section className="knowledge-filters" aria-label="Filtros da base de conhecimento">
           <label>
             Curso
@@ -195,52 +185,59 @@ function ConhecimentoPage({ onContribute = () => {}, onNavigate }) {
             </select>
           </label>
         </section>
+  )
 
-        {coursesError && <ErrorMessage>{coursesError}</ErrorMessage>}
+  return (
+    <PageLayout
+      onNavigate={onNavigate}
+      eyebrow="Base de conhecimento"
+      title="Aprenda com quem já passou por aqui"
+      description="Resumos, dicas e materiais da comunidade. Filtre por curso, disciplina ou tipo, ou veja tudo."
+      headerContent={filtros}
+    >
+      {coursesError && <ErrorMessage>{coursesError}</ErrorMessage>}
 
-        <div className="knowledge-results__toolbar">
-          <p className="knowledge-results__count" role="status">{contagem}</p>
-          {hasFilters && <Button variant="outline" onClick={clearFilters}>Limpar filtros</Button>}
-        </div>
+      <div className="knowledge-results__toolbar">
+        <p className="knowledge-results__count" role="status">{contagem}</p>
+        {hasFilters && <Button variant="outline" onClick={clearFilters}>Limpar filtros</Button>}
+      </div>
 
-        <section className="knowledge-results" aria-label="Conteúdos">
-          {!isLoading && result.erro && <ErrorMessage>{result.erro}</ErrorMessage>}
-          {!isLoading && !result.erro && result.itens.length === 0 && (
-            hasFilters ? (
-              <EmptyState title="Nenhum conteúdo para estes filtros">
-                Tente outra combinação de filtros ou compartilhe um material sobre o assunto.
-                <span className="knowledge-results__action">
-                  <Button variant="outline" onClick={clearFilters}>Limpar filtros</Button>{' '}
-                  <Button onClick={onContribute}>Quero contribuir</Button>
-                </span>
-              </EmptyState>
-            ) : (
-              <EmptyState title="Ainda não há conteúdos publicados">
-                Seja a primeira pessoa a compartilhar um material com a comunidade.
-                <span className="knowledge-results__action"><Button onClick={onContribute}>Quero contribuir</Button></span>
-              </EmptyState>
-            )
-          )}
-          {result.itens.length > 0 && (
-            // Enquanto novos filtros carregam, a lista anterior fica esmaecida em vez de sumir.
-            <div className="knowledge-grid" aria-busy={isLoading}>
-              {result.itens.map((content) => (
-                <ConteudoCard key={content.id} content={content} showDiscipline={!selectedDisciplineId} onOpen={openContent} />
-              ))}
-            </div>
-          )}
-          {!isLoading && result.itens.length < result.total && (
-            <div className="knowledge-results__more">
-              <Button variant="outline" onClick={loadMore} disabled={isLoadingMore}>
-                {isLoadingMore ? 'Carregando...' : 'Carregar mais'}
-              </Button>
-            </div>
-          )}
-          {loadMoreError && <ErrorMessage>{loadMoreError}</ErrorMessage>}
-        </section>
-      </main>
-      <SiteFooter />
-    </div>
+      <section className="knowledge-results" aria-label="Conteúdos">
+        {!isLoading && result.erro && <ErrorMessage>{result.erro}</ErrorMessage>}
+        {!isLoading && !result.erro && result.itens.length === 0 && (
+          hasFilters ? (
+            <EmptyState title="Nenhum conteúdo para estes filtros">
+              Tente outra combinação de filtros ou compartilhe um material sobre o assunto.
+              <span className="empty-state__action">
+                <Button variant="outline" onClick={clearFilters}>Limpar filtros</Button>{' '}
+                <Button onClick={onContribute}>Quero contribuir</Button>
+              </span>
+            </EmptyState>
+          ) : (
+            <EmptyState title="Ainda não há conteúdos publicados">
+              Seja a primeira pessoa a compartilhar um material com a comunidade.
+              <span className="empty-state__action"><Button onClick={onContribute}>Quero contribuir</Button></span>
+            </EmptyState>
+          )
+        )}
+        {result.itens.length > 0 && (
+          // Enquanto novos filtros carregam, a lista anterior fica esmaecida em vez de sumir.
+          <div className="cards-grid" aria-busy={isLoading}>
+            {result.itens.map((content) => (
+              <ConteudoCard key={content.id} content={content} showDiscipline={!selectedDisciplineId} onOpen={openContent} />
+            ))}
+          </div>
+        )}
+        {!isLoading && result.itens.length < result.total && (
+          <div className="knowledge-results__more">
+            <Button variant="outline" onClick={loadMore} disabled={isLoadingMore}>
+              {isLoadingMore ? 'Carregando...' : 'Carregar mais'}
+            </Button>
+          </div>
+        )}
+        {loadMoreError && <ErrorMessage>{loadMoreError}</ErrorMessage>}
+      </section>
+    </PageLayout>
   )
 }
 
