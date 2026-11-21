@@ -1,10 +1,11 @@
 import asyncio
-from unittest.mock import MagicMock
+from unittest.mock import AsyncMock, MagicMock
 
 from backend.app import db
 from backend.app.api import router
 from backend.app.api.schema import categoria
 from backend.app.main import criar_aplicacao
+import backend.app.main as main_module
 
 
 def test_roteador_api_tem_prefixo_esperado():
@@ -60,3 +61,78 @@ def test_ciclo_de_vida_cria_banco(monkeypatch):
     asyncio.run(run_lifespan())
 
     create_tables.assert_called_once()
+
+
+def test_carga_inicial_vazia_carrega_cursos_disciplinas_e_curriculos(monkeypatch):
+    session = MagicMock()
+    session.exec.return_value.first.side_effect = [None, None]
+    context = MagicMock()
+    context.__enter__.return_value = session
+    context.__exit__.return_value = None
+    monkeypatch.setattr(main_module, "Session", lambda _engine: context)
+
+    cursos = AsyncMock(return_value=2)
+    disciplinas = AsyncMock(return_value=5)
+    curriculos = AsyncMock(return_value=8)
+    monkeypatch.setattr(main_module, "coletar_e_salvar_cursos", cursos)
+    monkeypatch.setattr(main_module, "coletar_e_salvar_disciplinas", disciplinas)
+    monkeypatch.setattr(
+        main_module,
+        "coletar_e_sincronizar_curriculos",
+        curriculos,
+    )
+
+    asyncio.run(main_module._carregar_dados_iniciais())
+
+    cursos.assert_awaited_once_with(session)
+    disciplinas.assert_awaited_once_with(session)
+    curriculos.assert_awaited_once_with(session)
+
+
+def test_carga_inicial_existente_apenas_sincroniza_curriculos(monkeypatch):
+    session = MagicMock()
+    session.exec.return_value.first.side_effect = [1, 1]
+    context = MagicMock()
+    context.__enter__.return_value = session
+    context.__exit__.return_value = None
+    monkeypatch.setattr(main_module, "Session", lambda _engine: context)
+
+    cursos = AsyncMock(return_value=0)
+    disciplinas = AsyncMock(return_value=0)
+    curriculos = AsyncMock(return_value=3)
+    monkeypatch.setattr(main_module, "coletar_e_salvar_cursos", cursos)
+    monkeypatch.setattr(main_module, "coletar_e_salvar_disciplinas", disciplinas)
+    monkeypatch.setattr(
+        main_module,
+        "coletar_e_sincronizar_curriculos",
+        curriculos,
+    )
+
+    asyncio.run(main_module._carregar_dados_iniciais())
+
+    cursos.assert_not_awaited()
+    disciplinas.assert_not_awaited()
+    curriculos.assert_awaited_once_with(session)
+
+
+def test_falha_de_disciplina_nao_bloqueia_sincronizacao(monkeypatch):
+    session = MagicMock()
+    session.exec.return_value.first.side_effect = [1, None]
+    context = MagicMock()
+    context.__enter__.return_value = session
+    context.__exit__.return_value = None
+    monkeypatch.setattr(main_module, "Session", lambda _engine: context)
+
+    disciplinas = AsyncMock(side_effect=RuntimeError("falha parcial"))
+    curriculos = AsyncMock(return_value=4)
+    monkeypatch.setattr(main_module, "coletar_e_salvar_disciplinas", disciplinas)
+    monkeypatch.setattr(
+        main_module,
+        "coletar_e_sincronizar_curriculos",
+        curriculos,
+    )
+
+    asyncio.run(main_module._carregar_dados_iniciais())
+
+    disciplinas.assert_awaited_once_with(session)
+    curriculos.assert_awaited_once_with(session)
