@@ -19,6 +19,115 @@ services:
       retries: 5
     networks:
       - unb-core-network
+# BACKUP DO BANCO DE DADOS
+  db-backup:
+    image: postgres:16-alpine
+    container_name: unb-core-db-backup
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-unb_core}
+      PGPASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    volumes:
+      - ./backups:/backups
+    entrypoint: /bin/sh
+    command:
+      - -c
+      - |
+        mkdir -p /backups
+        while true; do
+          stamp=$$(date +%Y%m%d-%H%M%S)
+          echo "Starting backup: unb_core-$${stamp}.dump"
+          if pg_dump \
+            -h db \
+            -U $${POSTGRES_USER} \
+            -d $${POSTGRES_DB} \
+            -F c \
+            -f /backups/unb_core-$${stamp}.dump; then
+            echo "Backup completed: unb_core-$${stamp}.dump"
+          else
+            echo "Backup failed: unb_core-$${stamp}.dump"
+            rm -f /backups/unb_core-$${stamp}.dump
+          fi
+          find /backups -type f -mtime +7 -delete
+          echo "Next backup in 24 hours"
+          sleep 86400
+        done
+    networks:
+      - unb-core-network
+  db-restore:
+    image: postgres:16-alpine
+    profiles:
+      - manual
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-unb_core}
+      PGPASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      RESTORE_FILE: ${RESTORE_FILE:-}
+    volumes:
+      - ./backups:/backups
+    entrypoint: /bin/sh
+    command:
+      - -c
+      - |
+        if [ -z "$$RESTORE_FILE" ]; then
+          echo "Restore cancelled: define RESTORE_FILE with the backup name."
+          echo "Example: RESTORE_FILE=unb_core-20261121-132627.dump"
+          exit 2
+        fi
+
+        restore_file=$$(basename "$$RESTORE_FILE")
+        restore_path="/backups/$$restore_file"
+        if [ ! -f "$$restore_path" ]; then
+          echo "Restore cancelled: backup not found: $$restore_file"
+          exit 2
+        fi
+
+        stamp=$$(date +%Y%m%d-%H%M%S)
+        safety_file="/backups/unb_core-before-restore-$$stamp.dump"
+
+        echo "Backup being used: $$restore_file"
+        echo "Current database being replaced: $$POSTGRES_DB"
+        echo "Current Docker volume being replaced: postgres_data"
+        echo "Safety backup: $$safety_file"
+
+        pg_dump \
+          -h db \
+          -U "$$POSTGRES_USER" \
+          -d "$$POSTGRES_DB" \
+          -F c \
+          -f "$$safety_file"
+
+        psql \
+          -h db \
+          -U "$$POSTGRES_USER" \
+          -d postgres \
+          -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '$$POSTGRES_DB' AND pid <> pg_backend_pid();"
+
+        dropdb --if-exists -h db -U "$$POSTGRES_USER" "$$POSTGRES_DB"
+        createdb -h db -U "$$POSTGRES_USER" "$$POSTGRES_DB"
+
+        echo "Restoring $$restore_file over $$POSTGRES_DB..."
+        pg_restore \
+          --clean \
+          --if-exists \
+          --no-owner \
+          --exit-on-error \
+          -h db \
+          -U "$$POSTGRES_USER" \
+          -d "$$POSTGRES_DB" \
+          "$$restore_path"
+        echo "Restore completed: $$restore_file -> $$POSTGRES_DB"
+    networks:
+      - unb-core-network
 # BACKEND
   backend:
     build:

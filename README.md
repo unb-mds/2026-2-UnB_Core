@@ -127,6 +127,7 @@ docker compose up --build -d
 O comando `docker compose down -v` remove permanentemente o volume local do
 PostgreSQL.
 
+
 ### Backend
 
 Os comandos abaixo devem ser executados no terminal integrado do VS Code ou no
@@ -310,6 +311,64 @@ npm run build
 npm run lint
 npm test
 ```
+### Backups do banco de dados
+
+O serviço `db-backup` cria um backup completo do PostgreSQL ao iniciar e depois
+a cada 24 horas, na pasta `backups/` da raiz do projeto. Os arquivos têm o
+formato `unb_core-AAAAMMDD-HHMMSS.dump`. Backups com mais de 7 dias são apagados
+automaticamente.
+
+Confira se o backup está funcionando (o log deve mostrar `Backup completed`):
+
+```powershell
+docker compose logs db-backup
+```
+
+Para fazer um backup agora:
+
+```powershell
+docker compose up -d --force-recreate db-backup
+```
+
+Para listar os backups:
+
+```powershell
+Get-ChildItem .\backups\*.dump | Sort-Object LastWriteTime -Descending |
+  Format-Table Name, Length, LastWriteTime
+```
+
+Para conferir se um arquivo não está corrompido (deve listar a estrutura do
+banco, sem alterar nada):
+
+```powershell
+docker compose exec db-backup pg_restore --list /backups/unb_core-20261121-132627.dump
+```
+
+Se o log mostrar `Backup failed`, veja [Problemas com a senha](#problemas-com-a-senha-do-banco).
+Enquanto o backup falhar, nenhum novo arquivo é criado, e depois de 7 dias os
+backups antigos também são apagados. Copie a pasta `backups/` de vez em quando
+para um local seguro (HD externo ou nuvem). Ela é ignorada pelo Git e não deve
+ser enviada ao repositório.
+
+### Restaurar o banco
+
+A restauração é manual e substitui o conteúdo atual do banco `unb_core` pelo do
+arquivo escolhido. Antes disso, o serviço salva o banco atual em
+`backups/unb_core-before-restore-*.dump`.
+
+```powershell
+docker compose stop backend
+$env:RESTORE_FILE = "unb_core-AAAAMMDD-HHMMSS.dump"
+docker compose run --rm db-restore
+Remove-Item Env:RESTORE_FILE
+docker compose start backend
+```
+
+Troque o nome do arquivo por um que exista na pasta `backups/`. Se
+`RESTORE_FILE` não for informado ou o arquivo não existir, a operação é
+cancelada. A restauração só deu certo se a última linha for `Restore completed`
+e **nenhum erro** aparecer antes dela.
+
 
 ## Contribuindo
  

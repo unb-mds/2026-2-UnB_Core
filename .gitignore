@@ -1,5 +1,6 @@
 node_modules/
 frontend/dist/
+backups/
 __pycache__/
 *.pyc
 *.db
