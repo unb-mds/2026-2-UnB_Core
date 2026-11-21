@@ -32,6 +32,25 @@ def test_extrair_cursos_html_usa_departamento_como_sigla() -> None:
     ]
 
 
+def test_extrair_cursos_html_nao_descarta_graus_profissionais() -> None:
+    html = """
+    <table>
+      <tr><td colspan="7">ENG - DEPTO ENGENHARIA</td></tr>
+      <tr><td>ENGENHARIA MECATRÔNICA</td><td>Engenheiro Mecatrônico</td>
+          <td>DIURNO</td><td>BRASÍLIA</td><td>Presencial</td>
+          <td>Engenheiro Mecatrônico</td><td>Coordenação</td></tr>
+    </table>
+    """
+
+    assert extrair_cursos_html(html) == [
+        CursoColetado(
+            nome="ENGENHARIA MECATRÔNICA",
+            sigla="ENG",
+            grau=GrauCurso.BACHARELADO,
+        ),
+    ]
+
+
 def test_salvar_cursos_e_idempotente() -> None:
     engine = create_engine(
         "sqlite://",

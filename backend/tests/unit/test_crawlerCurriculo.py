@@ -20,15 +20,20 @@ from backend.app.domain import (
     Curso,
     CursoDisciplina,
     Disciplina,
+    GrauCurso,
     TipoConteudo,
     Usuario,
 )
 
 
-def _linha_curso(nome: str, id_portal: str) -> str:
+def _linha_curso(
+    nome: str,
+    id_portal: str,
+    grau: str = "Bacharelado",
+) -> str:
     return f"""
-    <tr><td>{nome}</td><td>Bacharelado</td><td>DIURNO</td><td>BRASÍLIA</td>
-      <td>Presencial</td><td>Bacharelado</td><td>COORDENAÇÃO</td>
+    <tr><td>{nome}</td><td>{grau}</td><td>DIURNO</td><td>BRASÍLIA</td>
+      <td>Presencial</td><td>{grau}</td><td>COORDENAÇÃO</td>
       <td><a href="portal.jsf?id={id_portal}&lc=pt_BR&nivel=G">ver</a></td></tr>
     """
 
@@ -41,13 +46,22 @@ def test_extrair_portais_cursos_html_retorna_cursos_de_todas_as_unidades() -> No
       <tr><td colspan="7">FCTE - CAMPUS UNB GAMA: FACULDADE DE CIÊNCIAS</td></tr>
       {_linha_curso("ENGENHARIA DE SOFTWARE", "200")}
       {_linha_curso("ENGENHARIA AEROESPACIAL", "201")}
+      <tr><td colspan="7">MAT - DEPARTAMENTO DE MATEMÁTICA</td></tr>
+      {_linha_curso("MATEMÁTICA", "300", "Licenciatura")}
+      {_linha_curso("MATEMÁTICA", "302", "Licenciatura")}
+      {_linha_curso("MATEMÁTICA", "301", "Bacharelado")}
+      <tr><td colspan="7">FCTE - CAMPUS UNB GAMA</td></tr>
+      {_linha_curso("ENGENHARIA MECATRÔNICA", "400", "Engenheiro Mecatrônico")}
     </table>
     """
 
     assert extrair_portais_cursos_html(html) == {
-        ("CIC", "CIÊNCIA DA COMPUTAÇÃO"): "100",
-        ("FCTE", "ENGENHARIA DE SOFTWARE"): "200",
-        ("FCTE", "ENGENHARIA AEROESPACIAL"): "201",
+        ("CIC", "CIÊNCIA DA COMPUTAÇÃO", "BACHARELADO"): ["100"],
+        ("FCTE", "ENGENHARIA DE SOFTWARE", "BACHARELADO"): ["200"],
+        ("FCTE", "ENGENHARIA AEROESPACIAL", "BACHARELADO"): ["201"],
+        ("MAT", "MATEMÁTICA", "LICENCIATURA"): ["300", "302"],
+        ("MAT", "MATEMÁTICA", "BACHARELADO"): ["301"],
+        ("FCTE", "ENGENHARIA MECATRÔNICA", "BACHARELADO"): ["400"],
     }
 
 
@@ -133,6 +147,58 @@ def test_sincronizacao_rejeita_resultado_vazio(monkeypatch) -> None:
         asyncio.run(coletar_e_sincronizar_curriculos(MagicMock()))
 
 
+def test_sincroniza_cursos_homonimos_por_grau() -> None:
+    engine = create_engine(
+        "sqlite://",
+        connect_args={"check_same_thread": False},
+        poolclass=StaticPool,
+    )
+    SQLModel.metadata.create_all(engine)
+
+    with Session(engine) as session:
+        licenciatura = Curso(
+            nome="MATEMÁTICA",
+            sigla="MAT",
+            grau=GrauCurso.LICENCIATURA,
+        )
+        bacharelado = Curso(
+            nome="MATEMÁTICA",
+            sigla="MAT",
+            grau=GrauCurso.BACHARELADO,
+        )
+        session.add_all([licenciatura, bacharelado])
+        session.commit()
+        session.refresh(licenciatura)
+        session.refresh(bacharelado)
+
+        curriculos = {
+            ("MAT", "MATEMÁTICA", "LICENCIATURA"): [
+                DisciplinaColetada("MAT0130", "MATEMÁTICA ELEMENTAR", None),
+            ],
+            ("MAT", "MATEMÁTICA", "BACHARELADO"): [
+                DisciplinaColetada("MAT0025", "CÁLCULO 1", None),
+            ],
+        }
+
+        sincronizar_disciplinas_por_curriculo(session, curriculos)
+
+        def codigos(curso: Curso) -> set[str]:
+            return {
+                disciplina.codigo
+                for disciplina in session.exec(
+                    select(Disciplina)
+                    .join(
+                        CursoDisciplina,
+                        CursoDisciplina.disciplina_id == Disciplina.id,
+                    )
+                    .where(CursoDisciplina.curso_id == curso.id)
+                ).all()
+            }
+
+        assert codigos(licenciatura) == {"MAT0130"}
+        assert codigos(bacharelado) == {"MAT0025"}
+
+
 def test_sincronizar_disciplinas_por_curriculo_separa_os_cursos_do_gama() -> None:
     engine = create_engine(
         "sqlite://",
@@ -189,11 +255,11 @@ def test_sincronizar_disciplinas_por_curriculo_separa_os_cursos_do_gama() -> Non
         session.commit()
 
         curriculos = {
-            ("FCTE", "ENGENHARIA DE SOFTWARE"): [
+            ("FCTE", "ENGENHARIA DE SOFTWARE", "BACHARELADO"): [
                 DisciplinaColetada("FGA0003", "COMPILADORES 1", None),
                 DisciplinaColetada("MAT0025", "CÁLCULO 1", None),
             ],
-            ("FCTE", "ENGENHARIA AEROESPACIAL"): [
+            ("FCTE", "ENGENHARIA AEROESPACIAL", "BACHARELADO"): [
                 DisciplinaColetada("FGA0109", "DINÂMICA DOS FLUIDOS", None),
             ],
         }

@@ -32,10 +32,11 @@ def _extrair_sigla(departamento: str) -> str:
 
 
 def _extrair_grau(grau: str) -> GrauCurso | None:
-    return {
-        "BACHARELADO": GrauCurso.BACHARELADO,
-        "LICENCIATURA": GrauCurso.LICENCIATURA,
-    }.get(grau.upper())
+    if not grau.strip():
+        return None
+    if grau.upper() == "LICENCIATURA":
+        return GrauCurso.LICENCIATURA
+    return GrauCurso.BACHARELADO
 
 
 def extrair_cursos_html(html: str) -> list[CursoColetado]:

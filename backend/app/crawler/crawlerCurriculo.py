@@ -26,6 +26,7 @@ from backend.app.domain import (
     Curso,
     CursoDisciplina,
     Disciplina,
+    GrauCurso,
 )
 
 
@@ -43,15 +44,15 @@ def _normalizar(texto: str) -> str:
 
 def extrair_portais_cursos_html(
     html: str,
-) -> dict[tuple[str, str], str]:
-    """Retorna {(sigla da unidade, nome do curso): id do portal no SIGAA}."""
+) -> dict[tuple[str, str, str], list[str]]:
+    """Retorna {(sigla, nome, grau): id do portal no SIGAA}."""
     soup = BeautifulSoup(html, "html.parser")
     tabela = soup.find("table", class_="listagem") or soup.find("table")
     if tabela is None:
         return {}
 
     unidade_atual = ""
-    portais: dict[str, str] = {}
+    portais: dict[tuple[str, str, str], list[str]] = {}
     for linha in tabela.find_all("tr"):
         celulas = linha.find_all(["th", "td"], recursive=False)
         if len(celulas) == 1 and str(celulas[0].get("colspan", "1")).isdigit():
@@ -63,12 +64,17 @@ def extrair_portais_cursos_html(
             continue
         link = linha.find("a", href=_PORTAL_ID)
         nome = _normalizar(celulas[0].get_text(" ", strip=True))
+        grau = _normalizar(celulas[5].get_text(" ", strip=True)).upper()
         if link is None or not nome:
             continue
-        portais.setdefault(
-            (unidade_atual.upper(), nome),
-            _PORTAL_ID.search(link["href"]).group(1),
-        )
+        if not grau:
+            continue
+        grau = "LICENCIATURA" if grau == "LICENCIATURA" else "BACHARELADO"
+        id_portal = _PORTAL_ID.search(link["href"]).group(1)
+        chave = (unidade_atual.upper(), nome, grau)
+        ids = portais.setdefault(chave, [])
+        if id_portal not in ids:
+            ids.append(id_portal)
     return portais
 
 
@@ -116,76 +122,83 @@ def extrair_componentes_curriculares_html(html: str) -> list[DisciplinaColetada]
 
 async def coletar_curriculos(
     url_cursos: str = URL_CURSOS_GRADUACAO,
-) -> dict[tuple[str, str], list[DisciplinaColetada]]:
+) -> dict[tuple[str, str, str], list[DisciplinaColetada]]:
     """Retorna os componentes ativos de todos os cursos da UnB."""
-    async with httpx.AsyncClient(follow_redirects=True, timeout=60.0) as cliente:
+    async with httpx.AsyncClient(follow_redirects=True, timeout=90.0) as cliente:
         resposta = await cliente.get(url_cursos)
         resposta.raise_for_status()
         portais = extrair_portais_cursos_html(resposta.text)
         if not portais:
             raise RuntimeError("Nenhum curso foi encontrado ao coletar curriculos.")
 
-        semaforo = asyncio.Semaphore(8)
+        semaforo = asyncio.Semaphore(3)
 
         async def coletar_curso(
-            chave_curso: tuple[str, str],
-            id_portal: str,
-        ) -> tuple[tuple[str, str], list[DisciplinaColetada]] | None:
+            chave_curso: tuple[str, str, str],
+            ids_portal: list[str],
+        ) -> tuple[tuple[str, str, str], list[DisciplinaColetada]] | None:
             async with semaforo:
-                try:
-                    resposta_curso = await cliente.get(
-                        URL_CURRICULO,
-                        params={"lc": "pt_BR", "id": id_portal},
-                    )
-                    resposta_curso.raise_for_status()
-                    campos, acoes = extrair_estruturas_ativas_html(
-                        resposta_curso.text
-                    )
-                    url_formulario = urljoin(
-                        str(resposta_curso.url),
-                        URL_CURRICULO,
-                    )
-
-                    componentes: dict[
-                        str,
-                        DisciplinaColetada,
-                    ] = {}
-                    for chave, id_estrutura in acoes:
-                        detalhe = await cliente.post(
-                            url_formulario,
-                            data={
-                                **campos,
-                                chave: chave,
-                                "id": id_estrutura,
-                            },
-                        )
-                        detalhe.raise_for_status()
-                        for componente in extrair_componentes_curriculares_html(
-                            detalhe.text
-                        ):
-                            componentes.setdefault(
-                                componente.codigo,
-                                componente,
+                componentes: dict[str, DisciplinaColetada] = {}
+                for id_portal in ids_portal:
+                    coletado = False
+                    for tentativa in range(3):
+                        try:
+                            resposta_curso = await cliente.get(
+                                URL_CURRICULO,
+                                params={"lc": "pt_BR", "id": id_portal},
                             )
-                    if not componentes:
-                        return None
-                    return chave_curso, list(componentes.values())
-                except (httpx.HTTPError, RuntimeError):
-                    sigla, nome = chave_curso
-                    logger.warning(
-                        "Falha ao coletar curriculo de %s - %s.",
-                        sigla,
-                        nome,
-                        exc_info=True,
-                    )
+                            resposta_curso.raise_for_status()
+                            campos, acoes = extrair_estruturas_ativas_html(
+                                resposta_curso.text
+                            )
+                            url_formulario = urljoin(
+                                str(resposta_curso.url),
+                                URL_CURRICULO,
+                            )
+                            for chave, id_estrutura in acoes:
+                                detalhe = await cliente.post(
+                                    url_formulario,
+                                    data={
+                                        **campos,
+                                        chave: chave,
+                                        "id": id_estrutura,
+                                    },
+                                )
+                                detalhe.raise_for_status()
+                                for componente in extrair_componentes_curriculares_html(
+                                    detalhe.text
+                                ):
+                                    componentes.setdefault(
+                                        componente.codigo,
+                                        componente,
+                                    )
+                            coletado = True
+                            break
+                        except (httpx.HTTPError, RuntimeError):
+                            if tentativa < 2:
+                                await asyncio.sleep(1 + tentativa)
+                    if not coletado:
+                        sigla, nome, grau = chave_curso
+                        logger.warning(
+                            "Falha ao coletar curriculo de %s - %s (%s).",
+                            sigla,
+                            nome,
+                            grau,
+                            exc_info=True,
+                        )
+                if not componentes:
                     return None
+                return chave_curso, list(componentes.values())
 
         resultados = await asyncio.gather(*(
             coletar_curso(chave_curso, id_portal)
             for chave_curso, id_portal in portais.items()
         ))
 
-        curriculos: dict[tuple[str, str], list[DisciplinaColetada]] = {}
+        curriculos: dict[
+            tuple[str, str, str],
+            list[DisciplinaColetada],
+        ] = {}
         for resultado in resultados:
             if resultado is None:
                 continue
@@ -200,7 +213,7 @@ async def coletar_curriculos(
 
 def sincronizar_disciplinas_por_curriculo(
     session: Session,
-    curriculos: dict[tuple[str, str], list[DisciplinaColetada]],
+    curriculos: dict[tuple[str, str, str], list[DisciplinaColetada]],
 ) -> int:
     """Deixa cada curso só com as disciplinas da sua estrutura curricular.
 
@@ -210,7 +223,14 @@ def sincronizar_disciplinas_por_curriculo(
     quantidade = 0
     cursos = session.exec(select(Curso)).all()
     for curso in cursos:
-        componentes = curriculos.get((curso.sigla.upper(), curso.nome))
+        grau = (
+            curso.grau.value
+            if isinstance(curso.grau, GrauCurso)
+            else str(curso.grau)
+        ).upper()
+        componentes = curriculos.get(
+            (curso.sigla.upper(), curso.nome, grau)
+        )
         if not componentes or curso.id is None:
             continue
         codigos = {componente.codigo for componente in componentes}
