@@ -1,16 +1,32 @@
 # UNB CORE
+
+[![Static Badge](https://img.shields.io/badge/Python-Black?style=for-the-badge&logo=Python&label=3.11%2B&color=%23ffe45d)](https://www.python.org/downloads/release/python-31318/)
+[![Static Badge](https://img.shields.io/badge/React-Black?style=for-the-badge&logo=react&color=black)](https://react.dev/)
+[![Static Badge](https://img.shields.io/badge/PostgreSQL-%2332658e?style=for-the-badge&logo=postgresql&logoColor=white&color=%2332658e)](https://www.postgresql.org/download/)
+[![Static Badge](https://img.shields.io/badge/Docker-%23586af8?style=for-the-badge&logo=Docker&color=%23586af8)](https://docs.docker.com/get-docker/desktop/)
+</br>
+<img src="https://img.shields.io/github/v/release/unb-mds/2026-2-UnB_Core?label=version">
+[![GitHub issues](https://img.shields.io/github/issues/unb-mds/2026-2-UnB_Core)](https://github.com/unb-mds/2026-2-UnB_Core/issues)
+[![GitHub contributors](https://img.shields.io/github/contributors/unb-mds/2026-2-UnB_Core)](https://img.shields.io/github/contributors/unb-mds/2026-2-UnB_Core)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/unb-mds/2026-2-UnB_Core)](https://img.shields.io/github/stars/unb-mds/2026-2-UnB_Core)
  
 Plataforma acadêmica colaborativa da Universidade de Brasília (UnB), com conteúdos organizados por curso e disciplina e contribuições submetidas à moderação.
  
 1. **Base de conhecimento acadêmica** com resumos, dicas, dificuldades, provas, implementações e links.
 2. **Contribuições moderadas** enviadas por usuários autenticados e revisadas por moderadores ou administradores.
 3. **Perfil do usuário**, onde cada pessoa edita o próprio nome, e-mail e senha.
+##
+<img width="1646" height="599" alt="image" src="https://github.com/user-attachments/assets/ea69e958-ca90-454b-bbb2-9ac69f06b856" />
+
+<img width="1383" height="496" alt="image" src="https://github.com/user-attachments/assets/c9d45efb-11a3-4b14-bc86-4ad115111890" />
+
 
 Projeto desenvolvido para a disciplina de **Métodos de Desenvolvimento de Software (MDS) - 2026/2**, Universidade de Brasília.
 
 ## Status do projeto
 
-**Fase atual: desenvolvimento e integração.** O backend possui uma API funcional construída com FastAPI, incluindo autenticação de usuários, cadastro, login e acesso a rotas protegidas. O projeto continua em evolução, com novas funcionalidades, testes, integração com o frontend e melhorias de documentação sendo desenvolvidos nas sprints.
+**Fase atual: desenvolvimento e integração.** A integração do Backend e Frontend já está completa, bastando apenas o seu aperfeiçoamento. O backend possui uma API funcional construída com FastAPI, incluindo autenticação de usuários, cadastro, login e acesso às disciplinas e cursos utilizando um crawler com o sistema do SIGAA. O projeto continua em evolução, com novas funcionalidades, testes e melhorias de documentação sendo desenvolvidos nas sprints.
  
 
 ## Integrantes
@@ -51,11 +67,10 @@ Projeto desenvolvido para a disciplina de **Métodos de Desenvolvimento de Softw
 
 
 ## Documentação
- 
+
 - [`docs/requisitos.md`](docs/requisitos.md) Visão geral, requisitos funcionais e não funcionais, entidades e critérios de sucesso.
-- [`docs/backend`](docs/backend) Documentação das Sprints do Backend.
-- [`docs/frontend`](docs/frontend) Documentação das Sprints do Frontend.
-- [`docs/documento_de_visao.md`](docs/documento_de_visao.md) Documento de Visão.
+- [`docs/sprint`](docs/Sprint) Documentação Geral das Sprints.
+- `GitPage UNB Core:` https://unb-mds.github.io/2026-2-UnB_Core/
 - `Board no Miro com Documentações Gerais:` https://miro.com/app/board/uXjVHkk8Wek=/?share_link_id=144842983750
 - `Figma Storymap:` https://www.figma.com/board/qmgPv7RFMwdFjr0kqOzTag/Welcome-to-FigJam?node-id=1-2&t=QFJpQxSbXNEcukDx-1
 - `Figma do Protótipo de Alta Fidelidade (Frontend):` https://www.figma.com/site/wV4UDTWGMPOiqpO7Ik9ErA/UnB_Core?node-id=23-665&t=vpy0So2nUZVnKKSz-1
@@ -377,4 +392,4 @@ Consulte o guia de contribuição do grupo (em construção) antes de abrir uma 
 ## Licença
 
 Este projeto está licenciado sob os termos da licença MIT.
-- [`LICENSE`](LICENSE) Veja este arquivo para o texto completo.
+- [`LICENSE`](LICENSE) - Veja este arquivo para o texto completo.
