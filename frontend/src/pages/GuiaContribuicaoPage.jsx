@@ -41,7 +41,7 @@ function GuiaContribuicaoPage({ onNavigate }) {
         <div className="guide-types">
           {contentTypes.map((type) => (
             <div className="guide-types__item" key={type.label}>
-              <span className="tag tag-outline">{type.label}</span>
+              <span className="badge badge-category">{type.label}</span>
               <p>{type.description}</p>
             </div>
           ))}
