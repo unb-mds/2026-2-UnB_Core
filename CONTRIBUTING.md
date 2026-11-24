@@ -1,6 +1,6 @@
 # Contribuindo para o UNB Core
 
-Obrigado por se voluntariar a contribuir para o UNB Core. Primeiramente, pedimos que leia nosso [código de conduta](#codigo-de-conduta-aqui), após isso basta seguir os passos abaixo:
+Obrigado por se voluntariar a contribuir para o UNB Core. Primeiramente, pedimos que leia nosso [código de conduta](https://github.com/unb-mds/2026-2-UnB_Core/blob/main/CODE_OF_CONDUCT.md), após isso basta seguir os passos abaixo:
 
 ## Issues
 
