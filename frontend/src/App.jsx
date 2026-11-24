@@ -9,7 +9,6 @@ import LoginPage from './pages/LoginPage'
 import ModeracaoPage from './pages/ModeracaoPage'
 import PerfilPage from './pages/PerfilPage'
 import AdminUsuariosPage from './pages/AdminUsuariosPage'
-import AdminPage from './pages/AdminPage'
 import ConteudoPage from './pages/ConteudoPage'
 import MinhaContribuicaoPage from './pages/MinhaContribuicaoPage'
 import ModeracaoContribuicaoPage from './pages/ModeracaoContribuicaoPage'
@@ -55,10 +54,6 @@ function getRoute() {
 
   if (path === '/admin/usuarios') {
     return { name: 'admin-users' }
-  }
-
-  if (path === '/admin') {
-    return { name: 'admin' }
   }
 
   const contentMatch = path.match(/^\/conteudos\/(\d+)$/)
@@ -135,10 +130,6 @@ function App() {
 
   if (route.name === 'admin-users') {
     return <AdminUsuariosPage onNavigate={navigate} />
-  }
-
-  if (route.name === 'admin') {
-    return <AdminPage onNavigate={navigate} />
   }
 
   // A key recria a página ao trocar de id, sem reaproveitar o estado anterior.

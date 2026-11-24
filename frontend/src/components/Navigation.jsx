@@ -10,7 +10,7 @@ const SECOES = [
   { chave: 'contribuir', caminhos: ['/contribuicao', '/guia-de-contribuicao'] },
   { chave: 'minhas', caminhos: ['/minhas-contribuicoes'] },
   { chave: 'moderacao', caminhos: ['/moderacao'] },
-  { chave: 'usuarios', caminhos: ['/admin'] },
+  { chave: 'usuarios', caminhos: ['/admin/usuarios'] },
   { chave: 'perfil', caminhos: ['/perfil'] },
 ]
 

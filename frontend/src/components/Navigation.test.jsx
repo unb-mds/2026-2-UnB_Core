@@ -33,6 +33,8 @@ describe('item ativo do menu', () => {
     ['/perfil', 'perfil'],
     ['/perfil/', 'perfil'],
     ['/endereco-que-nao-existe', 'conhecimento'],
+    // A antiga página /admin foi removida: vale como endereço desconhecido.
+    ['/admin', 'conhecimento'],
   ])('%s acende "%s"', (caminho, esperado) => {
     expect(secaoAtiva(caminho)).toBe(esperado)
   })
