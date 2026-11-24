@@ -386,7 +386,7 @@ e **nenhum erro** aparecer antes dela.
 
 ## Contribuindo
  
-Consulte o guia de contribuição do grupo (em construção) antes de abrir uma Pull Request. Issues e o quadro de tarefas do projeto refletem o progresso das sprints.
+Consulte o [guia de contribuição](https://github.com/unb-mds/2026-2-UnB_Core/blob/main/CONTRIBUTING.md) do grupo antes de abrir uma Pull Request. Issues e o quadro de tarefas do projeto refletem o progresso das sprints.
  
 ## Licença
 
