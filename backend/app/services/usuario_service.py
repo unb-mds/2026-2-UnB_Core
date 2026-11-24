@@ -130,6 +130,7 @@ def listar_usuarios_para_gestao(
     busca: str | None = None,
     perfil: str | None = None,
     ativo: bool | None = None,
+    recuperacao: bool | None = None,
 ) -> list[dict]:
     """Usuários com o total de contribuições. Moderadores veem só usuários comuns, sem e-mail."""
     perfis = FILTROS_DE_PERFIL.get(perfil or "", list(PerfilUsuario))
@@ -149,6 +150,9 @@ def listar_usuarios_para_gestao(
     )
     if ativo is not None:
         consulta = consulta.where(Usuario.ativo == ativo)
+    # Pedidos de nova senha: só administradores veem e filtram.
+    if recuperacao and _eh_administrador(ator):
+        consulta = consulta.where(Usuario.recuperacao_senha_solicitada_em.is_not(None))
     termo = (busca or "").strip().lower()
     if termo:
         filtro = func.lower(Usuario.nome).contains(termo)
@@ -166,6 +170,10 @@ def listar_usuarios_para_gestao(
             "ativo": usuario.ativo,
             "criado_em": usuario.criado_em,
             "total_contribuicoes": total_contribuicoes,
+            "recuperacao_senha_solicitada_em": (
+                usuario.recuperacao_senha_solicitada_em if _eh_administrador(ator) else None
+            ),
+            "contato_recuperacao": usuario.contato_recuperacao if _eh_administrador(ator) else None,
         }
         for usuario, total_contribuicoes in session.exec(consulta).all()
     ]
@@ -249,6 +257,10 @@ def definir_senha_temporaria(session: Session, usuario_id: int, nova_senha: str)
     if alvo.email == EMAIL_USUARIO_REMOVIDO:
         raise ErroValidacao("Esta é uma conta de sistema e não pode ser alterada.")
     alvo.senha_hash = hash_senha(nova_senha)
+    # Pedido atendido; a pessoa troca a senha temporária ao entrar.
+    alvo.recuperacao_senha_solicitada_em = None
+    alvo.contato_recuperacao = None
+    alvo.trocar_senha = True
     alvo.atualizado_em = datetime.now(timezone.utc)
     session.add(alvo)
     session.commit()

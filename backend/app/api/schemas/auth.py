@@ -35,3 +35,15 @@ class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
     usuario: UsuarioPublico
+    # Entrou com senha temporária: o front leva a pessoa para definir uma senha nova.
+    trocar_senha: bool = False
+
+
+class PedidoRecuperacaoSenha(BaseModel):
+    email: EmailStr
+    # Como a pessoa prefere receber a senha temporária (opcional).
+    contato: str | None = Field(default=None, max_length=300)
+
+
+class RespostaRecuperacaoSenha(BaseModel):
+    mensagem: str

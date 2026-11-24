@@ -104,7 +104,9 @@ def test_administrador_ve_todas_as_contas_com_email_e_contribuicoes() -> None:
     assert set(usuarios) == {"Ana Admin", "Mauro Moderador", "Bia Estudante", "Caio"}
     assert usuarios["Bia Estudante"]["email"] == "bia@example.com"
     assert usuarios["Bia Estudante"]["total_contribuicoes"] == 2
-    assert "senha" not in resposta.text
+    # Nem o hash da senha nem o campo aparecem na resposta.
+    assert "senha_hash" not in resposta.text
+    assert "$2b$" not in resposta.text
     assert set(ids_por_nome(equipe)) == {"Ana Admin", "Mauro Moderador"}
 
 
@@ -187,6 +189,7 @@ def test_senha_temporaria_so_por_administrador_e_sem_expor_a_senha() -> None:
     assert por_moderador.status_code == 403
     assert curta.status_code == 422
     assert resposta.status_code == 200
-    assert "senha" not in resposta.text
+    assert "senha_hash" not in resposta.text
+    assert "$2b$" not in resposta.text
     assert "temporaria-123" not in resposta.text
     assert login_novo.status_code == 200

@@ -146,3 +146,4 @@
 
 /* Avisos no cartão de login (sessão expirada, ajuda de senha). */
 .auth-card__notice { margin: -12px 0 20px; padding: 10px 12px; border-radius: 10px; color: var(--color-warning-text); background: var(--color-warning-bg); font-size: 14px; line-height: 1.5; }
+.auth-card__help { margin: -12px 0 4px; color: rgba(255, 255, 255, 0.86); font-size: 14px; line-height: 1.5; }

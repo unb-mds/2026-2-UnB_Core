@@ -5,7 +5,9 @@ from backend.app.api.dependencies import obter_usuario_atual
 from backend.app.api.schemas.auth import (
     CadastroRequest,
     LoginRequest,
+    PedidoRecuperacaoSenha,
     PerfilAtualizacao,
+    RespostaRecuperacaoSenha,
     TokenResponse,
     UsuarioPublico,
 )
@@ -16,6 +18,7 @@ from backend.app.services.auth_service import (
     autenticar_usuario,
     cadastrar_usuario,
     criar_sessao,
+    solicitar_recuperacao_senha,
 )
 
 router = APIRouter(prefix="/auth", tags=["autenticação"])
@@ -43,6 +46,7 @@ def login(
         "access_token": criar_sessao(usuario),
         "token_type": "bearer",
         "usuario": usuario,
+        "trocar_senha": usuario.trocar_senha,
     }
 
 
@@ -58,3 +62,16 @@ def atualizar_me(
     session: Session = Depends(get_session),
 ):
     return atualizar_perfil(session, usuario, **dados.model_dump())
+
+
+@router.post(
+    "/recuperar-senha",
+    response_model=RespostaRecuperacaoSenha,
+    status_code=status.HTTP_202_ACCEPTED,
+)
+def recuperar_senha(
+    dados: PedidoRecuperacaoSenha,
+    session: Session = Depends(get_session),
+):
+    """Pede uma senha temporária aos administradores, a partir da tela de login."""
+    return {"mensagem": solicitar_recuperacao_senha(session, dados.email, dados.contato)}

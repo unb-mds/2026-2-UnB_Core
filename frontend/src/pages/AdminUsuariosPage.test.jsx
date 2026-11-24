@@ -73,6 +73,32 @@ describe('AdminUsuariosPage', () => {
     expect(await screen.findByText(/Senha temporária definida para Bia Estudante/)).toBeInTheDocument()
   })
 
+  it('administrador vê os pedidos de senha com a data e o contato informado', async () => {
+    useAuth.mockReturnValue({ isAuthenticated: true, user: { id: 1, perfil: 'administrador' } })
+    const pedido = {
+      ...bia,
+      email: 'bia@example.com',
+      recuperacao_senha_solicitada_em: '2026-11-24T13:00:00Z',
+      contato_recuperacao: 'WhatsApp (61) 90000-0000',
+    }
+    api.get.mockImplementation((path) => Promise.resolve(path.includes('recuperacao=true') ? [pedido] : []))
+    api.post.mockResolvedValue({})
+
+    render(<AdminUsuariosPage onNavigate={() => {}} />)
+    fireEvent.click(await screen.findByRole('tab', { name: 'Pedidos de senha' }))
+
+    expect(await screen.findByText(/Contato informado: WhatsApp \(61\) 90000-0000/)).toBeInTheDocument()
+    expect(api.get).toHaveBeenCalledWith('/usuarios/gestao?recuperacao=true', expect.anything())
+    expect(screen.getByText('Pediu nova senha')).toBeInTheDocument()
+    expect(screen.getByText(/Pedido de nova senha em/)).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Senha temporária' }))
+    fireEvent.change(screen.getByLabelText(/Nova senha temporária para Bia Estudante/), { target: { value: 'temporaria-123' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Definir senha' }))
+
+    await waitFor(() => expect(api.post).toHaveBeenCalledWith('/usuarios/3/senha-temporaria', { nova_senha: 'temporaria-123' }))
+  })
+
   it('usuário comum não acessa a gestão', () => {
     useAuth.mockReturnValue({ isAuthenticated: true, user: { id: 5, perfil: 'usuario' } })
 

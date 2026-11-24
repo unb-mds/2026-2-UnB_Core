@@ -17,8 +17,16 @@ function mensagem(requestError, padrao) {
   return requestError instanceof ApiError ? requestError.message : padrao
 }
 
+const ABAS_ADMIN = [
+  { valor: 'equipe', rotulo: 'Equipe' },
+  { valor: 'todos', rotulo: 'Todos os usuários' },
+  { valor: 'pedidos', rotulo: 'Pedidos de senha' },
+]
+
 function montarConsulta({ aba, busca, perfil, situacao }) {
   const params = new URLSearchParams()
+  // Pedidos feitos na tela de login ("Esqueci minha senha"), só para administradores.
+  if (aba === 'pedidos') return '/usuarios/gestao?recuperacao=true'
   if (aba === 'equipe') params.set('perfil', 'equipe')
   else if (perfil) params.set('perfil', perfil)
   if (busca.trim()) params.set('busca', busca.trim())
@@ -125,7 +133,7 @@ function AdminUsuariosPage({ onNavigate }) {
     }
     const ok = await executar(
       () => api.post(`/usuarios/${usuario.id}/senha-temporaria`, { nova_senha: novaSenha }),
-      `Senha temporária definida para ${usuario.nome}. Passe a senha para a pessoa e peça que ela troque em Meu perfil.`,
+      `Senha temporária definida para ${usuario.nome}. Passe a senha para a pessoa: ao entrar, ela será levada a escolher uma senha nova.`,
     )
     if (ok) {
       setSenhaPara(null)
@@ -160,6 +168,14 @@ function AdminUsuariosPage({ onNavigate }) {
         <Button type="submit">Criar conta</Button>
       </form>
     </AsideCard>
+  ) : aba === 'pedidos' ? (
+    <AsideCard title="Como atender um pedido">
+      <ol>
+        <li>Confira se o pedido é da pessoa, pelo contato informado ou pelo e-mail da conta.</li>
+        <li>Defina uma senha temporária e passe para ela por esse contato.</li>
+        <li>Ao entrar com a senha temporária, ela é levada a Meu perfil para escolher uma senha nova.</li>
+      </ol>
+    </AsideCard>
   ) : (
     <AsideCard title="Privacidade e permissões">
       <ul>
@@ -173,10 +189,10 @@ function AdminUsuariosPage({ onNavigate }) {
   )
 
   return (
-    <PageLayout {...cabecalho} aside={aside} asideLabel={aba === 'equipe' ? 'Criar conta da equipe' : 'Privacidade e permissões'}>
+    <PageLayout {...cabecalho} aside={aside} asideLabel={{ equipe: 'Criar conta da equipe', pedidos: 'Como atender um pedido' }[aba] || 'Privacidade e permissões'}>
       {isAdmin && (
         <div className="governance-tabs" role="tablist" aria-label="Grupo de contas">
-          {[{ valor: 'equipe', rotulo: 'Equipe' }, { valor: 'todos', rotulo: 'Todos os usuários' }].map((item) => (
+          {ABAS_ADMIN.map((item) => (
             <button
               key={item.valor}
               type="button"
@@ -206,7 +222,9 @@ function AdminUsuariosPage({ onNavigate }) {
       {error && <ErrorMessage>{error}</ErrorMessage>}
       {aviso && <p className="content-page__feedback" role="status">{aviso}</p>}
       {isLoading && users.length === 0 && <p className="page-status">Carregando usuários...</p>}
-      {!isLoading && users.length === 0 && <EmptyState title="Nenhuma conta encontrada">Tente outra busca ou filtro.</EmptyState>}
+      {!isLoading && users.length === 0 && (aba === 'pedidos'
+        ? <EmptyState title="Nenhum pedido de senha">Quando alguém pedir uma senha nova na tela de login, o pedido aparece aqui.</EmptyState>
+        : <EmptyState title="Nenhuma conta encontrada">Tente outra busca ou filtro.</EmptyState>)}
 
       {users.length > 0 && (
         <section className="my-contributions-list" aria-label="Contas" aria-busy={isLoading}>
@@ -217,11 +235,18 @@ function AdminUsuariosPage({ onNavigate }) {
                 <div className="my-contribution-card__heading">
                   <span className="badge badge-category">{PERFIS[usuario.perfil] || usuario.perfil}</span>
                   <span className={`badge ${usuario.ativo ? 'badge-aprovada' : 'badge-arquivada'}`}>{usuario.ativo ? 'Ativa' : 'Desativada'}</span>
+                  {usuario.recuperacao_senha_solicitada_em && <span className="badge badge-pendente">Pediu nova senha</span>}
                 </div>
                 <h2>{usuario.nome}{isOwnAccount ? ' (você)' : ''}</h2>
                 <p className="moderation-card__meta">
                   {usuario.email ? `${usuario.email} · ` : ''}Cadastro em {formatarData(usuario.criado_em, 'medium')} · {usuario.total_contribuicoes} {usuario.total_contribuicoes === 1 ? 'contribuição' : 'contribuições'}
                 </p>
+                {usuario.recuperacao_senha_solicitada_em && (
+                  <div className="my-contribution-card__feedback">
+                    <strong>Pedido de nova senha em {formatarData(usuario.recuperacao_senha_solicitada_em, 'medium')}</strong>
+                    <p>{usuario.contato_recuperacao ? `Contato informado: ${usuario.contato_recuperacao}` : 'Nenhum contato informado. Use o e-mail da conta.'}</p>
+                  </div>
+                )}
 
                 {isOwnAccount ? (
                   <p className="my-contribution-card__note">Esta é a sua conta. Para alterar seus dados, use Meu perfil.</p>

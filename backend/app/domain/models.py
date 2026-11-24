@@ -50,6 +50,11 @@ class Usuario(SQLModel, table=True):
     ativo: bool = Field(default=True)
     criado_em: datetime = Field(default_factory=agora_utc)
     atualizado_em: datetime = Field(default_factory=agora_utc)
+    # Recuperação de senha (migration 0007): pedido feito na tela de login, contato
+    # informado pela pessoa e se ela precisa trocar a senha temporária ao entrar.
+    recuperacao_senha_solicitada_em: datetime | None = None
+    contato_recuperacao: str | None = None
+    trocar_senha: bool = Field(default=False)
 
 
 class Curso(SQLModel, table=True):

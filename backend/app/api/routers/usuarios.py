@@ -73,10 +73,13 @@ def listar_para_gestao(
     busca: str | None = Query(default=None, max_length=100),
     perfil: Literal["usuario", "moderador", "administrador", "equipe"] | None = Query(default=None),
     ativo: bool | None = Query(default=None),
+    recuperacao: bool | None = Query(default=None),
     session: Session = Depends(get_session),
     ator: Usuario = Depends(exigir_moderador),
 ):
-    return listar_usuarios_para_gestao(session, ator, busca=busca, perfil=perfil, ativo=ativo)
+    return listar_usuarios_para_gestao(
+        session, ator, busca=busca, perfil=perfil, ativo=ativo, recuperacao=recuperacao
+    )
 
 
 @router.patch("/{usuario_id}/situacao", response_model=UsuarioAdminPublico)

@@ -41,6 +41,9 @@ class UsuarioGestao(BaseModel):
     ativo: bool
     criado_em: datetime
     total_contribuicoes: int
+    # Pedido de nova senha (só para administradores).
+    recuperacao_senha_solicitada_em: datetime | None = None
+    contato_recuperacao: str | None = None
 
 
 class SituacaoUsuario(BaseModel):
