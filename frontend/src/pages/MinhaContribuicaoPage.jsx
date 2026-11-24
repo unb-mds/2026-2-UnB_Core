@@ -8,7 +8,8 @@ import Button from '../components/ui/Button'
 import PageLayout, { AsideCard } from '../components/layout/PageLayout'
 import ConteudoCorpo, { TextoOuLink } from '../components/conteudos/ConteudoCorpo'
 import EditarContribuicaoForm from '../components/contribuicoes/EditarContribuicaoForm'
-import { formatarData, rotuloDisciplinaDoConteudo, rotuloTipo } from '../components/conteudos/formatacao'
+import { formatarData, rotuloDisciplinaDoConteudo } from '../components/conteudos/formatacao'
+import TipoBadge from '../components/conteudos/TipoBadge'
 import '../components/conteudos/conteudos.css'
 import './ContribuicaoPage.css'
 import './MinhasContribuicoesPage.css'
@@ -158,7 +159,7 @@ function MinhaContribuicaoPage({ contribuicaoId, onNavigate }) {
       {contribution && (
         <article className="content-detail" aria-label={contribution.titulo}>
           <div className="my-contribution-card__heading">
-            <span className="badge badge-category">{rotuloTipo(contribution.tipo)}</span>
+            <TipoBadge tipo={contribution.tipo} />
             <StatusBadge status={contribution.estado} />
           </div>
           <dl className="content-detail__metadata">

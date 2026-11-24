@@ -7,6 +7,8 @@ import EmptyState from '../components/ui/EmptyState'
 import Button from '../components/ui/Button'
 import PageLayout, { AsideCard } from '../components/layout/PageLayout'
 import DisciplinaBusca from '../components/conteudos/DisciplinaBusca'
+import { IconeTipo } from '../components/conteudos/TipoBadge'
+import { classeTipo } from '../components/conteudos/formatacao'
 import './ContribuicaoPage.css'
 
 const contentTypes = [
@@ -186,9 +188,11 @@ function ContribuicaoPage({ courses = [], onNavigate }) {
               <button
                 key={type.value}
                 type="button"
-                className={`tag-toggle ${form.tipo === type.value ? 'tag-toggle--active' : ''}`}
+                className={`tag-toggle tag-toggle--tipo ${classeTipo(type.value)} ${form.tipo === type.value ? 'tag-toggle--active' : ''}`}
+                aria-pressed={form.tipo === type.value}
                 onClick={() => updateField({ target: { name: 'tipo', value: type.value } })}
               >
+                <IconeTipo tipo={type.value} />
                 {type.label}
               </button>
             ))}

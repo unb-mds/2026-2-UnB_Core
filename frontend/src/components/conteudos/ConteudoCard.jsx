@@ -1,5 +1,6 @@
 import Button from '../ui/Button'
-import { ehLink, formatarData, rotuloDisciplinaDoConteudo, rotuloTipo } from './formatacao'
+import { classeTipo, ehLink, formatarData, rotuloDisciplinaDoConteudo } from './formatacao'
+import TipoBadge from './TipoBadge'
 import './conteudos.css'
 
 const TAMANHO_TRECHO = 160
@@ -27,9 +28,9 @@ function ConteudoCard({ content, onOpen, showDiscipline = false, headingLevel = 
   const Titulo = headingLevel === 3 ? 'h3' : 'h2'
 
   return (
-    <article className="knowledge-card">
+    <article className={`knowledge-card ${classeTipo(content.tipo)}`.trim()}>
       <div className="knowledge-card__topline">
-        <span className="badge badge-category">{rotuloTipo(content.tipo)}</span>
+        <TipoBadge tipo={content.tipo} />
         <span>{formatarData(content.atualizado_em || content.data_atualizacao, 'medium')}</span>
       </div>
       <Titulo className="knowledge-card__title">

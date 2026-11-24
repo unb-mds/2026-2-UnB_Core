@@ -7,7 +7,8 @@ import Button from '../components/ui/Button'
 import PageLayout, { AsideCard } from '../components/layout/PageLayout'
 import DecisaoModal from '../components/moderacao/DecisaoModal'
 import StatusBadge from '../components/moderacao/StatusBadge'
-import { formatarData, rotuloDisciplinaDoConteudo, rotuloTipo, trecho } from '../components/conteudos/formatacao'
+import { formatarData, rotuloDisciplinaDoConteudo, trecho } from '../components/conteudos/formatacao'
+import TipoBadge from '../components/conteudos/TipoBadge'
 import './MinhasContribuicoesPage.css'
 import './governance.css'
 
@@ -119,7 +120,7 @@ function ModeracaoPage({ onNavigate }) {
               {contributions.map((contribution) => (
                 <article className="my-contribution-card" key={contribution.id}>
                   <div className="my-contribution-card__heading">
-                    <span className="badge badge-category">{rotuloTipo(contribution.tipo)}</span>
+                    <TipoBadge tipo={contribution.tipo} />
                     <span className="moderation-card__badges">
                       {contribution.exclusao_solicitada_em && <span className="badge badge-exclusao">Exclusão solicitada</span>}
                       <StatusBadge status={contribution.estado} />

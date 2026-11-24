@@ -11,6 +11,11 @@ export function rotuloTipo(tipo) {
   return ROTULOS_TIPO[tipo] || tipo || 'Conteúdo'
 }
 
+// Classe com as cores do tipo (definidas em ui.css). Tipo desconhecido fica sem classe e usa o azul do site.
+export function classeTipo(tipo) {
+  return ROTULOS_TIPO[tipo] ? `tipo-${tipo}` : ''
+}
+
 export function formatarData(valor, estilo = 'long') {
   if (!valor) return 'Data não informada'
   const data = new Date(valor)

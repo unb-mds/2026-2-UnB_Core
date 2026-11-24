@@ -33,6 +33,27 @@
   --color-field-border: #E2E4EA;
   --color-neutral-10: #F0F1F4;
   --color-neutral-50: #9AA0AE;
+  /* Tipos de conteúdo: texto e fundo do badge, e a faixa lateral do card.
+     Ficam fora das cores de status (amarelo, verde e vermelho), que significam pendente, aprovada e rejeitada.
+     Texto sobre o fundo acima de 6,5:1 e faixa acima de 3:1 nos dois temas. */
+  --type-resumo-text: #3730A3;
+  --type-resumo-bg: #E0E7FF;
+  --type-resumo-line: #4F46E5;
+  --type-dica-text: #115E59;
+  --type-dica-bg: #CCFBF1;
+  --type-dica-line: #0D9488;
+  --type-dificuldade-text: #6B21A8;
+  --type-dificuldade-bg: #F3E8FF;
+  --type-dificuldade-line: #9333EA;
+  --type-prova-text: #9D174D;
+  --type-prova-bg: #FCE7F3;
+  --type-prova-line: #DB2777;
+  --type-implementacao-text: #334155;
+  --type-implementacao-bg: #E2E8F0;
+  --type-implementacao-line: #475569;
+  --type-link-text: #075985;
+  --type-link-bg: #E0F2FE;
+  --type-link-line: #0284C7;
   --font-display: 'JetBrains Mono', monospace;
   --font-body: 'IBM Plex Sans', sans-serif;
   --radius-sm: 6px;
@@ -85,6 +106,24 @@
   --color-field-border: #46506D;
   --color-neutral-10: #232A3D;
   --color-neutral-50: #6B7389;
+  --type-resumo-text: #C7D2FE;
+  --type-resumo-bg: #272C5E;
+  --type-resumo-line: #818CF8;
+  --type-dica-text: #99F6E4;
+  --type-dica-bg: #0F3533;
+  --type-dica-line: #2DD4BF;
+  --type-dificuldade-text: #E9D5FF;
+  --type-dificuldade-bg: #3B1F57;
+  --type-dificuldade-line: #C084FC;
+  --type-prova-text: #FBCFE8;
+  --type-prova-bg: #4A1A33;
+  --type-prova-line: #F472B6;
+  --type-implementacao-text: #E2E8F0;
+  --type-implementacao-bg: #2B3445;
+  --type-implementacao-line: #94A3B8;
+  --type-link-text: #BAE6FD;
+  --type-link-bg: #0C3149;
+  --type-link-line: #38BDF8;
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
   --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.5);
 }

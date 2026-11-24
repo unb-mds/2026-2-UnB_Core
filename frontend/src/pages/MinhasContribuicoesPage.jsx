@@ -7,7 +7,8 @@ import StatusBadge from '../components/ui/StatusBadge'
 import Button from '../components/ui/Button'
 import PageLayout, { AsideCard } from '../components/layout/PageLayout'
 import EditarContribuicaoForm from '../components/contribuicoes/EditarContribuicaoForm'
-import { rotuloDisciplinaDoConteudo, rotuloTipo } from '../components/conteudos/formatacao'
+import { rotuloDisciplinaDoConteudo } from '../components/conteudos/formatacao'
+import TipoBadge from '../components/conteudos/TipoBadge'
 import './ContribuicaoPage.css'
 import './MinhasContribuicoesPage.css'
 
@@ -39,7 +40,7 @@ function ContributionCard({ contribution, onUpdated, onNavigate }) {
   return (
     <article className="my-contribution-card">
       <div className="my-contribution-card__heading">
-        <span className="badge badge-category">{contribution.tipo ? rotuloTipo(contribution.tipo) : 'Contribuição'}</span>
+        <TipoBadge tipo={contribution.tipo} rotulo={contribution.tipo ? undefined : 'Contribuição'} />
         <span className="moderation-card__badges">
           {contribution.exclusao_solicitada_em && <span className="badge badge-exclusao">Exclusão solicitada</span>}
           <StatusBadge status={contribution.estado || contribution.status || 'pendente'} />

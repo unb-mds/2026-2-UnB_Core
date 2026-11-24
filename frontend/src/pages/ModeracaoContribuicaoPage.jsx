@@ -8,7 +8,8 @@ import PageLayout, { AsideCard } from '../components/layout/PageLayout'
 import DecisaoModal from '../components/moderacao/DecisaoModal'
 import StatusBadge from '../components/moderacao/StatusBadge'
 import ConteudoCorpo, { TextoOuLink } from '../components/conteudos/ConteudoCorpo'
-import { formatarData, rotuloDisciplinaDoConteudo, rotuloTipo } from '../components/conteudos/formatacao'
+import { formatarData, rotuloDisciplinaDoConteudo } from '../components/conteudos/formatacao'
+import TipoBadge from '../components/conteudos/TipoBadge'
 import '../components/conteudos/conteudos.css'
 import './MinhasContribuicoesPage.css'
 import './ContribuicaoPage.css'
@@ -142,7 +143,7 @@ function ModeracaoContribuicaoPage({ contribuicaoId, onNavigate }) {
       {contribution && (
         <article className="content-detail" aria-label={contribution.titulo}>
           <div className="my-contribution-card__heading">
-            <span className="badge badge-category">{rotuloTipo(contribution.tipo)}</span>
+            <TipoBadge tipo={contribution.tipo} />
             <span className="moderation-card__badges">
               {contribution.exclusao_solicitada_em && <span className="badge badge-exclusao">Exclusão solicitada</span>}
               <StatusBadge status={contribution.estado} />

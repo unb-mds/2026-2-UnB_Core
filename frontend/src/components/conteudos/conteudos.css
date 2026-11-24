@@ -1,4 +1,5 @@
-.knowledge-card { display: grid; grid-template-columns: minmax(0, 1fr); min-width: 0; gap: var(--spacing-md); padding: var(--spacing-md); border: 1px solid var(--color-border); border-left: 3px solid var(--color-primary); border-radius: var(--radius-sm); background: var(--color-surface); box-shadow: var(--shadow-sm); }
+/* A faixa lateral do card tem a cor do tipo de conteúdo (classe tipo-<tipo>). */
+.knowledge-card { display: grid; grid-template-columns: minmax(0, 1fr); min-width: 0; gap: var(--spacing-md); padding: var(--spacing-md); border: 1px solid var(--color-border); border-left: 3px solid var(--tipo-line, var(--color-primary)); border-radius: var(--radius-sm); background: var(--color-surface); box-shadow: var(--shadow-sm); }
 .knowledge-card__topline,
 .knowledge-card__footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--spacing-sm); color: var(--color-text-muted); font-size: 12px; }
 .knowledge-card h2,
@@ -48,3 +49,6 @@
 .content-aside__list a { overflow-wrap: anywhere; text-decoration: none; }
 .content-aside__list a:hover { text-decoration: underline; }
 .content-aside__list span { color: var(--color-text-muted); font-size: 12px; }
+/* Na lista lateral só o ícone leva a cor do tipo, para não pesar ao lado dos títulos. */
+.content-aside__list .content-aside__type { display: inline-flex; align-items: center; gap: 5px; }
+.content-aside__type .icone-tipo { color: var(--tipo-line, var(--color-primary)); }

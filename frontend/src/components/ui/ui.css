@@ -50,6 +50,19 @@
 .badge-deferida { color: var(--color-success); background: var(--color-success-bg); }
 .badge-indeferida { color: var(--color-error-text); background: var(--color-error-bg); }
 
+/* ---------- Tipos de conteúdo ----------
+   A classe tipo-<tipo> define as cores do tipo para o elemento e o que está dentro dele
+   (badge, faixa do card, opção do formulário). Tipo desconhecido usa o azul do site. */
+.tipo-resumo { --tipo-text: var(--type-resumo-text); --tipo-bg: var(--type-resumo-bg); --tipo-line: var(--type-resumo-line); }
+.tipo-dica { --tipo-text: var(--type-dica-text); --tipo-bg: var(--type-dica-bg); --tipo-line: var(--type-dica-line); }
+.tipo-dificuldade { --tipo-text: var(--type-dificuldade-text); --tipo-bg: var(--type-dificuldade-bg); --tipo-line: var(--type-dificuldade-line); }
+.tipo-prova { --tipo-text: var(--type-prova-text); --tipo-bg: var(--type-prova-bg); --tipo-line: var(--type-prova-line); }
+.tipo-implementacao { --tipo-text: var(--type-implementacao-text); --tipo-bg: var(--type-implementacao-bg); --tipo-line: var(--type-implementacao-line); }
+.tipo-link { --tipo-text: var(--type-link-text); --tipo-bg: var(--type-link-bg); --tipo-line: var(--type-link-line); }
+/* O nome do tipo continua escrito: a cor e o ícone só ajudam a achar o tipo na lista. */
+.badge-tipo { align-items: center; gap: 5px; color: var(--tipo-text, var(--color-primary)); background: var(--tipo-bg, var(--color-bg-soft)); }
+.icone-tipo { flex: none; width: 13px; height: 13px; }
+
 
 /* ---------- Busca ---------- */
 .search-input { display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 16px; border: 1px solid var(--color-field-border); border-radius: var(--radius-full); background: var(--color-field); }
