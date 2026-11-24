@@ -29,3 +29,23 @@ class UsuarioAdminPublico(BaseModel):
     ativo: bool
     criado_em: datetime
     atualizado_em: datetime
+
+
+class UsuarioGestao(BaseModel):
+    """Usuário na gestão de contas. Nunca inclui a senha; o e-mail só vai para administradores."""
+
+    id: int
+    nome: str
+    email: str | None
+    perfil: PerfilUsuario
+    ativo: bool
+    criado_em: datetime
+    total_contribuicoes: int
+
+
+class SituacaoUsuario(BaseModel):
+    ativo: bool
+
+
+class SenhaTemporaria(BaseModel):
+    nova_senha: str = Field(min_length=8, max_length=128)

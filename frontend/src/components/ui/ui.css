@@ -77,3 +77,5 @@
   .topbar__links a:not(.topbar__login) { display: none; }
   .site-footer { flex-direction: column; padding: 24px 16px; }
 }
+/* Texto só para leitores de tela (some da tela, continua acessível). */
+.visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
