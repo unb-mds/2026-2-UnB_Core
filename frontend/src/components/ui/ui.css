@@ -31,6 +31,9 @@
 .btn-primary { padding: 8px 14px; color: var(--color-on-primary); background: var(--color-primary); }
 .btn-outline { padding: 7px 13px; border: 1px solid var(--color-primary); color: var(--color-primary); background: transparent; }
 .btn-accent { padding: 8px 14px; color: var(--color-on-accent); background: var(--color-accent); }
+/* Ações destrutivas (excluir): contorno vermelho, para não ser clicado por engano. */
+.btn-danger { padding: 7px 13px; border: 1px solid var(--color-error); color: var(--color-error); background: transparent; }
+.btn-danger:hover { background: var(--color-error-bg); }
 .btn:hover { box-shadow: var(--shadow-md); }
 
 /* ---------- Badges ---------- */
@@ -43,6 +46,7 @@
 .badge-pendente, .badge-ajustes { color: var(--color-warning-text); background: var(--color-warning-bg); }
 .badge-aprovada { color: var(--color-success); background: var(--color-success-bg); }
 .badge-rejeitada { color: var(--color-error-text); background: var(--color-error-bg); }
+.badge-exclusao { color: var(--color-error-text); background: var(--color-error-bg); }
 .badge-deferida { color: var(--color-success); background: var(--color-success-bg); }
 .badge-indeferida { color: var(--color-error-text); background: var(--color-error-bg); }
 

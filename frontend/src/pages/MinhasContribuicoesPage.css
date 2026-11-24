@@ -23,3 +23,6 @@
 @media (max-width: 680px) {
   .my-contributions-page { padding: var(--spacing-xl) var(--spacing-md) var(--spacing-2xl); }
 }
+/* Moderação: badges lado a lado e linha de dados (disciplina, autor, data). */
+.moderation-card__badges { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+.my-contribution-card > p.moderation-card__meta { color: var(--color-text-muted); font-size: 13px; }

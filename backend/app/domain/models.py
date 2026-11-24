@@ -109,6 +109,10 @@ class Contribuicao(SQLModel, table=True):
     justificativa_moderacao: str | None = None
     criado_em: datetime = Field(default_factory=agora_utc)
     atualizado_em: datetime = Field(default_factory=agora_utc)
+    # Pedido do autor para excluir uma contribuição já publicada (migration 0006).
+    exclusao_solicitada_em: datetime | None = None
+    motivo_exclusao: str | None = None
 
-    # Só para leitura do nome da disciplina nas respostas da API; não muda o banco.
+    # Só para leitura dos nomes nas respostas da API; não muda o banco.
     disciplina: Disciplina | None = Relationship()
+    autor: Usuario | None = Relationship()

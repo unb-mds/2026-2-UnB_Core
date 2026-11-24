@@ -40,7 +40,10 @@ function ContributionCard({ contribution, onUpdated, onNavigate }) {
     <article className="my-contribution-card">
       <div className="my-contribution-card__heading">
         <span className="badge badge-category">{contribution.tipo ? rotuloTipo(contribution.tipo) : 'Contribuição'}</span>
-        <StatusBadge status={contribution.estado || contribution.status || 'pendente'} />
+        <span className="moderation-card__badges">
+          {contribution.exclusao_solicitada_em && <span className="badge badge-exclusao">Exclusão solicitada</span>}
+          <StatusBadge status={contribution.estado || contribution.status || 'pendente'} />
+        </span>
       </div>
       <h2>{contribution.titulo || 'Contribuição sem título'}</h2>
       <dl className="my-contribution-card__metadata">

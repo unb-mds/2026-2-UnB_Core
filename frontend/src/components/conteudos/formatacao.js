@@ -30,3 +30,11 @@ export function rotuloDisciplinaDoConteudo(item) {
   }
   return item?.disciplina || 'Não informada'
 }
+
+// Começo de um texto longo, para cards e listas. Links viram uma frase curta.
+export function trecho(texto, tamanho = 220) {
+  const valor = String(texto || '').trim()
+  if (!valor) return ''
+  if (ehLink(valor)) return 'Link para um material externo.'
+  return valor.length > tamanho ? `${valor.slice(0, tamanho).trimEnd()}…` : valor
+}

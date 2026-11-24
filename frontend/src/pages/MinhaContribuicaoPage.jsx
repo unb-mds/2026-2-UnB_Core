@@ -10,6 +10,7 @@ import ConteudoCorpo, { TextoOuLink } from '../components/conteudos/ConteudoCorp
 import EditarContribuicaoForm from '../components/contribuicoes/EditarContribuicaoForm'
 import { formatarData, rotuloDisciplinaDoConteudo, rotuloTipo } from '../components/conteudos/formatacao'
 import '../components/conteudos/conteudos.css'
+import './ContribuicaoPage.css'
 import './MinhasContribuicoesPage.css'
 
 // O que cada estado significa para quem enviou, na coluna lateral.
@@ -29,6 +30,9 @@ function MinhaContribuicaoPage({ contribuicaoId, onNavigate }) {
   const [isLoading, setIsLoading] = useState(isAuthenticated)
   const [isEditing, setIsEditing] = useState(false)
   const [savedMessage, setSavedMessage] = useState('')
+  const [isRequestingDeletion, setIsRequestingDeletion] = useState(false)
+  const [deleteReason, setDeleteReason] = useState('')
+  const [isWorking, setIsWorking] = useState(false)
 
   useEffect(() => {
     if (!isAuthenticated) return undefined
@@ -58,8 +62,54 @@ function MinhaContribuicaoPage({ contribuicaoId, onNavigate }) {
     onNavigate?.('/minhas-contribuicoes')
   }
 
+  async function excluir() {
+    const confirmado = window.confirm('Excluir esta contribuição? Não dá para desfazer.')
+    if (!confirmado) return
+    setIsWorking(true)
+    setError(null)
+    try {
+      await api.delete(`/contribuicoes/minhas/${contribuicaoId}`)
+      onNavigate?.('/minhas-contribuicoes')
+    } catch (requestError) {
+      setError(requestError instanceof ApiError ? requestError.message : 'Não foi possível excluir a contribuição.')
+      setIsWorking(false)
+    }
+  }
+
+  async function pedirExclusao(event) {
+    event.preventDefault()
+    if (deleteReason.trim().length < 5) {
+      setError('Conte o motivo do pedido (pelo menos 5 caracteres).')
+      return
+    }
+    setIsWorking(true)
+    setError(null)
+    try {
+      setContribution(await api.post(`/contribuicoes/minhas/${contribuicaoId}/pedido-exclusao`, { motivo: deleteReason.trim() }))
+      setIsRequestingDeletion(false)
+      setDeleteReason('')
+    } catch (requestError) {
+      setError(requestError instanceof ApiError ? requestError.message : 'Não foi possível enviar o pedido.')
+    } finally {
+      setIsWorking(false)
+    }
+  }
+
+  async function cancelarPedido() {
+    setIsWorking(true)
+    setError(null)
+    try {
+      setContribution(await api.delete(`/contribuicoes/minhas/${contribuicaoId}/pedido-exclusao`))
+    } catch (requestError) {
+      setError(requestError instanceof ApiError ? requestError.message : 'Não foi possível cancelar o pedido.')
+    } finally {
+      setIsWorking(false)
+    }
+  }
+
   const justificativa = contribution?.justificativa_moderacao
   const hasPublishedVersion = Boolean(contribution?.conteudo_id)
+  const exclusaoSolicitada = Boolean(contribution?.exclusao_solicitada_em)
 
   const situacao = SITUACOES[contribution?.estado]
 
@@ -139,6 +189,13 @@ function MinhaContribuicaoPage({ contribuicaoId, onNavigate }) {
             </div>
           )}
           {savedMessage && <p className="content-page__feedback" role="status">{savedMessage}</p>}
+          {exclusaoSolicitada && (
+            <div className="my-contribution-card__feedback">
+              <strong>Pedido de exclusão enviado em {formatarData(contribution.exclusao_solicitada_em, 'medium')}</strong>
+              <p>Motivo: {contribution.motivo_exclusao}</p>
+              <p>A moderação vai analisar. Até lá, o conteúdo continua publicado.</p>
+            </div>
+          )}
 
           {isEditing ? (
             <EditarContribuicaoForm
@@ -162,7 +219,30 @@ function MinhaContribuicaoPage({ contribuicaoId, onNavigate }) {
                     {contribution.estado === 'aprovada' ? 'Ver publicação' : 'Ver versão publicada'}
                   </Button>
                 )}
+                {/* Não publicada: exclui na hora. Publicada: pede à moderação. */}
+                {!hasPublishedVersion && (
+                  <Button variant="danger" onClick={excluir} disabled={isWorking}>Excluir contribuição</Button>
+                )}
+                {hasPublishedVersion && !exclusaoSolicitada && !isRequestingDeletion && (
+                  <Button variant="danger" onClick={() => setIsRequestingDeletion(true)} disabled={isWorking}>Pedir exclusão</Button>
+                )}
+                {exclusaoSolicitada && (
+                  <Button variant="outline" onClick={cancelarPedido} disabled={isWorking}>Cancelar pedido de exclusão</Button>
+                )}
               </div>
+              {isRequestingDeletion && (
+                <form className="contribution-form" onSubmit={pedirExclusao} noValidate>
+                  <label>
+                    Por que você quer excluir esta contribuição? <span aria-hidden="true">*</span>
+                    <textarea value={deleteReason} onChange={(event) => setDeleteReason(event.target.value)} rows="3" maxLength={500} />
+                  </label>
+                  <p className="my-contribution-card__note">Como ela já está publicada, a moderação analisa o pedido antes de excluir.</p>
+                  <span className="my-contribution-card__actions">
+                    <Button variant="outline" onClick={() => setIsRequestingDeletion(false)} disabled={isWorking}>Cancelar</Button>
+                    <Button type="submit" disabled={isWorking}>Enviar pedido</Button>
+                  </span>
+                </form>
+              )}
               {hasPublishedVersion && ['pendente', 'ajustes'].includes(contribution.estado) && (
                 <p className="my-contribution-card__note">
                   A versão aprovada antes continua publicada até a moderação aprovar esta edição.
