@@ -5,7 +5,8 @@ import EmptyState from '../components/ui/EmptyState'
 import Button from '../components/ui/Button'
 import PageLayout, { AsideCard } from '../components/layout/PageLayout'
 import ConteudoDetalhe from '../components/conteudos/ConteudoDetalhe'
-import { rotuloTipo } from '../components/conteudos/formatacao'
+import { classeTipo, rotuloTipo } from '../components/conteudos/formatacao'
+import { IconeTipo } from '../components/conteudos/TipoBadge'
 import '../components/conteudos/conteudos.css'
 
 const QUANTIDADE_RELACIONADOS = 5
@@ -97,7 +98,7 @@ function ConteudoPage({ conteudoId, onNavigate }) {
             {related.map((item) => (
               <li key={item.id}>
                 <a href={`/conteudos/${item.id}`} onClick={goTo(`/conteudos/${item.id}`)}>{item.titulo}</a>
-                <span>{rotuloTipo(item.tipo)}</span>
+                <span className={`content-aside__type ${classeTipo(item.tipo)}`.trim()}><IconeTipo tipo={item.tipo} />{rotuloTipo(item.tipo)}</span>
               </li>
             ))}
           </ul>

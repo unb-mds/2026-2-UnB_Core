@@ -1,13 +1,15 @@
 import Button from '../components/ui/Button'
 import PageLayout, { AsideCard } from '../components/layout/PageLayout'
+import TipoBadge from '../components/conteudos/TipoBadge'
+import { classeTipo } from '../components/conteudos/formatacao'
 import './GuiaContribuicaoPage.css'
 
 const contentTypes = [
-  { label: 'Resumo', description: 'Síntese de um assunto específico da disciplina.' },
-  { label: 'Dica de estudo', description: 'Estratégias que ajudaram você a estudar ou se organizar.' },
-  { label: 'Dificuldade comum', description: 'Pontos em que a turma costuma travar, e como superar.' },
-  { label: 'Implementação', description: 'Código ou exemplo prático relacionado ao conteúdo.' },
-  { label: 'Link útil', description: 'Material externo (vídeo, artigo, ferramenta) que ajudou você.' },
+  { tipo: 'resumo', description: 'Síntese de um assunto específico da disciplina.' },
+  { tipo: 'dica', description: 'Estratégias que ajudaram você a estudar ou se organizar.' },
+  { tipo: 'dificuldade', description: 'Pontos em que a turma costuma travar, e como superar.' },
+  { tipo: 'implementacao', description: 'Código ou exemplo prático relacionado ao conteúdo.' },
+  { tipo: 'link', description: 'Material externo (vídeo, artigo, ferramenta) que ajudou você.' },
 ]
 
 const steps = [
@@ -40,8 +42,8 @@ function GuiaContribuicaoPage({ onNavigate }) {
         <h2 id="guide-types-title">O que você pode contribuir</h2>
         <div className="guide-types">
           {contentTypes.map((type) => (
-            <div className="guide-types__item" key={type.label}>
-              <span className="tag tag-outline">{type.label}</span>
+            <div className={`guide-types__item ${classeTipo(type.tipo)}`} key={type.tipo}>
+              <TipoBadge tipo={type.tipo} />
               <p>{type.description}</p>
             </div>
           ))}

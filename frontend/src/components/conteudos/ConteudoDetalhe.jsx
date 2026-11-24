@@ -1,5 +1,6 @@
 import ConteudoCorpo, { TextoOuLink } from './ConteudoCorpo'
-import { formatarData, rotuloDisciplinaDoConteudo, rotuloTipo } from './formatacao'
+import { formatarData, rotuloDisciplinaDoConteudo } from './formatacao'
+import TipoBadge from './TipoBadge'
 import './conteudos.css'
 
 /**
@@ -19,7 +20,7 @@ function ConteudoDetalhe({ content, onClose, onOpenPage, isPage = false }) {
     <Container className="content-detail" aria-labelledby={isPage ? undefined : 'content-detail-title'} aria-label={isPage ? content.titulo : undefined}>
       <div className="content-detail__heading">
         <div>
-          <span className="badge badge-category">{rotuloTipo(content.tipo)}</span>
+          <TipoBadge tipo={content.tipo} />
           {!isPage && <h2 id="content-detail-title">{content.titulo}</h2>}
         </div>
         {!isPage && onClose && (

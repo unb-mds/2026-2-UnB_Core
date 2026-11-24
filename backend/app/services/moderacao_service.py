@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 from sqlmodel import Session, select
 
 from backend.app.api.errors import ErroValidacao, NaoEncontrado
-from backend.app.api.schemas.moderacao import DecisaoModeracao
+from backend.app.api.schemas.moderacao import DecisaoModeracao, FiltroModeracao
 from backend.app.domain import (
     ConteudoAcademico,
     Contribuicao,
@@ -22,18 +22,79 @@ TRANSICOES_VALIDAS = {
 }
 
 
-def listar_para_moderacao(session: Session) -> list[Contribuicao]:
-    return list(
-        session.exec(
-            select(Contribuicao)
-            .where(
-                Contribuicao.estado.in_(
-                    [EstadoContribuicao.PENDENTE, EstadoContribuicao.AJUSTES]
-                )
+def listar_para_moderacao(
+    session: Session,
+    filtro: FiltroModeracao = FiltroModeracao.REVISAR,
+) -> list[Contribuicao]:
+    """Contribuições para a moderação.
+
+    - revisar (padrão): pendentes e com ajustes solicitados, das mais antigas para as mais novas;
+    - exclusao: com pedido de exclusão do autor, na ordem dos pedidos;
+    - todas: todas, das atualizadas mais recentemente para as mais antigas.
+    """
+    consulta = select(Contribuicao)
+    if filtro == FiltroModeracao.EXCLUSAO:
+        consulta = consulta.where(Contribuicao.exclusao_solicitada_em.is_not(None)).order_by(
+            Contribuicao.exclusao_solicitada_em
+        )
+    elif filtro == FiltroModeracao.TODAS:
+        consulta = consulta.order_by(Contribuicao.atualizado_em.desc(), Contribuicao.id.desc())
+    else:
+        consulta = consulta.where(
+            Contribuicao.estado.in_(
+                [EstadoContribuicao.PENDENTE, EstadoContribuicao.AJUSTES]
             )
-            .order_by(Contribuicao.criado_em)
+        ).order_by(Contribuicao.criado_em)
+    return list(session.exec(consulta).all())
+
+
+def obter_para_moderacao(session: Session, contribuicao_id: int) -> Contribuicao:
+    contribuicao = session.get(Contribuicao, contribuicao_id)
+    if contribuicao is None:
+        raise NaoEncontrado("A contribuição não foi encontrada.")
+    return contribuicao
+
+
+def excluir_contribuicao(session: Session, contribuicao_id: int) -> None:
+    """Exclui de vez a contribuição e, se houver, o conteúdo publicado a partir dela."""
+    contribuicao = obter_para_moderacao(session, contribuicao_id)
+    conteudo_id = contribuicao.conteudo_id
+    session.delete(contribuicao)
+    if conteudo_id is not None:
+        # Outras contribuições que propunham mudanças nesse conteúdo perdem o vínculo.
+        outras = session.exec(
+            select(Contribuicao).where(Contribuicao.conteudo_id == conteudo_id)
         ).all()
+        for outra in outras:
+            if outra.id != contribuicao_id:
+                outra.conteudo_id = None
+                session.add(outra)
+        conteudo = session.get(ConteudoAcademico, conteudo_id)
+        if conteudo is not None:
+            session.flush()
+            session.delete(conteudo)
+    session.commit()
+
+
+def recusar_exclusao(
+    session: Session,
+    contribuicao_id: int,
+    justificativa: str,
+) -> Contribuicao:
+    """Mantém a contribuição publicada e responde ao autor com a justificativa."""
+    contribuicao = obter_para_moderacao(session, contribuicao_id)
+    if contribuicao.exclusao_solicitada_em is None:
+        raise ErroValidacao("Esta contribuição não tem pedido de exclusão.")
+    contribuicao.exclusao_solicitada_em = None
+    contribuicao.motivo_exclusao = None
+    contribuicao.justificativa_moderacao = (
+        f"Pedido de exclusão recusado: {justificativa.strip()}"
     )
+    contribuicao.atualizado_em = datetime.now(timezone.utc)
+    session.add(contribuicao)
+    session.commit()
+    session.refresh(contribuicao)
+    return contribuicao
 
 
 def decidir_contribuicao(

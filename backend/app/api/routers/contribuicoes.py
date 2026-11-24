@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, Response, status
 from sqlmodel import Session
 
 from backend.app.api.dependencies import obter_usuario_atual
@@ -8,17 +8,62 @@ from backend.app.api.schemas.contribuicao import (
     ContribuicaoCriacao,
     ContribuicaoPublica,
     ContribuicaoUpdate,
+    PedidoExclusao,
 )
 from backend.app.db import get_session
 from backend.app.domain import Usuario
 from backend.app.domain.models import EstadoContribuicao
 from backend.app.services.contribuicao_service import (
+    cancelar_pedido_exclusao,
     criar_contribuicao,
+    excluir_contribuicao_do_usuario,
     listar_contribuicoes_do_usuario,
     obter_contribuicao_do_usuario,
+    solicitar_exclusao,
 )
 
 router = APIRouter(prefix="/contribuicoes", tags=["contribuições"])
+
+
+@router.delete(
+    "/minhas/{id_contribuicao}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    response_class=Response,
+)
+def excluir_minha_contribuicao(
+    id_contribuicao: int,
+    session: Session = Depends(get_session),
+    usuario: Usuario = Depends(obter_usuario_atual),
+):
+    """Exclui na hora uma contribuição própria que ainda não foi publicada."""
+    excluir_contribuicao_do_usuario(session, usuario, id_contribuicao)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@router.post(
+    "/minhas/{id_contribuicao}/pedido-exclusao",
+    response_model=ContribuicaoPublica,
+)
+def pedir_exclusao(
+    id_contribuicao: int,
+    dados: PedidoExclusao,
+    session: Session = Depends(get_session),
+    usuario: Usuario = Depends(obter_usuario_atual),
+):
+    """Pede à moderação a exclusão de uma contribuição própria já publicada."""
+    return solicitar_exclusao(session, usuario, id_contribuicao, dados.motivo)
+
+
+@router.delete(
+    "/minhas/{id_contribuicao}/pedido-exclusao",
+    response_model=ContribuicaoPublica,
+)
+def cancelar_exclusao(
+    id_contribuicao: int,
+    session: Session = Depends(get_session),
+    usuario: Usuario = Depends(obter_usuario_atual),
+):
+    return cancelar_pedido_exclusao(session, usuario, id_contribuicao)
 
 
 @router.post(

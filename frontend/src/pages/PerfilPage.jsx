@@ -86,7 +86,8 @@ function PerfilPage({ onNavigate }) {
     try {
       const updatedUser = await api.patch('/auth/me', payload)
       // Mantém o token e troca só os dados do usuário guardados na sessão.
-      login({ ...session, usuario: updatedUser })
+      // Com a senha nova definida, deixa de pedir a troca da senha temporária.
+      login({ ...session, usuario: updatedUser, trocar_senha: changesPassword ? false : session?.trocar_senha })
       setForm(emptyForm(updatedUser))
       setSuccess('Seus dados foram atualizados.')
     } catch (requestError) {
@@ -124,6 +125,12 @@ function PerfilPage({ onNavigate }) {
       aside={aside}
       asideLabel="Resumo da conta"
     >
+      {session?.trocar_senha && (
+        <div className="my-contribution-card__feedback" role="alert">
+          <strong>Você entrou com uma senha temporária</strong>
+          <p>Escolha uma senha nova agora. No campo “Senha atual”, use a senha temporária que você recebeu.</p>
+        </div>
+      )}
       <form className="contribution-form" onSubmit={submit} noValidate>
         <div className="contribution-form__grid">
           <label>Nome<input value={form.nome} onChange={updateField('nome')} maxLength="120" autoComplete="name" required /></label>

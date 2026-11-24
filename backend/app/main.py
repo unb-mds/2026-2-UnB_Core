@@ -9,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.exc import SQLAlchemyError
 from sqlmodel import Session, select
 
-from backend.app.api.errors import configurar_tratamento_de_erros
+from backend.app.api.errors import configurar_tratamento_de_erros, tratar_erro_interno
 from backend.app.api.router import api_router
 from backend.app.crawler.crawlerCurriculo import coletar_e_sincronizar_curriculos
 from backend.app.crawler.crawlerDisciplina import coletar_e_salvar_disciplinas
@@ -109,6 +109,18 @@ def criar_aplicacao() -> FastAPI:
         lifespan=lifespan,
     )
     configurar_tratamento_de_erros(aplicacao)
+
+    # Erros não tratados viram a resposta 500 padrão aqui dentro. Este middleware
+    # é registrado antes do CORS, que fica por fora e acrescenta os cabeçalhos também
+    # nessa resposta. Sem isso o navegador bloqueia o 500 e o front mostra
+    # "Não foi possível conectar à API" em vez da mensagem de erro.
+    @aplicacao.middleware("http")
+    async def converter_erros_internos(request, call_next):
+        try:
+            return await call_next(request)
+        except Exception as erro:  # noqa: BLE001 - qualquer erro inesperado
+            return await tratar_erro_interno(request, erro)
+
     aplicacao.add_middleware(
         CORSMiddleware,
         allow_origins=["http://127.0.0.1:5173", "http://localhost:5173"],

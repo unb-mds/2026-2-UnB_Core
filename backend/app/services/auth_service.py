@@ -92,6 +92,8 @@ def atualizar_perfil(
         usuario.email = email
     if nova_senha:
         usuario.senha_hash = hash_senha(nova_senha)
+        # A senha temporária foi trocada por uma escolhida pela pessoa.
+        usuario.trocar_senha = False
     usuario.atualizado_em = datetime.now(timezone.utc)
     session.add(usuario)
     session.commit()
@@ -103,3 +105,28 @@ def criar_sessao(usuario: Usuario) -> str:
     if usuario.id is None:
         raise ErroValidacao("Não foi possível criar a sessão da conta.")
     return criar_access_token(usuario.id, usuario.perfil.value)
+
+
+MENSAGEM_RECUPERACAO = (
+    "Se o e-mail estiver cadastrado, a equipe do UnB Core vai definir uma senha "
+    "temporária e entrar em contato com você."
+)
+
+
+def solicitar_recuperacao_senha(
+    session: Session,
+    email: str,
+    contato: str | None = None,
+) -> str:
+    """Registra o pedido de nova senha para os administradores verem.
+
+    A resposta é sempre a mesma, exista a conta ou não, para não revelar quem
+    tem cadastro.
+    """
+    usuario = session.exec(select(Usuario).where(Usuario.email == email.lower())).first()
+    if usuario is not None and usuario.ativo:
+        usuario.recuperacao_senha_solicitada_em = datetime.now(timezone.utc)
+        usuario.contato_recuperacao = (contato or "").strip() or None
+        session.add(usuario)
+        session.commit()
+    return MENSAGEM_RECUPERACAO

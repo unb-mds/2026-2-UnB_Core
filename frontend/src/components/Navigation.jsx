@@ -35,7 +35,7 @@ function Navigation({ onNavigate }) {
     { chave: 'contribuir', href: '/contribuicao', texto: 'Contribuir' },
     { chave: 'minhas', href: '/minhas-contribuicoes', texto: 'Minhas contribuições' },
     { chave: 'moderacao', href: '/moderacao', texto: 'Moderação', visivel: podeModerar },
-    { chave: 'usuarios', href: '/admin/usuarios', texto: 'Usuários', visivel: user?.perfil === 'administrador' },
+    { chave: 'usuarios', href: '/admin/usuarios', texto: 'Usuários', visivel: podeModerar },
     { chave: 'perfil', href: '/perfil', texto: 'Meu perfil', visivel: isAuthenticated },
   ].filter((link) => link.visivel !== false)
 

@@ -23,3 +23,10 @@
 @media (max-width: 680px) {
   .my-contributions-page { padding: var(--spacing-xl) var(--spacing-md) var(--spacing-2xl); }
 }
+/* Moderação: badges lado a lado e linha de dados (disciplina, autor, data). */
+.moderation-card__badges { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+.my-contribution-card > p.moderation-card__meta { color: var(--color-text-muted); font-size: 13px; }
+
+/* Gestão de usuários: filtros sem moldura extra e seletor de perfil do tamanho dos botões. */
+.users-filters { margin-bottom: var(--spacing-md); padding: var(--spacing-md) var(--spacing-lg); }
+.users-role select { min-height: 40px; padding: 6px 10px; border: 1px solid var(--color-field-border); border-radius: var(--radius-sm); color: var(--color-text); background: var(--color-field); font: inherit; font-size: 13px; }

@@ -184,6 +184,14 @@ Exemplo com o usuário padrão `postgres` e o banco `unbcore`:
 > `.env` não é carregado). Se a `DATABASE_URL` não for definida, a API usa um
 > SQLite local (`unb_core.db`) em vez do PostgreSQL.
 
+O login vale 30 minutos. Depois disso o site pede para entrar de novo. Para
+uma apresentação, aumente a duração antes de iniciar a API (o valor é em
+minutos):
+
+```powershell
+$env:ACCESS_TOKEN_EXPIRE_MINUTES = "480"
+```
+
 Para não precisar repetir o comando a cada terminal novo, salve a variável no
 seu usuário do Windows (vale para terminais abertos depois do comando):
 
@@ -344,6 +352,25 @@ npm run build
 npm run lint
 npm test
 ```
+
+#### Testes do frontend
+
+Os testes usam [Vitest](https://vitest.dev/) e [Testing Library](https://testing-library.com/docs/react-testing-library/intro/).
+Cada teste desenha a tela num navegador simulado (jsdom), age como a pessoa usando
+a página (clica, digita) e confere o que aparece. A API é simulada com `vi.mock`,
+então os testes não precisam do backend nem do banco rodando.
+
+```powershell
+npm test                              # roda todos os testes uma vez
+npx vitest                            # roda de novo a cada arquivo salvo
+npx vitest run src/pages/LoginPage    # só os testes de uma tela
+```
+
+Os arquivos de teste ficam ao lado do código, com o nome `NomeDoArquivo.test.jsx`
+(por exemplo, [ContribuicaoPage.test.jsx](frontend/src/pages/ContribuicaoPage.test.jsx)).
+Procure os elementos pelo que a pessoa vê, como o texto do botão ou o rótulo do campo,
+e não por classes CSS: assim o teste só quebra quando o comportamento muda.
+
 ### Backups do banco de dados
 
 O serviço `db-backup` cria um backup completo do PostgreSQL ao iniciar e depois

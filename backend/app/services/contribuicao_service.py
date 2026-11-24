@@ -1,3 +1,5 @@
+from datetime import datetime, timezone
+
 from sqlmodel import Session, select
 
 from backend.app.api.errors import ErroValidacao, NaoEncontrado
@@ -59,4 +61,53 @@ def obter_contribuicao_do_usuario(
     if contribuicao.autor_id != usuario.id:
         raise ErroValidacao("Usuario não tem permissão de editar essa contribuição")
 
+    return contribuicao
+
+
+def excluir_contribuicao_do_usuario(
+    session: Session,
+    usuario: Usuario,
+    id_contribuicao: int,
+) -> None:
+    """O autor exclui na hora uma contribuição que ainda não foi publicada."""
+    contribuicao = obter_contribuicao_do_usuario(session, usuario, id_contribuicao)
+    if contribuicao.conteudo_id is not None:
+        raise ErroValidacao(
+            "Esta contribuição já está publicada. Peça a exclusão à moderação."
+        )
+    session.delete(contribuicao)
+    session.commit()
+
+
+def solicitar_exclusao(
+    session: Session,
+    usuario: Usuario,
+    id_contribuicao: int,
+    motivo: str,
+) -> Contribuicao:
+    """O autor pede à moderação a exclusão de uma contribuição já publicada."""
+    contribuicao = obter_contribuicao_do_usuario(session, usuario, id_contribuicao)
+    if contribuicao.conteudo_id is None:
+        raise ErroValidacao(
+            "Esta contribuição ainda não foi publicada: você pode excluí-la diretamente."
+        )
+    contribuicao.exclusao_solicitada_em = datetime.now(timezone.utc)
+    contribuicao.motivo_exclusao = motivo.strip()
+    session.add(contribuicao)
+    session.commit()
+    session.refresh(contribuicao)
+    return contribuicao
+
+
+def cancelar_pedido_exclusao(
+    session: Session,
+    usuario: Usuario,
+    id_contribuicao: int,
+) -> Contribuicao:
+    contribuicao = obter_contribuicao_do_usuario(session, usuario, id_contribuicao)
+    contribuicao.exclusao_solicitada_em = None
+    contribuicao.motivo_exclusao = None
+    session.add(contribuicao)
+    session.commit()
+    session.refresh(contribuicao)
     return contribuicao

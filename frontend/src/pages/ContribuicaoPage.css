@@ -7,6 +7,11 @@
 .contribution-form__type-options { display: flex; flex-wrap: wrap; gap: 8px; }
 .tag-toggle { padding: 6px 12px; border: 1px solid var(--color-field-border); border-radius: var(--radius-full); color: var(--color-text-muted); background: var(--color-field); font: inherit; font-size: 12px; font-weight: 500; cursor: pointer; }
 .tag-toggle--active { border-color: var(--color-primary); color: var(--color-on-primary); background: var(--color-primary); }
+/* Opções de tipo de conteúdo: o ícone tem a cor do tipo; a escolhida ganha o fundo do tipo e uma borda mais grossa. */
+.tag-toggle--tipo { display: inline-flex; align-items: center; gap: 6px; }
+.tag-toggle--tipo .icone-tipo { color: var(--tipo-line, var(--color-primary)); }
+.tag-toggle--tipo.tag-toggle--active { border-color: var(--tipo-line, var(--color-primary)); color: var(--tipo-text, var(--color-primary)); background: var(--tipo-bg, var(--color-bg-soft)); box-shadow: inset 0 0 0 1px var(--tipo-line, var(--color-primary)); font-weight: 600; }
+.tag-toggle--tipo.tag-toggle--active .icone-tipo { color: currentColor; }
 .contribution-form { display: grid; gap: var(--spacing-lg); padding: var(--spacing-xl); border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-surface); box-shadow: var(--shadow-sm); }
 /* align-items: end mantém os campos lado a lado alinhados mesmo quando um rótulo quebra em duas linhas. */
 .contribution-form__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: end; gap: var(--spacing-md); }

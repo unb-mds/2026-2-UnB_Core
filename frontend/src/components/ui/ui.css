@@ -31,6 +31,9 @@
 .btn-primary { padding: 8px 14px; color: var(--color-on-primary); background: var(--color-primary); }
 .btn-outline { padding: 7px 13px; border: 1px solid var(--color-primary); color: var(--color-primary); background: transparent; }
 .btn-accent { padding: 8px 14px; color: var(--color-on-accent); background: var(--color-accent); }
+/* Ações destrutivas (excluir): contorno vermelho, para não ser clicado por engano. */
+.btn-danger { padding: 7px 13px; border: 1px solid var(--color-error); color: var(--color-error); background: transparent; }
+.btn-danger:hover { background: var(--color-error-bg); }
 .btn:hover { box-shadow: var(--shadow-md); }
 
 /* ---------- Badges ---------- */
@@ -43,12 +46,23 @@
 .badge-pendente, .badge-ajustes { color: var(--color-warning-text); background: var(--color-warning-bg); }
 .badge-aprovada { color: var(--color-success); background: var(--color-success-bg); }
 .badge-rejeitada { color: var(--color-error-text); background: var(--color-error-bg); }
+.badge-exclusao { color: var(--color-error-text); background: var(--color-error-bg); }
 .badge-deferida { color: var(--color-success); background: var(--color-success-bg); }
 .badge-indeferida { color: var(--color-error-text); background: var(--color-error-bg); }
 
-/* ---------- Tags secundárias (outline) ---------- */
-.tag { display: inline-flex; width: fit-content; padding: 2px 8px; border-radius: var(--radius-full); font-size: 10px; font-weight: 500; line-height: 1.4; }
-.tag-outline { color: var(--color-text-muted); border: 1px solid var(--color-border); }
+/* ---------- Tipos de conteúdo ----------
+   A classe tipo-<tipo> define as cores do tipo para o elemento e o que está dentro dele
+   (badge, faixa do card, opção do formulário). Tipo desconhecido usa o azul do site. */
+.tipo-resumo { --tipo-text: var(--type-resumo-text); --tipo-bg: var(--type-resumo-bg); --tipo-line: var(--type-resumo-line); }
+.tipo-dica { --tipo-text: var(--type-dica-text); --tipo-bg: var(--type-dica-bg); --tipo-line: var(--type-dica-line); }
+.tipo-dificuldade { --tipo-text: var(--type-dificuldade-text); --tipo-bg: var(--type-dificuldade-bg); --tipo-line: var(--type-dificuldade-line); }
+.tipo-prova { --tipo-text: var(--type-prova-text); --tipo-bg: var(--type-prova-bg); --tipo-line: var(--type-prova-line); }
+.tipo-implementacao { --tipo-text: var(--type-implementacao-text); --tipo-bg: var(--type-implementacao-bg); --tipo-line: var(--type-implementacao-line); }
+.tipo-link { --tipo-text: var(--type-link-text); --tipo-bg: var(--type-link-bg); --tipo-line: var(--type-link-line); }
+/* O nome do tipo continua escrito: a cor e o ícone só ajudam a achar o tipo na lista. */
+.badge-tipo { align-items: center; gap: 5px; color: var(--tipo-text, var(--color-primary)); background: var(--tipo-bg, var(--color-bg-soft)); }
+.icone-tipo { flex: none; width: 13px; height: 13px; }
+
 
 /* ---------- Busca ---------- */
 .search-input { display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 16px; border: 1px solid var(--color-field-border); border-radius: var(--radius-full); background: var(--color-field); }
@@ -76,3 +90,5 @@
   .topbar__links a:not(.topbar__login) { display: none; }
   .site-footer { flex-direction: column; padding: 24px 16px; }
 }
+/* Texto só para leitores de tela (some da tela, continua acessível). */
+.visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }

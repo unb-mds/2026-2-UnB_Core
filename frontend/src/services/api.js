@@ -1,5 +1,8 @@
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api/v1'
 const SESSION_STORAGE_KEY = 'unb-core-session'
+// Disparado quando a API recusa o token da sessão (expirado ou inválido).
+export const EVENTO_SESSAO_EXPIRADA = 'unb-core:sessao-expirada'
+const MENSAGEM_SESSAO_EXPIRADA = 'Sua sessão expirou. Entre de novo para continuar.'
 
 export class ApiError extends Error {
   constructor(message, { code = 'ERRO_INTERNO', id = null, status = 0, details = null } = {}) {
@@ -101,6 +104,14 @@ export async function request(path, options = {}) {
 
   if (!response.ok) {
     const error = getErrorPayload(payload)
+
+    // O token enviado foi recusado: a sessão guardada não vale mais.
+    if (response.status === 401 && token) {
+      clearSession()
+      window.dispatchEvent(new Event(EVENTO_SESSAO_EXPIRADA))
+      throw new ApiError(MENSAGEM_SESSAO_EXPIRADA, { ...error, status: response.status })
+    }
+
     throw new ApiError(error.message, {
       ...error,
       status: response.status,

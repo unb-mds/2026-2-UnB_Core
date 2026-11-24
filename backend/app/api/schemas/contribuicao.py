@@ -38,6 +38,13 @@ class ContribuicaoPublica(BaseModel):
         default=None,
         validation_alias=AliasPath("disciplina", "nome"),
     )
+    # Pedido de exclusão de uma contribuição já publicada, se houver.
+    exclusao_solicitada_em: datetime | None = None
+    motivo_exclusao: str | None = None
+
+
+class PedidoExclusao(BaseModel):
+    motivo: str = Field(min_length=5, max_length=500)
 
 
 class ContribuicaoUpdate(BaseModel):

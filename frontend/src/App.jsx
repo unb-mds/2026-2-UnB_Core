@@ -12,6 +12,7 @@ import AdminUsuariosPage from './pages/AdminUsuariosPage'
 import AdminPage from './pages/AdminPage'
 import ConteudoPage from './pages/ConteudoPage'
 import MinhaContribuicaoPage from './pages/MinhaContribuicaoPage'
+import ModeracaoContribuicaoPage from './pages/ModeracaoContribuicaoPage'
 
 function getRoute() {
   const path = window.location.pathname.replace(/\/$/, '') || '/'
@@ -68,6 +69,11 @@ function getRoute() {
   const myContributionMatch = path.match(/^\/minhas-contribuicoes\/(\d+)$/)
   if (myContributionMatch) {
     return { name: 'my-contribution', id: myContributionMatch[1] }
+  }
+
+  const moderationMatch = path.match(/^\/moderacao\/contribuicoes\/(\d+)$/)
+  if (moderationMatch) {
+    return { name: 'moderation-detail', id: moderationMatch[1] }
   }
 
   return { name: 'knowledge' }
@@ -142,6 +148,10 @@ function App() {
 
   if (route.name === 'my-contribution') {
     return <MinhaContribuicaoPage key={route.id} contribuicaoId={route.id} onNavigate={navigate} />
+  }
+
+  if (route.name === 'moderation-detail') {
+    return <ModeracaoContribuicaoPage key={route.id} contribuicaoId={route.id} onNavigate={navigate} />
   }
 
   return <ConhecimentoPage onNavigate={navigate} onContribute={() => navigate('/contribuicao')} />
