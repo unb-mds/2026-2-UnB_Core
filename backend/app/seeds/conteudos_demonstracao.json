@@ -1,0 +1,232 @@
+{
+  "descricao": "Conteúdos de demonstração do UnB Core, escritos com apoio de IA para apresentar a plataforma. Não substituem o material oficial das disciplinas.",
+  "autor": {
+    "nome": "Equipe UnB Core (demonstração)",
+    "email": "demonstracao@unbcore.local"
+  },
+  "origem_padrao": "Conteúdo de demonstração escrito com apoio de IA para apresentar a plataforma. Confira com o material da disciplina.",
+  "conteudos": [
+    {
+      "disciplina": "MAT0025",
+      "tipo": "resumo",
+      "titulo": "Limites: as ideias que você precisa dominar",
+      "corpo": "O limite descreve de qual valor f(x) se aproxima quando x se aproxima de a, mesmo que f não esteja definida em a.\n\n- Limites laterais: o limite existe se, e somente se, os limites pela esquerda e pela direita existem e são iguais.\n- Propriedades: o limite da soma, do produto e do quociente (com denominador de limite diferente de zero) é a soma, o produto e o quociente dos limites.\n- Indeterminação 0/0: fatore, racionalize ou simplifique antes de substituir. Exemplo: lim x→2 (x² − 4)/(x − 2) = lim x→2 (x + 2) = 4.\n- Limites fundamentais: lim x→0 sen(x)/x = 1 e lim x→∞ (1 + 1/x)^x = e.\n- Continuidade: f é contínua em a quando f(a) existe e lim x→a f(x) = f(a).\n- Teorema do Confronto: se g(x) ≤ f(x) ≤ h(x) perto de a e g e h tendem ao mesmo L, então f também tende a L."
+    },
+    {
+      "disciplina": "MAT0025",
+      "tipo": "dica",
+      "titulo": "Como estudar derivadas sem decorar tudo",
+      "corpo": "- Comece pela definição: f'(a) = lim h→0 [f(a + h) − f(a)] / h. Ela explica por que as regras funcionam.\n- Monte a sua própria tabela de derivadas básicas (potência, exponencial, logaritmo, seno e cosseno) e refaça de memória até acertar todas.\n- Na regra da cadeia, separe a função de fora e a de dentro: d/dx sen(x²) = cos(x²) · 2x.\n- Confira o resultado derivando de outro jeito ou testando um valor numérico.\n- Faça poucos exercícios por dia, mas todos os dias: derivada se aprende com prática."
+    },
+    {
+      "disciplina": "MAT0026",
+      "tipo": "resumo",
+      "titulo": "Séries: os testes de convergência mais usados",
+      "corpo": "- Teste do termo geral: se lim aₙ ≠ 0, a série Σaₙ diverge. Se o limite for 0, o teste não conclui nada.\n- Série geométrica: Σ a·rⁿ converge para a/(1 − r) quando |r| < 1 e diverge quando |r| ≥ 1.\n- Série-p: Σ 1/nᵖ converge se p > 1 e diverge se p ≤ 1 (a série harmônica, p = 1, diverge).\n- Comparação: se 0 ≤ aₙ ≤ bₙ e Σbₙ converge, então Σaₙ converge. Se Σaₙ diverge, Σbₙ também diverge.\n- Teste da razão: com L = lim |aₙ₊₁ / aₙ|, a série converge absolutamente se L < 1, diverge se L > 1 e o teste é inconclusivo se L = 1.\n- Séries alternadas (Leibniz): se bₙ é decrescente e tende a 0, Σ(−1)ⁿ bₙ converge."
+    },
+    {
+      "disciplina": "MAT0026",
+      "tipo": "dificuldade",
+      "titulo": "Qual teste de convergência usar primeiro?",
+      "corpo": "Uma ordem que costuma funcionar:\n\n1. O termo geral tende a zero? Se não tende, a série diverge e você terminou.\n2. A série é geométrica ou uma série-p? Use a regra direta.\n3. Há fatoriais ou potências n-ésimas (n!, 2ⁿ, nⁿ)? Tente o teste da razão.\n4. O termo parece uma fração de polinômios? Compare com uma série-p usando os termos de maior grau.\n5. Os sinais se alternam? Use o teste de Leibniz e depois verifique se a convergência é absoluta.\n\nO erro mais comum é concluir que a série converge só porque o termo geral tende a zero."
+    },
+    {
+      "disciplina": "CIC0004",
+      "tipo": "dica",
+      "titulo": "Primeiros passos para não travar em APC",
+      "corpo": "- Antes de programar, resolva o problema à mão com uma entrada pequena e anote os passos.\n- Escreva o programa em partes e teste cada parte antes de seguir.\n- Use teste de mesa: uma tabela com o valor de cada variável a cada linha executada.\n- Leia a mensagem de erro até o fim. Ela costuma dizer a linha e o motivo.\n- Teste casos extremos: lista vazia, um único elemento, números negativos, valores repetidos.\n- Pratique em juízes online, como o beecrowd, para se acostumar com o formato de entrada e saída."
+    },
+    {
+      "disciplina": "CIC0004",
+      "tipo": "implementacao",
+      "titulo": "Busca binária comentada em Python",
+      "corpo": "A busca binária encontra um valor numa lista ORDENADA dividindo o intervalo de busca pela metade a cada passo. O custo é O(log n).\n\ndef busca_binaria(lista, alvo):\n    inicio, fim = 0, len(lista) - 1\n    while inicio <= fim:\n        meio = (inicio + fim) // 2\n        if lista[meio] == alvo:\n            return meio          # achou: devolve a posição\n        if lista[meio] < alvo:\n            inicio = meio + 1    # o alvo está na metade da direita\n        else:\n            fim = meio - 1       # o alvo está na metade da esquerda\n    return -1                    # não está na lista\n\nprint(busca_binaria([2, 5, 8, 12, 16, 23], 12))  # 3\n\nErro comum: usar a busca binária numa lista que não está ordenada."
+    },
+    {
+      "disciplina": "CIC0004",
+      "tipo": "link",
+      "titulo": "Tutorial oficial de Python em português",
+      "corpo": "https://docs.python.org/pt-br/3/tutorial/index.html",
+      "origem": "Documentação oficial da linguagem Python, indicada como conteúdo de demonstração."
+    },
+    {
+      "disciplina": "IFD0171",
+      "tipo": "resumo",
+      "titulo": "Leis de Newton e o diagrama de corpo livre",
+      "corpo": "- 1ª lei (inércia): sem força resultante, o corpo mantém velocidade constante (inclusive zero).\n- 2ª lei: a força resultante é igual à massa vezes a aceleração, ΣF = m·a. Vale em cada eixo separadamente.\n- 3ª lei: as forças de ação e reação têm mesmo módulo, sentidos opostos e atuam em corpos DIFERENTES.\n\nRoteiro para resolver problemas:\n1. Desenhe o diagrama de corpo livre de cada corpo, só com as forças que agem sobre ele.\n2. Escolha os eixos (no plano inclinado, um eixo paralelo à rampa facilita).\n3. Escreva ΣFx = m·ax e ΣFy = m·ay.\n4. Atrito: estático até μe·N; cinético igual a μc·N, contra o movimento relativo.\n5. Confira as unidades e se o resultado faz sentido físico."
+    },
+    {
+      "disciplina": "IFD0171",
+      "tipo": "dificuldade",
+      "titulo": "Sinais e referencial em cinemática",
+      "corpo": "Boa parte dos erros em cinemática vem dos sinais, não das fórmulas.\n\n- Escolha um sentido positivo no começo e não mude no meio da resolução.\n- No lançamento vertical com o eixo para cima, a aceleração é −g durante todo o movimento, inclusive no ponto mais alto.\n- No ponto mais alto, a velocidade vertical é zero, mas a aceleração não.\n- Deslocamento é diferente de distância percorrida: num ida e volta, o deslocamento pode ser zero.\n- No lançamento oblíquo, trate os eixos separadamente: no horizontal o movimento é uniforme; no vertical, uniformemente variado."
+    },
+    {
+      "disciplina": "FGA0157",
+      "tipo": "resumo",
+      "titulo": "Distribuições de probabilidade que mais aparecem",
+      "corpo": "Discretas:\n- Bernoulli(p): um único ensaio com sucesso ou fracasso. Média p.\n- Binomial(n, p): número de sucessos em n ensaios independentes. Média n·p e variância n·p·(1 − p).\n- Poisson(λ): número de eventos num intervalo. Média e variância iguais a λ.\n\nContínuas:\n- Uniforme(a, b): todos os valores do intervalo são igualmente prováveis. Média (a + b)/2.\n- Exponencial(λ): tempo até o próximo evento. Média 1/λ e propriedade de falta de memória.\n- Normal(μ, σ²): padronize com Z = (X − μ)/σ e use a tabela da normal padrão. Cerca de 68%, 95% e 99,7% dos valores ficam a 1, 2 e 3 desvios-padrão da média."
+    },
+    {
+      "disciplina": "FGA0157",
+      "tipo": "dica",
+      "titulo": "Probabilidade condicional e Bayes sem confusão",
+      "corpo": "- Definição: P(A | B) = P(A ∩ B) / P(B). Leia como 'a probabilidade de A, sabendo que B aconteceu'.\n- Teorema de Bayes: P(A | B) = P(B | A) · P(A) / P(B).\n- Desenhe uma árvore de probabilidades: cada ramo multiplica, e os caminhos que levam ao mesmo resultado se somam.\n\nExemplo: uma doença atinge 1% da população. O teste detecta 99% dos doentes e dá falso positivo em 5% dos saudáveis.\nP(doente | positivo) = (0,99 · 0,01) / (0,99 · 0,01 + 0,05 · 0,99) = 0,0099 / 0,0594 ≈ 16,7%.\nMesmo com um teste bom, a maioria dos positivos é falsa quando a doença é rara."
+    },
+    {
+      "disciplina": "MAT0031",
+      "tipo": "resumo",
+      "titulo": "Sistemas lineares e escalonamento",
+      "corpo": "- Escalonamento (eliminação de Gauss): use operações elementares nas linhas (trocar linhas, multiplicar por constante não nula, somar múltiplo de outra linha) até chegar à forma escalonada.\n- Posto: número de linhas não nulas depois de escalonar.\n- Classificação (Rouché–Capelli), com n incógnitas:\n  - posto(A) = posto([A | b]) = n: sistema possível e determinado (uma solução);\n  - posto(A) = posto([A | b]) < n: possível e indeterminado (infinitas soluções);\n  - posto(A) < posto([A | b]): impossível (nenhuma solução).\n- Para matriz quadrada, det(A) ≠ 0 garante solução única.\n- Sistema homogêneo (b = 0) sempre tem a solução trivial; tem outras soluções se det(A) = 0."
+    },
+    {
+      "disciplina": "FGA0163",
+      "tipo": "dica",
+      "titulo": "Como organizar trabalhos em equipe no primeiro semestre",
+      "corpo": "- Combine na primeira reunião: canal de comunicação, prazo interno (antes do prazo real) e quem revisa o quê.\n- Divida o trabalho em tarefas pequenas, cada uma com um responsável e uma data.\n- Use um quadro simples (A fazer, Fazendo, Feito) para todos verem o andamento.\n- Registre decisões numa ata curta: data, presentes, o que foi decidido e próximos passos.\n- Guarde os arquivos num lugar compartilhado e com versões, e não em anexos de mensagem.\n- Ensaie a apresentação pelo menos uma vez com o tempo cronometrado."
+    },
+    {
+      "disciplina": "FGA0168",
+      "tipo": "dica",
+      "titulo": "Modelagem 3D: planeje antes de desenhar",
+      "corpo": "- Antes de abrir o software, faça um esboço à mão da peça e identifique a forma base e os recursos (furos, rasgos, arredondamentos).\n- Comece pelo esboço mais simples e use restrições geométricas (paralelo, concêntrico, igual) antes das cotas.\n- Deixe cada esboço totalmente definido: isso evita que a peça se deforme quando você muda uma medida.\n- Pense na intenção de projeto: cote a partir das referências que importam para a montagem.\n- Dê nomes às operações na árvore do modelo. Fica muito mais fácil editar depois.\n- Deixe arredondamentos e chanfros para o final."
+    },
+    {
+      "disciplina": "FGA0158",
+      "tipo": "resumo",
+      "titulo": "Os quatro pilares da orientação a objetos",
+      "corpo": "- Abstração: representar só o que importa do objeto para o problema.\n- Encapsulamento: esconder o estado interno e expor operações. Atributos privados e métodos públicos protegem as regras da classe.\n- Herança: uma classe reaproveita e especializa outra (relação 'é um').\n- Polimorfismo: objetos de classes diferentes respondem à mesma mensagem cada um do seu jeito.\n\nBoas práticas:\n- Prefira composição ('tem um') à herança quando a relação 'é um' não for verdadeira.\n- Uma classe deve ter uma única responsabilidade.\n- Programe para interfaces: dependa de abstrações, não de classes concretas."
+    },
+    {
+      "disciplina": "FGA0158",
+      "tipo": "implementacao",
+      "titulo": "Polimorfismo com classe abstrata em Python",
+      "corpo": "from abc import ABC, abstractmethod\nimport math\n\nclass Forma(ABC):\n    @abstractmethod\n    def area(self) -> float:\n        ...\n\nclass Retangulo(Forma):\n    def __init__(self, largura, altura):\n        self.largura = largura\n        self.altura = altura\n\n    def area(self):\n        return self.largura * self.altura\n\nclass Circulo(Forma):\n    def __init__(self, raio):\n        self.raio = raio\n\n    def area(self):\n        return math.pi * self.raio ** 2\n\nformas = [Retangulo(2, 3), Circulo(1)]\nfor forma in formas:\n    print(type(forma).__name__, round(forma.area(), 2))\n\nO laço não precisa saber o tipo de cada forma: cada uma sabe calcular a própria área. Tentar instanciar Forma diretamente gera erro, porque ela é abstrata."
+    },
+    {
+      "disciplina": "FGA0003",
+      "tipo": "resumo",
+      "titulo": "As fases de um compilador",
+      "corpo": "1. Análise léxica: lê os caracteres do código-fonte e agrupa em tokens (identificadores, números, palavras reservadas, operadores). Ferramentas como Flex geram o analisador a partir de expressões regulares.\n2. Análise sintática: verifica se a sequência de tokens segue a gramática e monta a árvore sintática. Ferramentas como Bison geram o analisador a partir da gramática.\n3. Análise semântica: checa tipos, declarações e escopos.\n4. Geração de código intermediário: traduz a árvore para uma representação mais simples, como código de três endereços.\n5. Otimização: melhora o código intermediário sem mudar o resultado.\n6. Geração de código final: produz o código de máquina ou assembly.\n\nA tabela de símbolos acompanha todas as fases, guardando informações sobre identificadores."
+    },
+    {
+      "disciplina": "FGA0003",
+      "tipo": "dificuldade",
+      "titulo": "Recursão à esquerda e gramáticas ambíguas",
+      "corpo": "Analisadores descendentes (LL) entram em laço infinito com recursão à esquerda, como em E → E + T | T.\n\nPara eliminar a recursão direta, troque\nA → A α | β\npor\nA → β A'\nA' → α A' | ε\n\nNo exemplo: E → T E' e E' → + T E' | ε.\n\nAmbiguidade é outro problema: uma gramática é ambígua quando a mesma frase tem duas árvores sintáticas. Em expressões, resolva criando um não terminal por nível de precedência (soma num nível, multiplicação no nível de baixo) ou declarando precedência e associatividade na ferramenta (por exemplo, %left no Bison)."
+    },
+    {
+      "disciplina": "FGA0030",
+      "tipo": "resumo",
+      "titulo": "Árvores AVL e rotações",
+      "corpo": "Uma árvore AVL é uma árvore binária de busca em que, para todo nó, a diferença entre as alturas das subárvores esquerda e direita (fator de balanceamento) é −1, 0 ou 1. Isso garante busca, inserção e remoção em O(log n).\n\nDepois de inserir ou remover, suba até a raiz recalculando os fatores. Se algum nó ficar com fator ±2, aplique a rotação:\n- Desbalanceamento esquerda-esquerda: rotação simples à direita.\n- Direita-direita: rotação simples à esquerda.\n- Esquerda-direita: rotação à esquerda no filho, depois à direita no nó.\n- Direita-esquerda: rotação à direita no filho, depois à esquerda no nó.\n\nDica: desenhe a árvore antes e depois de cada rotação e confira se a ordem dos valores (percurso em ordem) continua a mesma."
+    },
+    {
+      "disciplina": "FGA0030",
+      "tipo": "implementacao",
+      "titulo": "Tabela hash com encadeamento em C",
+      "corpo": "#include <stdlib.h>\n#include <string.h>\n\n#define TAMANHO 101  /* um número primo ajuda a espalhar as chaves */\n\ntypedef struct No {\n    char *chave;\n    int valor;\n    struct No *proximo;\n} No;\n\nstatic No *tabela[TAMANHO];\n\nstatic unsigned long hash(const char *s) {\n    unsigned long h = 5381;  /* função djb2 */\n    int c;\n    while ((c = (unsigned char)*s++))\n        h = h * 33 + c;\n    return h % TAMANHO;\n}\n\nvoid inserir(const char *chave, int valor) {\n    unsigned long i = hash(chave);\n    for (No *no = tabela[i]; no; no = no->proximo) {\n        if (strcmp(no->chave, chave) == 0) {\n            no->valor = valor;  /* chave já existe: atualiza */\n            return;\n        }\n    }\n    No *novo = malloc(sizeof(No));\n    novo->chave = malloc(strlen(chave) + 1);\n    strcpy(novo->chave, chave);\n    novo->valor = valor;\n    novo->proximo = tabela[i];  /* insere no início da lista */\n    tabela[i] = novo;\n}\n\nint buscar(const char *chave, int *valor) {\n    for (No *no = tabela[hash(chave)]; no; no = no->proximo) {\n        if (strcmp(no->chave, chave) == 0) {\n            *valor = no->valor;\n            return 1;\n        }\n    }\n    return 0;\n}\n\nEm código de verdade, confira se o malloc devolveu NULL e libere a memória no final."
+    },
+    {
+      "disciplina": "FGA0137",
+      "tipo": "resumo",
+      "titulo": "Normalização: 1FN, 2FN e 3FN",
+      "corpo": "- 1ª forma normal: todos os atributos são atômicos. Nada de listas ou grupos repetidos numa mesma coluna.\n- 2ª forma normal: está na 1FN e nenhum atributo não chave depende de só uma parte de uma chave composta (sem dependência parcial).\n- 3ª forma normal: está na 2FN e nenhum atributo não chave depende de outro atributo não chave (sem dependência transitiva).\n\nExemplo: numa tabela Matricula(matricula_aluno, codigo_disciplina, nome_aluno, nota), o nome_aluno depende só da matrícula do aluno. Isso viola a 2FN. A solução é mover nome_aluno para uma tabela Aluno.\n\nNormalizar reduz redundância e anomalias de inserção, atualização e remoção."
+    },
+    {
+      "disciplina": "FGA0137",
+      "tipo": "implementacao",
+      "titulo": "Consultas SQL com JOIN e GROUP BY",
+      "corpo": "Considere as tabelas aluno(id, nome), disciplina(id, nome) e matricula(aluno_id, disciplina_id, nota).\n\n-- Alunos e as disciplinas em que estão matriculados\nSELECT a.nome AS aluno, d.nome AS disciplina, m.nota\nFROM matricula m\nJOIN aluno a ON a.id = m.aluno_id\nJOIN disciplina d ON d.id = m.disciplina_id;\n\n-- Média de notas por disciplina, só com turmas de pelo menos 5 alunos\nSELECT d.nome, AVG(m.nota) AS media, COUNT(*) AS alunos\nFROM matricula m\nJOIN disciplina d ON d.id = m.disciplina_id\nGROUP BY d.nome\nHAVING COUNT(*) >= 5\nORDER BY media DESC;\n\nLembre: WHERE filtra linhas antes do agrupamento; HAVING filtra os grupos depois."
+    },
+    {
+      "disciplina": "FGA0138",
+      "tipo": "resumo",
+      "titulo": "Scrum em uma página",
+      "corpo": "Papéis (o Time Scrum):\n- Product Owner: maximiza o valor do produto e ordena o Product Backlog.\n- Scrum Master: ajuda o time a entender e aplicar o Scrum e remove impedimentos.\n- Desenvolvedores: criam o incremento de cada Sprint.\n\nEventos:\n- Sprint: ciclo de até um mês que contém todos os outros eventos.\n- Sprint Planning: define o objetivo da Sprint e o que será feito.\n- Daily Scrum: reunião de até 15 minutos para inspecionar o progresso.\n- Sprint Review: apresenta o incremento e adapta o Product Backlog.\n- Sprint Retrospective: o time avalia o próprio processo e planeja melhorias.\n\nArtefatos e compromissos:\n- Product Backlog (Meta do Produto), Sprint Backlog (Meta da Sprint) e Incremento (Definição de Pronto)."
+    },
+    {
+      "disciplina": "FGA0138",
+      "tipo": "link",
+      "titulo": "Guia oficial do Scrum",
+      "corpo": "https://scrumguides.org",
+      "origem": "Site oficial dos guias do Scrum, com versões em vários idiomas. Indicado como conteúdo de demonstração."
+    },
+    {
+      "disciplina": "FGA0138",
+      "tipo": "dica",
+      "titulo": "Git em equipe sem conflitos",
+      "corpo": "- Uma branch por tarefa, com nome descritivo (por exemplo, fix/menu-pagina-ativa).\n- Antes de começar, atualize a main: git switch main e git pull.\n- Commits pequenos, com mensagens que dizem o que mudou e por quê.\n- Abra o pull request cedo e peça revisão de outra pessoa do time.\n- Se aparecer conflito, resolva com calma no editor, rode os testes e só então finalize o merge.\n- Nunca guarde senhas ou chaves no repositório: use variáveis de ambiente."
+    },
+    {
+      "disciplina": "FGA0172",
+      "tipo": "resumo",
+      "titulo": "Técnicas de elicitação de requisitos",
+      "corpo": "- Entrevistas: boas para entender o contexto. Prepare perguntas abertas e registre as respostas.\n- Questionários: alcançam muitas pessoas, mas com respostas menos detalhadas.\n- Observação: acompanhar o usuário na rotina revela necessidades que ele não verbaliza.\n- Workshops e brainstorming: reúnem interessados para gerar e priorizar ideias.\n- Prototipação: um protótipo de tela ajuda o usuário a validar o que precisa.\n- Análise de documentos: normas, formulários e sistemas atuais.\n\nRequisitos funcionais dizem o que o sistema faz; não funcionais dizem como (desempenho, segurança, usabilidade).\n\nHistória de usuário: 'Como <papel>, quero <objetivo>, para <benefício>', sempre com critérios de aceitação. Boas histórias seguem o INVEST: independentes, negociáveis, valiosas, estimáveis, pequenas e testáveis."
+    },
+    {
+      "disciplina": "FGA0238",
+      "tipo": "resumo",
+      "titulo": "Níveis e técnicas de teste de software",
+      "corpo": "Níveis (pirâmide de testes):\n- Unidade: testa uma função ou classe isolada. São muitos, rápidos e baratos.\n- Integração: testa partes do sistema funcionando juntas, como API e banco de dados.\n- Ponta a ponta: simula o usuário no sistema completo. São poucos, mais lentos e mais frágeis.\n\nTécnicas de caixa-preta (sem olhar o código):\n- Partição de equivalência: divida as entradas em grupos que devem se comportar igual e teste um valor de cada.\n- Análise de valor-limite: teste nas bordas dos intervalos (mínimo, mínimo − 1, máximo, máximo + 1).\n\nCaixa-branca (olhando o código):\n- Cobertura de comandos e de decisões: cada linha e cada desvio (if/else) executado pelo menos uma vez.\n\nUm bom teste tem uma razão para falhar e uma mensagem clara quando falha."
+    },
+    {
+      "disciplina": "FGA0170",
+      "tipo": "resumo",
+      "titulo": "Processos, threads e escalonamento",
+      "corpo": "- Processo: programa em execução, com espaço de memória próprio.\n- Thread: fluxo de execução dentro de um processo. Threads do mesmo processo compartilham a memória.\n\nAlgoritmos de escalonamento:\n- FCFS (primeiro a chegar, primeiro a ser atendido): simples, mas processos longos atrasam os curtos.\n- SJF (menor job primeiro): minimiza o tempo médio de espera, mas exige conhecer a duração.\n- Round Robin: cada processo recebe uma fatia de tempo (quantum) em rodízio. Bom para sistemas interativos.\n- Prioridade: atende primeiro os mais prioritários. Use envelhecimento (aging) para evitar inanição.\n\nDeadlock exige quatro condições ao mesmo tempo (Coffman): exclusão mútua, posse e espera, não preempção e espera circular. Quebrar qualquer uma delas evita o deadlock."
+    },
+    {
+      "disciplina": "FGA0073",
+      "tipo": "resumo",
+      "titulo": "Álgebra booleana e mapas de Karnaugh",
+      "corpo": "Identidades úteis:\n- A + 0 = A, A · 1 = A, A + A' = 1, A · A' = 0\n- Absorção: A + A·B = A\n- De Morgan: (A·B)' = A' + B' e (A + B)' = A' · B'\n\nMapa de Karnaugh:\n1. Organize as linhas e colunas em código Gray (00, 01, 11, 10).\n2. Marque os 1s da tabela-verdade.\n3. Agrupe os 1s em retângulos com 1, 2, 4, 8... células.\n4. Faça os maiores grupos possíveis; eles podem se sobrepor e atravessar as bordas do mapa.\n5. Cada grupo vira um termo: mantenha só as variáveis que não mudam dentro dele.\n\nCondições 'não importa' (X) podem entrar num grupo quando ajudam a aumentá-lo."
+    },
+    {
+      "disciplina": "ENE0172",
+      "tipo": "resumo",
+      "titulo": "Leis de Kirchhoff e análise nodal",
+      "corpo": "- Lei das Correntes (LCK): a soma das correntes que entram num nó é igual à soma das que saem.\n- Lei das Tensões (LTK): a soma algébrica das tensões numa malha fechada é zero.\n- Lei de Ohm: V = R · I.\n\nAnálise nodal, passo a passo:\n1. Escolha um nó de referência (terra), de preferência o que tem mais ligações.\n2. Nomeie as tensões dos outros nós (V1, V2...).\n3. Em cada nó, escreva a LCK com as correntes em função das tensões: I = (Va − Vb)/R.\n4. Resolva o sistema de equações.\n\nFontes de tensão entre dois nós sem referência formam um supernó: escreva uma LCK para o conjunto e uma equação com a tensão da fonte."
+    },
+    {
+      "disciplina": "FGA0102",
+      "tipo": "resumo",
+      "titulo": "Sistemas lineares invariantes no tempo e convolução",
+      "corpo": "- Linear: vale a superposição. A resposta a a·x1 + b·x2 é a·y1 + b·y2.\n- Invariante no tempo: atrasar a entrada só atrasa a saída, sem mudar sua forma.\n\nUm sistema LIT fica totalmente descrito pela resposta ao impulso h(t). A saída para qualquer entrada é a convolução:\ny(t) = (x * h)(t) = ∫ x(τ) · h(t − τ) dτ\n\nNo domínio da frequência, a convolução vira multiplicação: Y(ω) = X(ω) · H(ω), e o mesmo vale para a transformada de Laplace. Por isso é comum resolver no domínio da frequência e voltar para o tempo.\n\nEstabilidade BIBO: um sistema LIT é estável quando ∫ |h(t)| dt é finita."
+    },
+    {
+      "disciplina": "ENM0140",
+      "tipo": "resumo",
+      "titulo": "Equação de Bernoulli: quando dá para usar",
+      "corpo": "Ao longo de uma linha de corrente:\np + ½ · ρ · v² + ρ · g · z = constante\n\nVale quando o escoamento é:\n- permanente (não muda com o tempo);\n- incompressível (densidade constante);\n- sem atrito (viscosidade desprezível);\n- sem bombas, turbinas ou troca de calor entre os pontos.\n\nCombine com a conservação da massa (continuidade): A1 · v1 = A2 · v2. Num estreitamento, a velocidade aumenta e a pressão cai (efeito Venturi).\n\nSe houver perdas por atrito ou máquinas no trecho, use a equação da energia com os termos de perda de carga e de altura da bomba ou turbina."
+    },
+    {
+      "disciplina": "ENM0068",
+      "tipo": "resumo",
+      "titulo": "Primeira lei da termodinâmica: sistema e volume de controle",
+      "corpo": "Sistema fechado (massa fixa), com W positivo quando o sistema realiza trabalho:\nΔU = Q − W\n\nVolume de controle em regime permanente, com uma entrada (1) e uma saída (2):\nQ̇ − Ẇ = ṁ · [(h2 − h1) + (v2² − v1²)/2 + g · (z2 − z1)]\n\nAplicações típicas:\n- Bocal e difusor: sem trabalho; troca entre entalpia e energia cinética.\n- Turbina e compressor: geralmente adiabáticos; o trabalho vem da variação de entalpia.\n- Válvula de estrangulamento: entalpia constante (h1 = h2).\n- Trocador de calor: sem trabalho; o calor é a variação de entalpia de cada fluido.\n\nConfira sempre a convenção de sinais usada pelo livro ou pelo professor."
+    },
+    {
+      "disciplina": "MAT0031",
+      "tipo": "dica",
+      "titulo": "Visualize vetores antes de fazer contas",
+      "estado": "pendente",
+      "corpo": "- Desenhe os vetores no plano antes de calcular: soma é colocar um vetor na ponta do outro.\n- Combinação linear é 'chegar a um ponto usando só passos nas direções dos vetores'.\n- Dois vetores no plano são linearmente independentes quando não estão na mesma reta.\n- O determinante de uma matriz 2×2 é a área (com sinal) do paralelogramo formado pelas colunas. Determinante zero quer dizer que os vetores estão alinhados."
+    },
+    {
+      "disciplina": "FGA0170",
+      "tipo": "dificuldade",
+      "titulo": "Mutex e semáforo: qual a diferença?",
+      "estado": "pendente",
+      "corpo": "- Mutex: garante que só uma thread por vez entra na seção crítica. Quem trava é quem destrava.\n- Semáforo: um contador. wait (P) decrementa e bloqueia quando chega a zero; signal (V) incrementa e acorda uma thread em espera.\n- Semáforo binário parece um mutex, mas qualquer thread pode dar signal.\n- Semáforo contador controla o acesso a N recursos iguais, como as vagas de um buffer no problema produtor-consumidor.\n\nErro comum: esquecer de liberar o mutex num caminho de erro, o que trava as outras threads."
+    },
+    {
+      "disciplina": "IFD0171",
+      "tipo": "link",
+      "titulo": "Simulações interativas de Física (PhET)",
+      "estado": "pendente",
+      "corpo": "https://phet.colorado.edu/pt_BR/",
+      "origem": "Simulações gratuitas da Universidade do Colorado, indicadas como conteúdo de demonstração."
+    }
+  ]
+}
