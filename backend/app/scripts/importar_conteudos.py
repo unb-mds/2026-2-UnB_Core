@@ -24,6 +24,7 @@ import secrets
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from email_validator import EmailNotValidError, validate_email
 from sqlmodel import Session, select
 
 from backend.app.domain import (
@@ -61,6 +62,11 @@ def validar_dados(dados: dict) -> None:
     autor = dados.get("autor") or {}
     if not autor.get("nome") or not autor.get("email"):
         raise ValueError("O arquivo precisa de autor.nome e autor.email.")
+    try:
+        # Mesma regra do cadastro: domínios reservados como .local são recusados.
+        validate_email(autor["email"], check_deliverability=False)
+    except EmailNotValidError as erro:
+        raise ValueError(f"E-mail do autor inválido: {erro}") from erro
 
     tipos = {tipo.value for tipo in TipoConteudo}
     vistos: set[tuple[str, str]] = set()
@@ -82,8 +88,23 @@ def validar_dados(dados: dict) -> None:
         vistos.add(chave)
 
 
-def obter_autor(session: Session, nome: str, email: str) -> Usuario:
+def obter_autor(
+    session: Session,
+    nome: str,
+    email: str,
+    emails_antigos: list[str] | None = None,
+) -> Usuario:
     autor = session.exec(select(Usuario).where(Usuario.email == email.lower())).first()
+    if autor is None:
+        # Conta criada por uma versão anterior do arquivo, com outro e-mail:
+        # reaproveita e atualiza o e-mail, em vez de criar uma segunda conta.
+        for antigo in emails_antigos or []:
+            autor = session.exec(select(Usuario).where(Usuario.email == antigo.lower())).first()
+            if autor is not None:
+                autor.email = email.lower()
+                session.add(autor)
+                session.flush()
+                return autor
     if autor is None:
         autor = Usuario(
             nome=nome,
@@ -100,7 +121,12 @@ def obter_autor(session: Session, nome: str, email: str) -> Usuario:
 
 def importar(session: Session, dados: dict) -> Resultado:
     resultado = Resultado()
-    autor = obter_autor(session, dados["autor"]["nome"], dados["autor"]["email"])
+    autor = obter_autor(
+        session,
+        dados["autor"]["nome"],
+        dados["autor"]["email"],
+        dados["autor"].get("emails_antigos"),
+    )
     origem_padrao = dados.get("origem_padrao")
 
     for item in dados.get("conteudos") or []:

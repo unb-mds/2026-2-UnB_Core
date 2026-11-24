@@ -2,7 +2,8 @@
   "descricao": "Conteúdos de demonstração do UnB Core, escritos com apoio de IA para apresentar a plataforma. Não substituem o material oficial das disciplinas.",
   "autor": {
     "nome": "Equipe UnB Core (demonstração)",
-    "email": "demonstracao@unbcore.local"
+    "email": "demonstracao@unbcore.example",
+    "emails_antigos": ["demonstracao@unbcore.local"]
   },
   "origem_padrao": "Conteúdo de demonstração escrito com apoio de IA para apresentar a plataforma. Confira com o material da disciplina.",
   "conteudos": [

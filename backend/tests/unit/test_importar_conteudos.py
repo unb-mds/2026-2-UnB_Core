@@ -38,7 +38,7 @@ def criar_sessao() -> Session:
 
 def dados_de_exemplo() -> dict:
     return {
-        "autor": {"nome": "Equipe (demonstração)", "email": "Demo@Exemplo.local"},
+        "autor": {"nome": "Equipe (demonstração)", "email": "Demo@Exemplo.example"},
         "origem_padrao": "Conteúdo de demonstração.",
         "conteudos": [
             {"disciplina": "FGA0003", "tipo": "resumo", "titulo": "Fases", "corpo": "Texto"},
@@ -89,7 +89,7 @@ def test_autor_e_uma_conta_desativada() -> None:
     session.commit()
 
     autor = session.exec(select(Usuario)).one()
-    assert autor.email == "demo@exemplo.local"
+    assert autor.email == "demo@exemplo.example"
     assert autor.ativo is False
 
 
@@ -122,6 +122,28 @@ def test_validacao_recusa_itens_invalidos(alteracao, mensagem) -> None:
 
     with pytest.raises(ValueError, match=mensagem):
         validar_dados(dados)
+
+
+def test_validacao_recusa_email_de_dominio_reservado() -> None:
+    dados = dados_de_exemplo()
+    dados["autor"]["email"] = "demo@unbcore.local"
+
+    with pytest.raises(ValueError, match="E-mail do autor"):
+        validar_dados(dados)
+
+
+def test_reaproveita_a_conta_criada_com_email_antigo() -> None:
+    session = criar_sessao()
+    session.add(Usuario(nome="Equipe (demonstração)", email="demo@antigo.local", senha_hash="hash", ativo=False))
+    session.commit()
+    dados = dados_de_exemplo()
+    dados["autor"]["emails_antigos"] = ["demo@antigo.local"]
+
+    importar(session, dados)
+    session.commit()
+
+    autores = session.exec(select(Usuario)).all()
+    assert [autor.email for autor in autores] == ["demo@exemplo.example"]
 
 
 def test_arquivo_de_demonstracao_e_valido() -> None:
