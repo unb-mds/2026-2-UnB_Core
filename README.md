@@ -246,6 +246,25 @@ O valor precisa estar em maiúsculas. Saia e entre de novo na aplicação para
 que o novo perfil seja carregado. A partir daí, os outros moderadores e
 administradores podem ser criados pela página **Usuários**.
 
+#### Conteúdos de demonstração
+
+Para preencher a base de conhecimento (por exemplo, numa apresentação), importe
+os conteúdos de demonstração de `backend/app/seeds/conteudos_demonstracao.json`.
+Com a `DATABASE_URL` do banco desejado configurada:
+
+```powershell
+# Mostra o que seria importado, sem gravar nada
+.\.venv\Scripts\python.exe -m backend.app.scripts.importar_conteudos --simular
+
+# Importa
+.\.venv\Scripts\python.exe -m backend.app.scripts.importar_conteudos
+```
+
+- **O que é criado:** 33 conteúdos já publicados e 3 contribuições pendentes, para demonstrar a moderação.
+- **Disciplinas:** cada uma é encontrada pelo código (ex.: FGA0003), então o mesmo arquivo funciona em qualquer banco.
+- **Rodar de novo:** não duplica nada e nunca altera ou apaga o que já existe.
+- **Autoria:** os textos foram escritos com apoio de IA e aparecem com o autor "Equipe UnB Core (demonstração)". Veja [`docs/ai-usage.md`](docs/ai-usage.md).
+
 #### Problemas comuns
 
 - **Front mostra "Não foi possível conectar à API"**: confira se a API está
