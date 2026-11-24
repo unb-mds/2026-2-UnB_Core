@@ -17,7 +17,9 @@ class UsuarioPublico(BaseModel):
 
     id: int
     nome: str
-    email: EmailStr
+    # Resposta: o e-mail já foi validado na entrada. Revalidar aqui derrubaria a rota
+    # inteira por causa de um único cadastro antigo ou fora do padrão.
+    email: str
     perfil: str
     ativo: bool
 

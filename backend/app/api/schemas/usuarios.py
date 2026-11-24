@@ -22,7 +22,9 @@ class UsuarioAdminPublico(BaseModel):
 
     id: int
     nome: str
-    email: EmailStr
+    # Resposta: o e-mail já foi validado na entrada. Revalidar aqui derrubaria a lista
+    # inteira de usuários por causa de um único cadastro fora do padrão.
+    email: str
     perfil: PerfilUsuario
     ativo: bool
     criado_em: datetime
