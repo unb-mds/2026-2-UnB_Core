@@ -45,6 +45,11 @@ function AdminUsuariosPage({ onNavigate }) {
   const [novaSenha, setNovaSenha] = useState('')
   const [recarregar, setRecarregar] = useState(0)
 
+  // Sem sessão (por exemplo, depois que ela expira), leva ao login como as outras páginas protegidas.
+  useEffect(() => {
+    if (!isAuthenticated) onNavigate?.('/login')
+  }, [isAuthenticated, onNavigate])
+
   useEffect(() => {
     if (!canManage) return undefined
 

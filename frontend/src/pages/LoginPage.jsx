@@ -1,12 +1,16 @@
 import { useState } from 'react'
 import { api, ApiError } from '../services/api'
-import { login } from '../state/auth'
+import { consumirAvisoDeLogin, login } from '../state/auth'
 import AuthForm from '../components/auth/AuthForm'
 import './AuthPage.css'
+
+const AJUDA_SENHA = 'Peça a um administrador do UnB Core para definir uma senha temporária. Depois de entrar, troque a senha em Meu perfil.'
 
 function LoginPage({ onNavigate }) {
   const [error, setError] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  // Aviso vindo de outra tela (ex.: sessão expirada) ou a ajuda de "Esqueceu a senha?".
+  const [aviso, setAviso] = useState(() => consumirAvisoDeLogin())
 
   async function handleLogin(form) {
     setIsSubmitting(true)
@@ -34,7 +38,8 @@ function LoginPage({ onNavigate }) {
           <div className="auth-message"><span className="auth-dots" aria-hidden="true" />Olá,<br />Bem vindo!</div>
           <section className="auth-card" aria-labelledby="login-title">
             <h1 id="login-title">Login</h1>
-            <AuthForm mode="login" onSubmit={handleLogin} isSubmitting={isSubmitting} error={error} onForgotPassword={() => {}} />
+            {aviso && <p className="auth-card__notice" role="status">{aviso}</p>}
+            <AuthForm mode="login" onSubmit={handleLogin} isSubmitting={isSubmitting} error={error} onForgotPassword={() => setAviso(AJUDA_SENHA)} />
             <p className="auth-card__switch">Não tem conta ainda? <a href="/cadastro" onClick={(event) => { event.preventDefault(); onNavigate('/cadastro') }}>Crie agora</a></p>
           </section>
         </section>

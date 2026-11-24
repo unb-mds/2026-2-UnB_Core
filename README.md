@@ -184,6 +184,14 @@ Exemplo com o usuário padrão `postgres` e o banco `unbcore`:
 > `.env` não é carregado). Se a `DATABASE_URL` não for definida, a API usa um
 > SQLite local (`unb_core.db`) em vez do PostgreSQL.
 
+O login vale 30 minutos. Depois disso o site pede para entrar de novo. Para
+uma apresentação, aumente a duração antes de iniciar a API (o valor é em
+minutos):
+
+```powershell
+$env:ACCESS_TOKEN_EXPIRE_MINUTES = "480"
+```
+
 Para não precisar repetir o comando a cada terminal novo, salve a variável no
 seu usuário do Windows (vale para terminais abertos depois do comando):
 

@@ -11,7 +11,8 @@ class Settings:
         "dev-only-change-this-secret-key-32-bytes-minimum",
     )
     jwt_algorithm: str = "HS256"
-    access_token_expire_minutes: int = 30
+    # Duração do login (minutos). Para apresentações, aumente com a variável de ambiente.
+    access_token_expire_minutes: int = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "30"))
 
 
 settings = Settings()

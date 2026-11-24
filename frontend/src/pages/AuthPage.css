@@ -143,3 +143,6 @@
   .auth-layout--signup .auth-card { justify-self: center; padding: 36px 24px 30px; }
   .auth-card h1 { font-size: 38px; }
 }
+
+/* Avisos no cartão de login (sessão expirada, ajuda de senha). */
+.auth-card__notice { margin: -12px 0 20px; padding: 10px 12px; border-radius: 10px; color: var(--color-warning-text); background: var(--color-warning-bg); font-size: 14px; line-height: 1.5; }
