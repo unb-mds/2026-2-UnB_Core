@@ -50,8 +50,8 @@ def _garantir_admin_configurado() -> None:
 
 
 async def _carregar_dados_iniciais() -> None:
-    try:
-        with Session(engine) as session:
+    with Session(engine) as session:
+        try:
             curso_existente = session.exec(select(Curso.id).limit(1)).first()
             if curso_existente is None:
                 quantidade = await coletar_e_salvar_cursos(session)
@@ -59,7 +59,10 @@ async def _carregar_dados_iniciais() -> None:
                     "Carga inicial de cursos concluida: %s cursos.",
                     quantidade,
                 )
+        except (httpx.HTTPError, SQLAlchemyError, RuntimeError):
+            logger.exception("Falha na carga inicial dos cursos.")
 
+        try:
             disciplina_existente = session.exec(
                 select(Disciplina.id).limit(1)
             ).first()
@@ -69,13 +72,17 @@ async def _carregar_dados_iniciais() -> None:
                     "Carga inicial de disciplinas concluida: %s disciplinas.",
                     quantidade,
                 )
-                quantidade = await coletar_e_sincronizar_curriculos(session)
-                logger.info(
-                    "Estruturas curriculares do Gama aplicadas: %s disciplinas.",
-                    quantidade,
-                )
-    except (httpx.HTTPError, SQLAlchemyError, RuntimeError):
-        logger.exception("Falha na carga inicial dos dados academicos.")
+        except (httpx.HTTPError, SQLAlchemyError, RuntimeError):
+            logger.exception("Falha na carga inicial das disciplinas.")
+
+        try:
+            quantidade = await coletar_e_sincronizar_curriculos(session)
+            logger.info(
+                "Estruturas curriculares da UnB aplicadas: %s disciplinas.",
+                quantidade,
+            )
+        except (httpx.HTTPError, SQLAlchemyError, RuntimeError):
+            logger.exception("Falha na sincronizacao das estruturas curriculares.")
 
 
 @asynccontextmanager
