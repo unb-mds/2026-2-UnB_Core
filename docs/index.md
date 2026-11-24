@@ -1,15 +1,15 @@
 # UNB CORE
  
-Plataforma acadêmica colaborativa da Universidade de Brasília (UnB) para os cursos do campus do Gama (FCTE), com conteúdos organizados por curso e disciplina e contribuições submetidas à moderação.
+Plataforma acadêmica colaborativa da Universidade de Brasília (UnB), com conteúdos organizados por curso e disciplina e contribuições submetidas à moderação.
  
 1. **Base de conhecimento acadêmica** com resumos, dicas, dificuldades, provas, implementações e links.
-2. **Contribuições moderadas** enviadas por usuários autenticados e revisadas por moderadores ou administradores.
+
+
 Projeto desenvolvido para a disciplina de **Métodos de Desenvolvimento de Software (MDS) - 2026/2**, Universidade de Brasília.
 
 ## Status do projeto
 
-**Fase atual: consolidação final do MVP e preparação para a entrega.** O backend possui uma API funcional construída com FastAPI, com autenticação, rotas acadêmicas, contribuições, moderação e testes unitários e de integração. A integração com o frontend está em andamento, e o projeto já conta com PostgreSQL e fluxo de migrações com Alembic, além de atualizações nas bibliotecas e nas instruções de execução do frontend. A configuração Docker ainda está em estudo e implementação, sem entrega concluída até o momento.
- 
+**Fase atual: desenvolvimento e integração.** A integração do Backend e Frontend já está completa, bastando apenas o seu aperfeiçoamento. O backend possui uma API funcional construída com FastAPI, incluindo autenticação de usuários, cadastro, login e acesso às disciplinas e cursos utilizando um crawler com o sistema do SIGAA. O projeto continua em evolução, com novas funcionalidades, testes e melhorias de documentação sendo desenvolvidos nas sprints. 
 
 ## Integrantes
 
