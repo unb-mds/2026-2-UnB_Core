@@ -34,7 +34,7 @@ Projeto desenvolvido para a disciplina de **Métodos de Desenvolvimento de Softw
 
 **Fase atual: publicado para a apresentação de 25/11/2026.** O site está no ar em https://unb-core.vercel.app, com o front no Vercel, a API no Render e o banco no Neon (veja [Publicação](#publicação-vercel-render-e-neon)).
 
-- **Backend:** API em FastAPI com autenticação, cadastro, perfil, contribuições, moderação, gestão de usuários e recuperação de senha. Os cursos e as disciplinas da FCTE vêm de um crawler do SIGAA público.
+- **Backend:** API em FastAPI com autenticação, cadastro, perfil, contribuições, moderação, gestão de usuários e recuperação de senha. Os cursos e as disciplinas de graduação da UnB vêm de um crawler do SIGAA público.
 - **Frontend:** React com tema claro e escuro, cores e ícones por tipo de conteúdo e páginas próprias para cada conteúdo e contribuição.
 - **Testes:** testes de unidade e de integração do backend (pytest) e testes de componentes do frontend (Vitest e Testing Library).
  
@@ -79,7 +79,11 @@ Projeto desenvolvido para a disciplina de **Métodos de Desenvolvimento de Softw
 ## Documentação
 
 - [`docs/requisitos.md`](docs/requisitos.md) Visão geral, requisitos funcionais e não funcionais, entidades e critérios de sucesso.
-- [`docs/sprint`](docs/Sprint) Documentação Geral das Sprints.
+- [`specs/001-unb-core`](specs/001-unb-core) Especificação, plano, modelo de dados, contratos da API e tarefas.
+- [`docs/ai-usage.md`](docs/ai-usage.md) Declaração do uso de inteligência artificial no projeto.
+- [`docs/Sprint`](docs/Sprint) Documentação Geral das Sprints.
+- Qualidade: [testes do frontend](#testes-do-frontend), [testes do backend](#testes-do-backend), [teste de mutação](#teste-de-mutação-escore-de-mutação) e [teste de sabotagem](#teste-de-sabotagem-módulos-críticos).
+- [Publicação](#publicação-vercel-render-e-neon) Como o site é publicado no Vercel, no Render e no Neon.
 - `GitPage UNB Core:` https://unb-mds.github.io/2026-2-UnB_Core/
 - `Board no Miro com Documentações Gerais:` https://miro.com/app/board/uXjVHkk8Wek=/?share_link_id=144842983750
 - `Figma Storymap:` https://www.figma.com/board/qmgPv7RFMwdFjr0kqOzTag/Welcome-to-FigJam?node-id=1-2&t=QFJpQxSbXNEcukDx-1
@@ -90,7 +94,7 @@ Projeto desenvolvido para a disciplina de **Métodos de Desenvolvimento de Softw
 - **Back-end**: Python (FastAPI)
 - **Front-end**: JavaScript (React)
 - **Banco de dados**: PostgreSQL, com migrations Alembic
-- **Dados acadêmicos**: cursos e disciplinas coletados do SIGAA público (escopo: campus do Gama, FCTE)
+- **Dados acadêmicos**: cursos e disciplinas de graduação da UnB, coletados do SIGAA público
 - **Testes**: pytest (backend), Vitest e Testing Library (frontend)
 - **Publicação**: Vercel (site), Render (API) e Neon (banco)
  
@@ -102,6 +106,10 @@ Pré-requisitos:
 
 - Docker Desktop instalado e em execução.
 - PowerShell aberto na raiz do repositório.
+- Porta 5432 livre. Se o PostgreSQL também estiver instalado no Windows, ele já
+  usa essa porta e o banco do Docker não sobe: pare o serviço do PostgreSQL
+  (`Stop-Service postgresql-x64-18`, como administrador) ou rode o projeto sem
+  Docker, pelas seções [Backend](#backend) e [Frontend](#frontend).
 
 Configure as variáveis na mesma janela do PowerShell. Os valores do
 administrador são opcionais; quando informados, a conta é criada
@@ -225,13 +233,11 @@ python -m uvicorn backend.app.main:app --reload
 
 Na primeira execução com o banco vazio, a API coleta os cursos e as
 disciplinas do SIGAA em segundo plano (precisa de internet e pode levar alguns
-minutos). Em seguida, aplica a estrutura curricular de cada curso do Gama,
-para que cada curso mostre só as próprias disciplinas. Nas execuções seguintes
-a coleta não é repetida.
+minutos). Nas execuções seguintes a coleta não é repetida.
 
-Se o seu banco já tinha disciplinas antes dessa mudança (todos os cursos do
-Gama com as mesmas disciplinas), sincronize as estruturas curriculares uma vez,
-com a `DATABASE_URL` configurada:
+A cada início, a API também aplica a estrutura curricular de cada curso de
+graduação da UnB, para que cada curso mostre só as próprias disciplinas. Para
+sincronizar as estruturas sem reiniciar a API, com a `DATABASE_URL` configurada:
 
 ```powershell
 python -c "import asyncio; from sqlmodel import Session; from backend.app.db import engine; from backend.app.crawler.crawlerCurriculo import coletar_e_sincronizar_curriculos; print(asyncio.run(coletar_e_sincronizar_curriculos(Session(engine))))"
@@ -298,6 +304,21 @@ Com a `DATABASE_URL` do banco desejado configurada:
 - **`relação "usuario" já existe` ao rodar as migrations**: o banco foi criado
   antes do Alembic. Use um banco vazio ou faça backup e remova as tabelas
   antigas antes de migrar.
+
+#### Testes do backend
+
+Os testes usam [pytest](https://docs.pytest.org/). Os de integração chamam as
+rotas da API com um SQLite em memória, então não precisam do PostgreSQL nem da
+`DATABASE_URL`. Na raiz do repositório, com o ambiente virtual ativo:
+
+```powershell
+python -m pytest backend/tests/integration
+python -m pytest backend/tests/unit backend/tests/contract
+```
+
+Rode as pastas em comandos separados: `unit/` e `integration/` têm um arquivo
+com o mesmo nome (`test_errors.py`), e o pytest recusa os dois na mesma
+execução (`import file mismatch`).
  
 ### Frontend
 
@@ -333,23 +354,20 @@ npm ci
 npm run dev
 ```
 
-Se o `npm ci` ou o `npm install` falhar com `ERESOLVE` / `unable to resolve
-dependency tree` (conflito de peer dependencies), normalmente a pasta
-`node_modules` ainda é de uma versão antiga do projeto (por exemplo, Vite 7.1.7,
-que também gera os alertas de vulnerabilidade do `npm audit`). O projeto usa
-Vite 8; atualize a branch, apague as dependências antigas e instale de novo:
+O arquivo `frontend/.npmrc` liga o modo `legacy-peer-deps` do npm, com que o
+`package-lock.json` foi gerado. Sem ele, o `npm ci` falha dizendo que o
+`package.json` e o lock estão fora de sincronia. Ao adicionar uma biblioteca,
+rode o `npm install` dentro da pasta `frontend`, para o arquivo valer.
+
+Se o `npm ci` falhar com `ERESOLVE` ou `unable to resolve dependency tree`,
+normalmente a pasta `node_modules` é de uma versão antiga do projeto. Atualize a
+branch, apague as dependências antigas e instale de novo:
 
 ```powershell
 cd frontend
 git pull
 Remove-Item node_modules -Recurse -Force
 npm ci
-```
-
-Se o erro continuar, instale ativando o modo legado de peer dependencies do npm:
-
-```powershell
-npm install --legacy-peer-deps
 ```
 
 Use `npm audit --omit=dev` para conferir as vulnerabilidades do que vai para o
@@ -397,7 +415,8 @@ uma linha, esvazia um texto), e roda os testes contra cada uma:
 - **Sobrevivente:** todos os testes passaram. Há um defeito que os testes não pegam.
 - **Sem cobertura:** nenhum teste passa por aquele trecho.
 
-O **escore de mutação** é a porcentagem de mutantes mortos. Na pasta `frontend`:
+O **escore de mutação** é a porcentagem de mutantes mortos. O Stryker precisa do
+Node.js 22 ou superior. Na pasta `frontend`:
 
 ```powershell
 npm run test:mutacao
