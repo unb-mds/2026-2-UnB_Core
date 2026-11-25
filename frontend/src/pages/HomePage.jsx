@@ -72,8 +72,8 @@ function HomePage({ onNavigate }) {
         {/* Faixas de largura total; o conteúdo de cada uma fica alinhado ao menu (.page-container). */}
         <section className="home-hero" aria-labelledby="home-title">
           <div className="page-container home-hero__content">
-            <p className="home-hero__eyebrow">FCTE · Campus Gama</p>
-            <h1 id="home-title">O conhecimento da FCTE, organizado por disciplina</h1>
+            <p className="home-hero__eyebrow">UNB · Universidade de Brasília</p>
+            <h1 id="home-title">O conhecimento da UnB, organizado por disciplina</h1>
             <p className="home-hero__lead">
               Resumos, dicas, provas e materiais compartilhados por estudantes e revisados antes de serem publicados.
             </p>
