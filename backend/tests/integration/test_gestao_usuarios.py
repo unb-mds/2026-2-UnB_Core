@@ -172,7 +172,26 @@ def test_administrador_nao_exclui_a_propria_conta_mas_exclui_moderador() -> None
         moderador = client.delete(f"/api/v1/usuarios/{ids['Mauro Moderador']['id']}", headers=admin)
 
     assert propria.status_code == 422
+    assert propria.json()["erro"]["mensagem"] == "Você não pode excluir a sua própria conta."
     assert moderador.status_code == 204
+
+
+def test_administrador_nao_exclui_a_propria_conta_mesmo_com_outro_administrador() -> None:
+    with Session(engine) as session:
+        session.add(usuario("Beto Admin", "beto@example.com", "administrador"))
+        session.commit()
+
+    with TestClient(app) as client:
+        admin = autenticar(client, "admin@example.com")
+        ids = ids_por_nome(client.get("/api/v1/usuarios/gestao", headers=admin))
+
+        propria = client.delete(f"/api/v1/usuarios/{ids['Ana Admin']['id']}", headers=admin)
+        outro_admin = client.delete(f"/api/v1/usuarios/{ids['Beto Admin']['id']}", headers=admin)
+
+    # Com outro administrador ativo, só a regra da própria conta impede a exclusão.
+    assert propria.status_code == 422
+    assert propria.json()["erro"]["mensagem"] == "Você não pode excluir a sua própria conta."
+    assert outro_admin.status_code == 204
 
 
 def test_senha_temporaria_so_por_administrador_e_sem_expor_a_senha() -> None:

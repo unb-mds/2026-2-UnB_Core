@@ -141,3 +141,95 @@ describe('DisciplinaBusca com curso escolhido', () => {
     expect(api.get).toHaveBeenCalledTimes(1)
   })
 })
+
+describe('DisciplinaBusca: estados e teclado', () => {
+  it('avisa enquanto busca e enquanto carrega as disciplinas do curso', async () => {
+    api.get.mockReturnValue(new Promise(() => {}))
+    const { unmount } = render(<Campo />)
+
+    digitar('comp')
+    expect(screen.getByRole('status')).toHaveTextContent('Buscando disciplinas...')
+    unmount()
+
+    render(<Campo cursoId="33" />)
+    fireEvent.focus(screen.getByRole('combobox', { name: 'Disciplina' }))
+    expect(screen.getByRole('status')).toHaveTextContent('Carregando as disciplinas do curso...')
+  })
+
+  it('Enter apertado antes do resultado chegar escolhe o primeiro quando ele chega', async () => {
+    let responder
+    api.get.mockReturnValue(new Promise((resolve) => { responder = resolve }))
+    const onChange = vi.fn()
+    render(<Campo onChange={onChange} />)
+
+    const campo = digitar('comp')
+    fireEvent.keyDown(campo, { key: 'Enter' })
+    await waitFor(() => expect(api.get).toHaveBeenCalled())
+    expect(onChange).not.toHaveBeenCalled()
+
+    responder({ itens: [compiladores, calculo] })
+
+    await waitFor(() => expect(onChange).toHaveBeenCalledWith(compiladores))
+  })
+
+  it('seta para cima volta para a opção anterior e Esc fecha a lista', async () => {
+    api.get.mockResolvedValue({ itens: [compiladores, calculo] })
+    render(<Campo />)
+
+    const campo = digitar('engenharia')
+    await screen.findByRole('option', { name: /CÁLCULO 1/ })
+    fireEvent.keyDown(campo, { key: 'ArrowDown' })
+    fireEvent.keyDown(campo, { key: 'ArrowDown' })
+    fireEvent.keyDown(campo, { key: 'ArrowUp' })
+
+    expect(screen.getByRole('option', { name: /COMPILADORES 1/ })).toHaveAttribute('aria-selected', 'true')
+    expect(campo).toHaveAttribute('aria-activedescendant', screen.getByRole('option', { name: /COMPILADORES 1/ }).id)
+
+    fireEvent.keyDown(campo, { key: 'Escape' })
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument()
+    expect(campo).toHaveAttribute('aria-expanded', 'false')
+  })
+
+  it('sair do campo fecha a lista', async () => {
+    api.get.mockResolvedValue({ itens: [compiladores] })
+    render(<Campo />)
+
+    const campo = digitar('comp')
+    await screen.findByRole('listbox')
+    fireEvent.blur(campo)
+
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument()
+  })
+
+  it('digitar de novo depois de escolher desfaz a escolha', async () => {
+    api.get.mockResolvedValue({ itens: [compiladores] })
+    const onChange = vi.fn()
+    render(<Campo onChange={onChange} />)
+
+    const campo = digitar('comp')
+    fireEvent.mouseDown(await screen.findByRole('option', { name: /COMPILADORES 1/ }))
+    fireEvent.change(campo, { target: { value: 'FGA0003 - COMPILADORES' } })
+
+    expect(onChange).toHaveBeenLastCalledWith(null)
+    expect(campo).toHaveValue('FGA0003 - COMPILADORES')
+  })
+
+  it('mostra no máximo dois cursos por disciplina e resume o resto', async () => {
+    const tresCursos = { ...compiladores, curso_id: [33, 34, 35] }
+    api.get.mockResolvedValue({ itens: [tresCursos] })
+    render(<DisciplinaBusca cursos={[...cursos, { id: 35, nome: 'Engenharia de Energia' }]} />)
+
+    fireEvent.change(screen.getByRole('combobox', { name: 'Disciplina' }), { target: { value: 'comp' } })
+
+    expect(await screen.findByRole('option')).toHaveTextContent('Engenharia de Software, Engenharia Eletrônica +1')
+  })
+
+  it('se as disciplinas do curso não carregam, avisa que nada foi encontrado', async () => {
+    api.get.mockRejectedValue(new ApiError('Fora do ar.'))
+    render(<Campo cursoId="33" />)
+
+    fireEvent.focus(screen.getByRole('combobox', { name: 'Disciplina' }))
+
+    expect(await screen.findByText('Nenhuma disciplina encontrada.')).toBeInTheDocument()
+  })
+})
