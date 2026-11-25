@@ -430,6 +430,121 @@ cancelada. A restauração só deu certo se a última linha for `Restore complet
 e **nenhum erro** aparecer antes dela.
 
 
+## Publicação (Vercel, Render e Neon)
+
+Publicação gratuita, pensada para apresentações. Não é um ambiente de produção.
+
+| Parte | Serviço | O que saber |
+|---|---|---|
+| Banco | [Neon](https://neon.tech) | Pausa sozinho quando fica parado e volta no primeiro acesso. |
+| API | [Render](https://render.com) (Web Service com Docker) | Dorme depois de 15 minutos sem acesso e leva cerca de 1 minuto para acordar. |
+| Site | [Vercel](https://vercel.com) | Publica a pasta `frontend`. |
+
+O repositório pertence à organização `unb-mds`. Para conectar o Render e o Vercel
+ao GitHub, um administrador da organização pode precisar aprovar o acesso. Outra
+opção é publicar a partir de um fork na sua conta.
+
+Nunca coloque no repositório a URL do banco, senhas ou a chave do JWT. Esses
+valores ficam só nos painéis do Render e do Vercel.
+
+### 1. Criar o banco no Neon
+
+1. Crie um projeto no Neon. Escolha a região **AWS US East (N. Virginia)**, a
+   mesma que a API vai usar no Render, e o PostgreSQL 18 se estiver disponível
+   (a mesma versão do banco local).
+2. Em **Connect**, desligue **Connection pooling** e copie a URL de conexão. Ela
+   tem o formato
+   `postgresql://usuario:senha@ep-xxxx.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require`.
+
+### 2. Copiar os dados do banco local para o Neon
+
+Copiar o banco local leva cursos, disciplinas, contas e conteúdos de uma vez, sem
+precisar coletar o SIGAA de novo. No PowerShell, troque a senha e a URL:
+
+```powershell
+$pg = "C:\Program Files\PostgreSQL\18\bin"
+$env:PGPASSWORD = "SENHA_DO_POSTGRES_LOCAL"
+& "$pg\pg_dump.exe" -h localhost -U postgres -d unbcore -Fc --no-owner --no-privileges -f "$env:TEMP\unbcore.dump"
+Remove-Item Env:PGPASSWORD
+& "$pg\pg_restore.exe" --no-owner --no-privileges -d "URL_DO_NEON" "$env:TEMP\unbcore.dump"
+```
+
+O banco local precisa estar com todas as migrations aplicadas (`alembic upgrade head`).
+As contas vão junto, então você entra no site publicado com o mesmo e-mail e a
+mesma senha de administrador que usa localmente.
+
+### 3. Publicar a API no Render
+
+1. **New > Web Service** e escolha o repositório.
+2. Preencha:
+   - **Language:** Docker
+   - **Branch:** `main`
+   - **Region:** Virginia (US East)
+   - **Instance Type:** Free
+   - Em **Advanced**: **Dockerfile Path** `backend/Dockerfile`, **Docker Build Context Directory** `.` (a raiz do repositório) e **Health Check Path** `/docs`.
+3. Em **Environment Variables**:
+
+   | Variável | Valor |
+   |---|---|
+   | `DATABASE_URL` | A URL do Neon, trocando o começo `postgresql://` por `postgresql+psycopg2://` |
+   | `JWT_SECRET_KEY` | Uma chave aleatória longa (veja abaixo) |
+   | `CORS_ORIGINS` | O endereço do site no Vercel (passo 5). Pode deixar em branco por enquanto. |
+   | `ACCESS_TOKEN_EXPIRE_MINUTES` | `240`, para o login durar a apresentação inteira |
+
+   Para gerar a chave do JWT:
+   ```powershell
+   .\.venv\Scripts\python.exe -c "import secrets; print(secrets.token_urlsafe(48))"
+   ```
+   Sem essa variável, a API usa a chave de desenvolvimento que está no
+   repositório, e qualquer pessoa conseguiria criar um login falso.
+   Com `postgresql://`, o SQLAlchemy 2.1 procura o driver `psycopg` (versão 3),
+   que o projeto não instala, e o deploy falha com
+   `ModuleNotFoundError: No module named 'psycopg'`. A API já corrige o começo da
+   URL sozinha, mas indicar o driver evita o erro em versões antigas do código.
+4. Clique em **Deploy**. Ao iniciar, a API aplica as migrations que faltarem.
+   Confira em `https://NOME-DA-API.onrender.com/docs`.
+
+### 4. Publicar o site no Vercel
+
+1. **Add New > Project** e importe o repositório.
+2. Em **Root Directory**, escolha `frontend`. O arquivo `frontend/vercel.json` já
+   define a instalação, o build e o redirecionamento das rotas do site.
+3. Em **Environment Variables**, crie `VITE_API_URL` com
+   `https://NOME-DA-API.onrender.com/api/v1` (com `/api/v1` no fim).
+4. Clique em **Deploy** e copie o endereço gerado, por exemplo `https://unb-core.vercel.app`.
+
+O Vercel grava o `VITE_API_URL` no site durante o build. Se você mudar a
+variável, faça um novo deploy (**Deployments > Redeploy**).
+
+### 5. Liberar o site na API
+
+No Render, em **Environment**, coloque em `CORS_ORIGINS` o endereço do Vercel,
+sem barra no fim, e salve com **Save, rebuild, and deploy**. Para mais de um
+endereço, separe por vírgula.
+
+### 6. Conferir
+
+- O site abre e a Base de Conhecimento mostra os conteúdos.
+- Recarregar uma página interna, como `/conteudos/1`, não dá erro 404.
+- O login funciona com a sua conta de administrador.
+
+Daqui para a frente, cada push na `main` publica de novo o site e a API.
+
+### Antes de apresentar
+
+Abra `https://NOME-DA-API.onrender.com/docs` uns 2 minutos antes, para a API
+acordar. O primeiro acesso depois de um tempo parado leva cerca de 1 minuto.
+
+### Problemas comuns na publicação
+
+| Sintoma | Causa provável |
+|---|---|
+| "Não foi possível conectar à API" | A API ainda está acordando (espere 1 minuto); o `VITE_API_URL` está sem `/api/v1` ou mudou sem novo deploy; ou o `CORS_ORIGINS` não tem o endereço exato do site. |
+| Erro 404 ao recarregar uma página | O **Root Directory** do Vercel não é `frontend`, então o `vercel.json` não foi lido. |
+| O Render não acha o Dockerfile | Confira **Dockerfile Path** `backend/Dockerfile` e **Docker Build Context Directory** `.`. |
+| O login não funciona no site publicado | O banco do Neon está vazio: refaça o passo 2. |
+
+
 ## Contribuindo
  
 Consulte o [Guia de Contribuição](https://github.com/unb-mds/2026-2-UnB_Core/blob/main/CONTRIBUTING.md) do grupo antes de abrir uma Pull Request. Issues e o quadro de tarefas do projeto refletem o progresso das sprints.

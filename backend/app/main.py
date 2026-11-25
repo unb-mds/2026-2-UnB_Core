@@ -101,6 +101,20 @@ async def lifespan(_: FastAPI):
             logger.info("Carga inicial interrompida durante o encerramento.")
 
 
+ORIGENS_LOCAIS = ["http://127.0.0.1:5173", "http://localhost:5173"]
+
+
+def _origens_permitidas() -> list[str]:
+    """Endereços do front que podem chamar a API pelo navegador.
+
+    Na publicação, CORS_ORIGINS recebe os endereços separados por vírgula
+    (ex.: https://unb-core.vercel.app). Sem a variável, vale o front local.
+    """
+    valor = os.getenv("CORS_ORIGINS", "")
+    origens = [origem.strip().rstrip("/") for origem in valor.split(",") if origem.strip()]
+    return origens or ORIGENS_LOCAIS
+
+
 def criar_aplicacao() -> FastAPI:
     aplicacao = FastAPI(
         title="UNB CORE API",
@@ -123,7 +137,7 @@ def criar_aplicacao() -> FastAPI:
 
     aplicacao.add_middleware(
         CORSMiddleware,
-        allow_origins=["http://127.0.0.1:5173", "http://localhost:5173"],
+        allow_origins=_origens_permitidas(),
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
