@@ -20,4 +20,5 @@ COPY backend /app/backend
 EXPOSE 8000
 
 # Iniciar
-CMD ["sh", "-c", "alembic -c backend/alembic.ini upgrade head && uvicorn backend.app.main:app --host 0.0.0.0 --port 8000"]
+# O Render informa a porta pela variável PORT; localmente vale a 8000.
+CMD ["sh", "-c", "alembic -c backend/alembic.ini upgrade head && uvicorn backend.app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
