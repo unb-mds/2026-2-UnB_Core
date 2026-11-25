@@ -12,10 +12,16 @@
 [![GitHub stars](https://img.shields.io/github/stars/unb-mds/2026-2-UnB_Core)](https://img.shields.io/github/stars/unb-mds/2026-2-UnB_Core)
  
 Plataforma acadêmica colaborativa da Universidade de Brasília (UnB), com conteúdos organizados por curso e disciplina e contribuições submetidas à moderação.
+
+- **Acesse o site:** https://unb-core.vercel.app
+- **Documentação da API:** https://two026-2-unb-core.onrender.com/docs
+
+> A API está no plano gratuito do Render e dorme depois de 15 minutos sem acesso. No primeiro acesso, o site pode levar cerca de 1 minuto para carregar os dados.
  
-1. **Base de conhecimento acadêmica** com resumos, dicas, dificuldades, provas, implementações e links.
-2. **Contribuições moderadas** enviadas por usuários autenticados e revisadas por moderadores ou administradores.
-3. **Perfil do usuário**, onde cada pessoa edita o próprio nome, e-mail e senha.
+1. **Base de conhecimento acadêmica** com resumos, dicas, dificuldades, implementações e links, com filtros por curso, disciplina e tipo de conteúdo.
+2. **Contribuições moderadas** enviadas por usuários autenticados e revisadas por moderadores ou administradores, que aprovam, pedem ajustes ou rejeitam. O autor acompanha cada envio, edita e pode pedir a exclusão.
+3. **Gestão de usuários** para a equipe, com perfis de usuário, moderador e administrador, e recuperação de senha pela tela de login.
+4. **Perfil do usuário**, onde cada pessoa edita o próprio nome, e-mail e senha.
 ##
 <img width="1646" height="599" alt="image" src="https://github.com/user-attachments/assets/ea69e958-ca90-454b-bbb2-9ac69f06b856" />
 
@@ -26,7 +32,11 @@ Projeto desenvolvido para a disciplina de **Métodos de Desenvolvimento de Softw
 
 ## Status do projeto
 
-**Fase atual: desenvolvimento e integração.** A integração do Backend e Frontend já está completa, bastando apenas o seu aperfeiçoamento. O backend possui uma API funcional construída com FastAPI, incluindo autenticação de usuários, cadastro, login e acesso às disciplinas e cursos utilizando um crawler com o sistema do SIGAA. O projeto continua em evolução, com novas funcionalidades, testes e melhorias de documentação sendo desenvolvidos nas sprints.
+**Fase atual: publicado para a apresentação de 25/11/2026.** O site está no ar em https://unb-core.vercel.app, com o front no Vercel, a API no Render e o banco no Neon (veja [Publicação](#publicação-vercel-render-e-neon)).
+
+- **Backend:** API em FastAPI com autenticação, cadastro, perfil, contribuições, moderação, gestão de usuários e recuperação de senha. Os cursos e as disciplinas da FCTE vêm de um crawler do SIGAA público.
+- **Frontend:** React com tema claro e escuro, cores e ícones por tipo de conteúdo e páginas próprias para cada conteúdo e contribuição.
+- **Testes:** testes de unidade e de integração do backend (pytest) e testes de componentes do frontend (Vitest e Testing Library).
  
 
 ## Integrantes
@@ -81,6 +91,8 @@ Projeto desenvolvido para a disciplina de **Métodos de Desenvolvimento de Softw
 - **Front-end**: JavaScript (React)
 - **Banco de dados**: PostgreSQL, com migrations Alembic
 - **Dados acadêmicos**: cursos e disciplinas coletados do SIGAA público (escopo: campus do Gama, FCTE)
+- **Testes**: pytest (backend), Vitest e Testing Library (frontend)
+- **Publicação**: Vercel (site), Render (API) e Neon (banco)
  
 ## Como rodar localmente
 
