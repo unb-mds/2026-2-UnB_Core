@@ -5,7 +5,7 @@
 [![Static Badge](https://img.shields.io/badge/PostgreSQL-%2332658e?style=for-the-badge&logo=postgresql&logoColor=white&color=%2332658e)](https://www.postgresql.org/download/)
 [![Static Badge](https://img.shields.io/badge/Docker-%23586af8?style=for-the-badge&logo=Docker&color=%23586af8)](https://docs.docker.com/get-docker/desktop/)
 </br>
-<img src="https://img.shields.io/github/v/release/unb-mds/2026-2-UnB_Core?label=version">
+[<img src="https://img.shields.io/github/v/release/unb-mds/2026-2-UnB_Core?label=version">](https://github.com/unb-mds/2026-2-UnB_Core/releases)
 [![GitHub issues](https://img.shields.io/github/issues/unb-mds/2026-2-UnB_Core)](https://github.com/unb-mds/2026-2-UnB_Core/issues)
 [![GitHub contributors](https://img.shields.io/github/contributors/unb-mds/2026-2-UnB_Core)](https://img.shields.io/github/contributors/unb-mds/2026-2-UnB_Core)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
@@ -432,7 +432,7 @@ e **nenhum erro** aparecer antes dela.
 
 ## Contribuindo
  
-Consulte o [guia de contribuição](https://github.com/unb-mds/2026-2-UnB_Core/blob/main/CONTRIBUTING.md) do grupo antes de abrir uma Pull Request. Issues e o quadro de tarefas do projeto refletem o progresso das sprints.
+Consulte o [Guia de Contribuição](https://github.com/unb-mds/2026-2-UnB_Core/blob/main/CONTRIBUTING.md) do grupo antes de abrir uma Pull Request. Issues e o quadro de tarefas do projeto refletem o progresso das sprints.
  
 ## Licença
 
