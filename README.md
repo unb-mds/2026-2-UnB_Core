@@ -486,7 +486,7 @@ mesma senha de administrador que usa localmente.
 
    | Variável | Valor |
    |---|---|
-   | `DATABASE_URL` | A URL do Neon |
+   | `DATABASE_URL` | A URL do Neon, trocando o começo `postgresql://` por `postgresql+psycopg2://` |
    | `JWT_SECRET_KEY` | Uma chave aleatória longa (veja abaixo) |
    | `CORS_ORIGINS` | O endereço do site no Vercel (passo 5). Pode deixar em branco por enquanto. |
    | `ACCESS_TOKEN_EXPIRE_MINUTES` | `240`, para o login durar a apresentação inteira |
@@ -497,6 +497,10 @@ mesma senha de administrador que usa localmente.
    ```
    Sem essa variável, a API usa a chave de desenvolvimento que está no
    repositório, e qualquer pessoa conseguiria criar um login falso.
+   Com `postgresql://`, o SQLAlchemy 2.1 procura o driver `psycopg` (versão 3),
+   que o projeto não instala, e o deploy falha com
+   `ModuleNotFoundError: No module named 'psycopg'`. A API já corrige o começo da
+   URL sozinha, mas indicar o driver evita o erro em versões antigas do código.
 4. Clique em **Deploy**. Ao iniciar, a API aplica as migrations que faltarem.
    Confira em `https://NOME-DA-API.onrender.com/docs`.
 
