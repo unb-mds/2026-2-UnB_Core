@@ -352,10 +352,13 @@ Se o erro continuar, instale ativando o modo legado de peer dependencies do npm:
 npm install --legacy-peer-deps
 ```
 
-Use `npm audit` para conferir as vulnerabilidades. Na versão atual das
-dependências o resultado esperado é `found 0 vulnerabilities`. Não rode
-`npm audit fix --force`, pois ele pode trocar versões principais das bibliotecas
-e quebrar o projeto para o restante da equipe.
+Use `npm audit --omit=dev` para conferir as vulnerabilidades do que vai para o
+site. Na versão atual das dependências o resultado esperado é
+`found 0 vulnerabilities`. O `npm audit` completo mostra alertas moderados em
+bibliotecas usadas só pelo Stryker (teste de mutação), que roda apenas na
+máquina de quem desenvolve. Não rode `npm audit fix --force`, pois ele pode
+trocar versões principais das bibliotecas e quebrar o projeto para o restante
+da equipe.
 
 Comandos de qualidade do frontend:
 
@@ -382,6 +385,61 @@ Os arquivos de teste ficam ao lado do código, com o nome `NomeDoArquivo.test.js
 (por exemplo, [ContribuicaoPage.test.jsx](frontend/src/pages/ContribuicaoPage.test.jsx)).
 Procure os elementos pelo que a pessoa vê, como o texto do botão ou o rótulo do campo,
 e não por classes CSS: assim o teste só quebra quando o comportamento muda.
+
+#### Teste de mutação (escore de mutação)
+
+O teste de mutação mede o quanto os testes do frontend pegam defeitos. O
+[Stryker Mutator](https://stryker-mutator.io/) cria centenas de pequenas
+alterações no código, uma de cada vez (troca `<` por `<=`, `&&` por `||`, apaga
+uma linha, esvazia um texto), e roda os testes contra cada uma:
+
+- **Morto:** algum teste falhou. Os testes perceberam a alteração, como deveriam.
+- **Sobrevivente:** todos os testes passaram. Há um defeito que os testes não pegam.
+- **Sem cobertura:** nenhum teste passa por aquele trecho.
+
+O **escore de mutação** é a porcentagem de mutantes mortos. Na pasta `frontend`:
+
+```powershell
+npm run test:mutacao
+```
+
+Leva alguns minutos. O relatório fica em `frontend/reports/mutacao/index.html`:
+abra no navegador para ver, linha por linha, quais mutantes sobreviveram. Os
+arquivos analisados e as faixas do escore ficam em
+[stryker.config.mjs](frontend/stryker.config.mjs). A pasta `reports/` é ignorada
+pelo Git.
+
+Alguns sobreviventes são "equivalentes": a alteração não muda o comportamento.
+Por exemplo, tirar o `.trim()` do e-mail não muda nada, porque o campo de e-mail
+do navegador já remove os espaços.
+
+### Teste de sabotagem (módulos críticos)
+
+O teste de sabotagem planta um defeito proposital em cada módulo crítico do
+backend e do frontend, roda a suíte de testes e confere se ela quebra. Depois
+devolve o arquivo original, mesmo que algo dê errado no meio. Na raiz do
+repositório:
+
+```powershell
+.\.venv\Scripts\python.exe scripts/teste_sabotagem.py               # backend e frontend
+.\.venv\Scripts\python.exe scripts/teste_sabotagem.py --parte backend
+.\.venv\Scripts\python.exe scripts/teste_sabotagem.py --listar      # só a lista de módulos e defeitos
+```
+
+Para cada módulo, o resultado é **pegou** (a suíte quebrou, como deveria) ou
+**escapou** (falta um teste para aquele módulo). O comando termina com erro se
+algum defeito escapar. Antes de sabotar, ele confere se a suíte passa sem
+defeitos.
+
+Os módulos críticos e os defeitos ficam na lista `SABOTAGENS` de
+[scripts/teste_sabotagem.py](scripts/teste_sabotagem.py). Exemplos: conta
+desativada consegue entrar, token assinado com outra chave é aceito, moderador
+gere contas da equipe, rejeição sem justificativa e link `javascript:` aceito.
+Ao criar uma regra de negócio ou de segurança, acrescente o módulo à lista.
+
+Se a execução for interrompida à força (por exemplo, fechando o terminal), confira
+com `git status` se algum arquivo ficou alterado e desfaça com
+`git checkout -- <arquivo>`.
 
 ### Backups do banco de dados
 

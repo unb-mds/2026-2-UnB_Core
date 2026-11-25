@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint src",
-    "test": "vitest run --passWithNoTests"
+    "test": "vitest run --passWithNoTests",
+    "test:mutacao": "stryker run"
   },
   "dependencies": {
     "axios": "^1.20.0",
@@ -17,6 +18,9 @@
   "devDependencies": {
     "@eslint/js": "^9.37.0",
     "@rolldown/plugin-babel": "^0.1.1",
+    "@stryker-mutator/core": "^10.1.1",
+    "@stryker-mutator/vitest-runner": "^10.1.1",
+    "@testing-library/dom": "^10.4.2",
     "@testing-library/jest-dom": "^6.8.0",
     "@testing-library/react": "^16.3.0",
     "@vitejs/plugin-react": "^6.2.1",

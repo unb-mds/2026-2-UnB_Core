@@ -86,3 +86,107 @@ describe('sessão de login', () => {
     expect(consumirAvisoDeLogin()).toBeNull()
   })
 })
+
+describe('validade do token', () => {
+  it('vence exatamente no instante do campo exp', async () => {
+    const { tokenExpirado } = await import('./auth')
+
+    expect(tokenExpirado(token(1000), 1000 * 1000)).toBe(true)
+    expect(tokenExpirado(token(1001), 1000 * 1000)).toBe(false)
+  })
+
+  it('token sem o campo exp não é tratado como vencido', async () => {
+    const { tokenExpirado } = await import('./auth')
+    const semExp = `cabecalho.${btoa(JSON.stringify({ sub: '1' }))}.assinatura`
+
+    expect(tokenExpirado(semExp)).toBe(false)
+  })
+})
+
+describe('entrar e sair', () => {
+  it('login guarda a sessão, avisa as telas e o useAuth passa a mostrar a pessoa', async () => {
+    const { renderHook, act } = await import('@testing-library/react')
+    const { login, logout, subscribe, useAuth } = await import('./auth')
+    const sessao = { access_token: token(agoraEmSegundos() + 600), usuario: { nome: 'Bia', perfil: 'usuario' } }
+    const ouvinte = vi.fn()
+    const cancelar = subscribe(ouvinte)
+    const { result } = renderHook(() => useAuth())
+
+    expect(result.current).toEqual({ session: null, user: null, isAuthenticated: false })
+
+    act(() => { login(sessao) })
+
+    expect(JSON.parse(localStorage.getItem(CHAVE_SESSAO))).toEqual(sessao)
+    expect(ouvinte).toHaveBeenCalledTimes(1)
+    expect(result.current).toEqual({ session: sessao, user: sessao.usuario, isAuthenticated: true })
+
+    // Depois de cancelar a inscrição, a tela não é mais avisada.
+    cancelar()
+    act(() => { logout() })
+
+    expect(ouvinte).toHaveBeenCalledTimes(1)
+    expect(localStorage.getItem(CHAVE_SESSAO)).toBeNull()
+    expect(result.current).toEqual({ session: null, user: null, isAuthenticated: false })
+  })
+
+  it('aceita sessões antigas que guardavam a pessoa em "user"', async () => {
+    const { renderHook } = await import('@testing-library/react')
+    localStorage.setItem(CHAVE_SESSAO, JSON.stringify({ token: token(agoraEmSegundos() + 600), user: { nome: 'Caio' } }))
+    const { useAuth } = await import('./auth')
+
+    const { result } = renderHook(() => useAuth())
+
+    expect(result.current.user).toEqual({ nome: 'Caio' })
+    expect(result.current.isAuthenticated).toBe(true)
+  })
+})
+
+describe('modo sem login de desenvolvimento', () => {
+  afterEach(() => {
+    vi.unstubAllEnvs()
+  })
+
+  it('com VITE_SKIP_AUTH, o ambiente de desenvolvimento entra como administrador local', async () => {
+    vi.stubEnv('DEV', true)
+    vi.stubEnv('VITE_SKIP_AUTH', 'true')
+    const { renderHook } = await import('@testing-library/react')
+    const { useAuth } = await import('./auth')
+
+    const { result } = renderHook(() => useAuth())
+
+    expect(result.current.isAuthenticated).toBe(true)
+    expect(result.current.user).toEqual({ nome: 'Usuário local', perfil: 'administrador' })
+    expect(result.current.session.access_token).toBe('dev-bypass')
+  })
+
+  it('VITE_ALLOW_NO_LOGIN também liga o modo, mas só no desenvolvimento', async () => {
+    vi.stubEnv('DEV', true)
+    vi.stubEnv('VITE_ALLOW_NO_LOGIN', 'true')
+    const { renderHook } = await import('@testing-library/react')
+    const { useAuth } = await import('./auth')
+
+    expect(renderHook(() => useAuth()).result.current.isAuthenticated).toBe(true)
+  })
+
+  it('no site publicado (build de produção) o modo nunca liga, mesmo com a variável', async () => {
+    vi.stubEnv('DEV', false)
+    vi.stubEnv('VITE_SKIP_AUTH', 'true')
+    vi.stubEnv('VITE_ALLOW_NO_LOGIN', 'true')
+    const { renderHook } = await import('@testing-library/react')
+    const { useAuth } = await import('./auth')
+
+    const { result } = renderHook(() => useAuth())
+
+    expect(result.current).toEqual({ session: null, user: null, isAuthenticated: false })
+  })
+
+  it('sem as variáveis, o desenvolvimento também exige login', async () => {
+    vi.stubEnv('DEV', true)
+    vi.stubEnv('VITE_SKIP_AUTH', 'false')
+    vi.stubEnv('VITE_ALLOW_NO_LOGIN', 'false')
+    const { renderHook } = await import('@testing-library/react')
+    const { useAuth } = await import('./auth')
+
+    expect(renderHook(() => useAuth()).result.current.isAuthenticated).toBe(false)
+  })
+})

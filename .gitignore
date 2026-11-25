@@ -10,3 +10,5 @@ __pycache__/
 .cache/
 .pytest_cache/
 .venv/
+frontend/reports/
+frontend/.stryker-tmp/
