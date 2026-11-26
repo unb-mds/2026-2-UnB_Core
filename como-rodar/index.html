@@ -500,6 +500,78 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Execução manual">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Backend
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#primeiro-administrador" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Primeiro administrador
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#frontend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Frontend
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testar-a-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testar a API
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#problemas-comuns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Problemas comuns
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backups" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Backups
+      
+    </span>
+  </a>
+  
 </li>
       
     </ul>
@@ -1074,6 +1146,78 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Execução manual">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Backend
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#primeiro-administrador" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Primeiro administrador
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#frontend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Frontend
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testar-a-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testar a API
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#problemas-comuns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Problemas comuns
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backups" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Backups
+      
+    </span>
+  </a>
+  
 </li>
       
     </ul>
@@ -1132,8 +1276,9 @@ PostgreSQL e todos os dados de desenvolvimento nele armazenados.</p>
 </blockquote>
 <h2 id="execucao-manual">Execução manual<a class="headerlink" href="#execucao-manual" title="Permanent link">&para;</a></h2>
 <p>Esta opção requer Python, PostgreSQL 14 ou superior e Node.js 20.19 ou superior
-(ou 22.12 ou superior). Crie e ative o ambiente virtual na raiz do repositório
-e instale as dependências do backend:</p>
+(ou 22.12 ou superior).</p>
+<h3 id="backend">Backend<a class="headerlink" href="#backend" title="Permanent link">&para;</a></h3>
+<p>Crie e ative o ambiente virtual na raiz do repositório e instale as dependências:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">py</span> <span class="n">-m</span> <span class="n">venv</span> <span class="p">.</span><span class="n">venv</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">Activate</span><span class="p">.</span><span class="n">ps1</span>
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">python</span> <span class="n">-m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">-r</span> <span class="n">backend</span><span class="p">\</span><span class="n">requirements</span><span class="p">.</span><span class="n">txt</span>
@@ -1157,8 +1302,80 @@ Com as variáveis configuradas, aplique as migrations e inicie a API:</p>
 em <a href="http://127.0.0.1:8000">http://127.0.0.1:8000</a> e sua documentação interativa em
 <a href="http://127.0.0.1:8000/docs">http://127.0.0.1:8000/docs</a>. Para parar cada servidor, pressione <code>Ctrl+C</code> no
 terminal correspondente.</p>
-<p>Para configuração detalhada do banco, solução de problemas e outros comandos,
-consulte a seção <strong>Como rodar localmente</strong> do README do projeto.</p>
+<p>Crie um banco PostgreSQL vazio, por exemplo:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="p">&amp;</span> <span class="s2">"C:\Program Files\PostgreSQL\18\bin\createdb.exe"</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">unbcore</span>
+</code></pre></div>
+<p>Para persistir a conexão no Windows:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="no">[Environment]</span><span class="p">::</span><span class="n">SetEnvironmentVariable</span><span class="p">(</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>  <span class="s2">"DATABASE_URL"</span><span class="p">,</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>  <span class="s2">"postgresql+psycopg2://postgres:SUA_SENHA@localhost:5432/unbcore"</span><span class="p">,</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>  <span class="s2">"User"</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="p">)</span>
+</code></pre></div>
+<p>Se o backend já tiver iniciado com dados antigos e todos os cursos do Gama
+aparecerem com as mesmas disciplinas, sincronize as estruturas curriculares:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">python</span> <span class="n">-c</span> <span class="s2">"import asyncio; from sqlmodel import Session; from backend.app.db import engine; from backend.app.crawler.crawlerCurriculo import coletar_e_sincronizar_curriculos; print(asyncio.run(coletar_e_sincronizar_curriculos(Session(engine))))"</span>
+</code></pre></div>
+<h3 id="primeiro-administrador">Primeiro administrador<a class="headerlink" href="#primeiro-administrador" title="Permanent link">&para;</a></h3>
+<p>Cadastre a conta normalmente e promova-a diretamente no banco:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="p">&amp;</span> <span class="s2">"C:\Program Files\PostgreSQL\18\bin\psql.exe"</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">unbcore</span> <span class="n">-c</span> <span class="s2">"UPDATE usuario SET perfil = 'ADMINISTRADOR' WHERE email = 'seu-email@exemplo.com';"</span>
+</code></pre></div>
+<p>Saia e entre novamente na aplicação para carregar o novo perfil.</p>
+<h3 id="frontend">Frontend<a class="headerlink" href="#frontend" title="Permanent link">&para;</a></h3>
+<p>Verifique o Node.js instalado:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">node</span> <span class="p">-</span><span class="n">-version</span>
+</code></pre></div>
+<p>Se necessário, atualize e reabra o terminal:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">winget</span> <span class="n">upgrade</span> <span class="n">OpenJS</span><span class="p">.</span><span class="n">NodeJS</span>
+</code></pre></div>
+<p>Em outro terminal, instale as dependências e inicie o frontend:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="nb">cd </span><span class="n">frontend</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="n">npm</span> <span class="n">ci</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="n">npm</span> <span class="n">run</span> <span class="n">dev</span>
+</code></pre></div>
+<p>Se <code>node_modules</code> estiver desatualizada ou ocorrer <code>Cannot find native binding</code>,
+reinstale as dependências:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="nb">cd </span><span class="n">frontend</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="nb">Remove-Item</span> <span class="n">node_modules</span> <span class="n">-Recurse</span> <span class="n">-Force</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="n">npm</span> <span class="n">ci</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="n">npm</span> <span class="n">run</span> <span class="n">dev</span>
+</code></pre></div>
+<p>Comandos de qualidade:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="n">npm</span> <span class="n">run</span> <span class="n">build</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="n">npm</span> <span class="n">run</span> <span class="n">lint</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="n">npm</span> <span class="n">test</span>
+</code></pre></div>
+<p>Não use <code>npm audit fix --force</code>; a atualização pode substituir versões
+principais e quebrar o projeto.</p>
+<h2 id="testar-a-api">Testar a API<a class="headerlink" href="#testar-a-api" title="Permanent link">&para;</a></h2>
+<p>Abra <a href="http://127.0.0.1:8000/docs">http://127.0.0.1:8000/docs</a> e, no Swagger UI:</p>
+<ol>
+<li>Execute <code>POST /api/v1/auth/cadastro</code> para criar um usuário.</li>
+<li>Execute <code>POST /api/v1/auth/login</code> com o mesmo e-mail e senha.</li>
+<li>Copie o valor de <code>access_token</code> da resposta.</li>
+<li>Clique em <strong>Authorize</strong>, informe <code>Bearer &lt;access_token&gt;</code> e confirme.</li>
+<li>Execute <code>GET /api/v1/auth/me</code> para testar uma rota autenticada.</li>
+</ol>
+<h2 id="problemas-comuns">Problemas comuns<a class="headerlink" href="#problemas-comuns" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>O frontend não conecta à API:</strong> confirme que a API está em
+  <a href="http://127.0.0.1:8000">http://127.0.0.1:8000</a> e abra
+  <a href="http://127.0.0.1:8000/api/v1/cursos">http://127.0.0.1:8000/api/v1/cursos</a>.</li>
+<li><strong>Todas as rotas retornam <code>ERRO_INTERNO</code>:</strong> confira <code>DATABASE_URL</code>, execute
+  as migrations e reinicie a API:</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="nb">echo </span><span class="nv">$env:DATABASE_URL</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">alembic</span><span class="p">.</span><span class="n">exe</span> <span class="n">-c</span> <span class="n">backend</span><span class="p">\</span><span class="n">alembic</span><span class="p">.</span><span class="n">ini</span> <span class="n">upgrade</span> <span class="n">head</span>
+</code></pre></div>
+<ul>
+<li><strong><code>relação "usuario" já existe</code>:</strong> use um banco vazio ou remova as tabelas
+  antigas após fazer backup.</li>
+<li><strong><code>ERESOLVE</code> ou conflito de peer dependencies:</strong> atualize a branch, remova
+  <code>node_modules</code> e execute <code>npm ci</code> novamente.</li>
+</ul>
+<h2 id="backups">Backups<a class="headerlink" href="#backups" title="Permanent link">&para;</a></h2>
+<p>As instruções de criação e restauração de backups estão em
+<a href="../backups/">Backups e restauração</a>.</p>
 
 
 
