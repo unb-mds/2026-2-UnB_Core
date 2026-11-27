@@ -6,37 +6,37 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Base de conhecimento acadêmica colaborativa dos cursos do campus do Gama (FCTE) da UnB.">
+        <meta name="description" content="Base de conhecimento acadêmica colaborativa dos cursos  da UnB.">
       
       
         <meta name="author" content="Unb Core — MDS 2026/2 (UnB)">
       
       
-        <link rel="canonical" href="https://unb-mds.github.io/2026-2-UnB_Core/backups/">
+        <link rel="canonical" href="https://unb-mds.github.io/2026-2-UnB_Core/frontend/aplicacao/">
       
       
-        <link rel="prev" href="../como-rodar/">
+        <link rel="prev" href="../../backend/banco-de-dados/">
       
       
-        <link rel="next" href="../Sprint/Sprint01/">
+        <link rel="next" href="../design-system/">
       
       
         
       
       
-      <link rel="icon" href="../assets/images/favicon.png">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
-        <title>Backups e restauração - Unb Core — Documentação</title>
+        <title>Aplicação - Unb Core — Documentação</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -55,7 +55,7 @@
       
     
     
-    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#backups-e-restauracao-do-banco-de-dados" class="md-skip">
+        <a href="#frontend-aplicacao-e-arquitetura" class="md-skip">
           Ir para o conteúdo
         </a>
       
@@ -96,7 +96,7 @@
 
 <header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
-    <a href=".." title="Unb Core — Documentação" class="md-header__button md-logo" aria-label="Unb Core — Documentação" data-md-component="logo">
+    <a href="../.." title="Unb Core — Documentação" class="md-header__button md-logo" aria-label="Unb Core — Documentação" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Backups e restauração
+              Aplicação
             
           </span>
         </div>
@@ -223,7 +223,7 @@
   
   
     <li class="md-tabs__item">
-      <a href=".." class="md-tabs__link">
+      <a href="../.." class="md-tabs__link">
         
   
   
@@ -242,7 +242,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../como-rodar/" class="md-tabs__link">
+      <a href="../../como-rodar/" class="md-tabs__link">
         
   
   
@@ -259,17 +259,53 @@
   
   
   
-    
   
-  
-    <li class="md-tabs__item md-tabs__item--active">
-      <a href="./" class="md-tabs__link">
+    <li class="md-tabs__item">
+      <a href="../../publicacao/" class="md-tabs__link">
         
   
   
     
   
-  Backups e restauração
+  Publicação
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../documento_de_visao/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Documento de Visão
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../ai-usage/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Uso de IA
 
       </a>
     </li>
@@ -284,7 +320,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../Sprint/Sprint01/" class="md-tabs__link">
+        <a href="../../Sprint/Sprint01/" class="md-tabs__link">
           
   
   
@@ -304,7 +340,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../requisitos/" class="md-tabs__link">
+        <a href="../../requisitos/" class="md-tabs__link">
           
   
   
@@ -324,7 +360,29 @@
     
     
       <li class="md-tabs__item">
-        <a href="../frontend/design-system.md" class="md-tabs__link">
+        <a href="../../backend/api/" class="md-tabs__link">
+          
+  
+  
+  Backend
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
           
   
   
@@ -364,7 +422,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegação" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="Unb Core — Documentação" class="md-nav__button md-logo" aria-label="Unb Core — Documentação" data-md-component="logo">
+    <a href="../.." title="Unb Core — Documentação" class="md-nav__button md-logo" aria-label="Unb Core — Documentação" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -394,7 +452,7 @@
   
   
     <li class="md-nav__item">
-      <a href=".." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   
@@ -421,7 +479,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../como-rodar/" class="md-nav__link">
+      <a href="../../como-rodar/" class="md-nav__link">
         
   
   
@@ -445,44 +503,17 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Backups e restauração
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../publicacao/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Backups e restauração
+    Publicação
   
 
     
@@ -491,59 +522,60 @@
   
 
       </a>
-      
-        
+    </li>
+  
 
-<nav class="md-nav md-nav--secondary" aria-label="Índice">
+    
+      
+      
   
   
   
+  
+    <li class="md-nav__item">
+      <a href="../../documento_de_visao/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
     
   
+    Documento de Visão
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Índice
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#como-os-backups-funcionam" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Como os backups funcionam
-      
-    </span>
-  </a>
+
+    
+  </span>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#verificar-os-backups" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Verificar os backups
-      
-    </span>
-  </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#restaurar-um-backup" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Restaurar um backup
-      
-    </span>
-  </a>
+
+      </a>
+    </li>
   
-</li>
+
+    
       
-    </ul>
+      
   
-</nav>
-      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Uso de IA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -570,10 +602,10 @@
         
           
         
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
         
           
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
             
   
   
@@ -591,8 +623,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -609,7 +641,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Sprint/Sprint01/" class="md-nav__link">
+      <a href="../../Sprint/Sprint01/" class="md-nav__link">
         
   
   
@@ -637,7 +669,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Sprint/Sprint02/" class="md-nav__link">
+      <a href="../../Sprint/Sprint02/" class="md-nav__link">
         
   
   
@@ -665,7 +697,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Sprint/Sprint03/" class="md-nav__link">
+      <a href="../../Sprint/Sprint03/" class="md-nav__link">
         
   
   
@@ -693,7 +725,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Sprint/Sprint04/" class="md-nav__link">
+      <a href="../../Sprint/Sprint04/" class="md-nav__link">
         
   
   
@@ -721,7 +753,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Sprint/Sprint05/" class="md-nav__link">
+      <a href="../../Sprint/Sprint05/" class="md-nav__link">
         
   
   
@@ -749,7 +781,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Sprint/Sprint06/" class="md-nav__link">
+      <a href="../../Sprint/Sprint06/" class="md-nav__link">
         
   
   
@@ -777,7 +809,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Sprint/Sprint07/" class="md-nav__link">
+      <a href="../../Sprint/Sprint07/" class="md-nav__link">
         
   
   
@@ -805,7 +837,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Sprint/Sprint08/" class="md-nav__link">
+      <a href="../../Sprint/Sprint08/" class="md-nav__link">
         
   
   
@@ -833,7 +865,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Sprint/Sprint09/" class="md-nav__link">
+      <a href="../../Sprint/Sprint09/" class="md-nav__link">
         
   
   
@@ -883,10 +915,10 @@
         
           
         
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
         
           
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
             
   
   
@@ -904,8 +936,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -922,7 +954,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../requisitos/" class="md-nav__link">
+      <a href="../../requisitos/" class="md-nav__link">
         
   
   
@@ -972,10 +1004,158 @@
         
           
         
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
         
           
-          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backend
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Backend
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../backend/api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rotas da API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../backend/schemas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Schemas da API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../backend/banco-de-dados/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Banco de dados
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
             
   
   
@@ -993,8 +1173,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_9">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1008,10 +1188,140 @@
                 
   
   
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Aplicação
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Aplicação
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#telas-e-rotas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Telas e rotas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#estrutura-do-codigo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Estrutura do código
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integracao-com-a-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integração com a API
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sessao-e-tema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sessão e tema
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#componentes-compartilhados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Componentes compartilhados
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
   
   
     <li class="md-nav__item">
-      <a href="../frontend/design-system.md" class="md-nav__link">
+      <a href="../design-system/" class="md-nav__link">
         
   
   
@@ -1019,6 +1329,34 @@
     
   
     Design system
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../testes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testes
   
 
     
@@ -1066,10 +1404,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#como-os-backups-funcionam" class="md-nav__link">
+  <a href="#telas-e-rotas" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Como os backups funcionam
+        Telas e rotas
       
     </span>
   </a>
@@ -1077,10 +1415,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#verificar-os-backups" class="md-nav__link">
+  <a href="#estrutura-do-codigo" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Verificar os backups
+        Estrutura do código
       
     </span>
   </a>
@@ -1088,10 +1426,32 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#restaurar-um-backup" class="md-nav__link">
+  <a href="#integracao-com-a-api" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Restaurar um backup
+        Integração com a API
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sessao-e-tema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sessão e tema
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#componentes-compartilhados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Componentes compartilhados
       
     </span>
   </a>
@@ -1118,62 +1478,154 @@
   
 
 
-<h1 id="backups-e-restauracao-do-banco-de-dados">Backups e restauração do banco de dados<a class="headerlink" href="#backups-e-restauracao-do-banco-de-dados" title="Permanent link">&para;</a></h1>
-<p>Os comandos desta página devem ser executados no PowerShell, na raiz do
-repositório, com o Docker Desktop em execução.</p>
-<h2 id="como-os-backups-funcionam">Como os backups funcionam<a class="headerlink" href="#como-os-backups-funcionam" title="Permanent link">&para;</a></h2>
-<p>O serviço <code>db-backup</code> cria um backup completo do PostgreSQL ao iniciar e,
-depois, a cada 24 horas. Os arquivos ficam na pasta <code>backups/</code> da raiz do
-projeto, com nomes no formato <code>unb_core-AAAAMMDD-HHMMSS.dump</code>. Arquivos com
-mais de 7 dias são removidos automaticamente.</p>
-<p>Para iniciar a aplicação e o serviço de backup:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">docker</span> <span class="n">compose</span> <span class="n">up</span> <span class="p">-</span><span class="n">-build</span> <span class="n">-d</span>
+<h1 id="frontend-aplicacao-e-arquitetura">Frontend: aplicação e arquitetura<a class="headerlink" href="#frontend-aplicacao-e-arquitetura" title="Permanent link">&para;</a></h1>
+<p>O frontend é uma aplicação React criada com Vite. O ponto de entrada
+<code>frontend/src/main.jsx</code> inicializa o tema e monta <code>App</code>; as telas, componentes,
+estado de sessão e chamadas HTTP ficam separados por responsabilidade em
+<code>frontend/src/</code>.</p>
+<h2 id="telas-e-rotas">Telas e rotas<a class="headerlink" href="#telas-e-rotas" title="Permanent link">&para;</a></h2>
+<p>A navegação é implementada em <code>frontend/src/App.jsx</code> usando a History API do
+navegador (<code>pushState</code> e <code>popstate</code>), sem uma biblioteca externa de roteamento.</p>
+<table>
+<thead>
+<tr>
+<th>Caminho</th>
+<th>Tela</th>
+<th>Finalidade</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/</code></td>
+<td><code>HomePage</code></td>
+<td>Apresenta a base, busca disciplinas e mostra conteúdos recentes.</td>
+</tr>
+<tr>
+<td><code>/base-de-conhecimentos</code></td>
+<td><code>ConhecimentoPage</code></td>
+<td>Pesquisa e filtra conteúdos publicados.</td>
+</tr>
+<tr>
+<td><code>/conteudos/{id}</code></td>
+<td><code>ConteudoPage</code></td>
+<td>Exibe os detalhes de um conteúdo.</td>
+</tr>
+<tr>
+<td><code>/cadastro</code></td>
+<td><code>CadastroPage</code></td>
+<td>Cria uma conta.</td>
+</tr>
+<tr>
+<td><code>/login</code></td>
+<td><code>LoginPage</code></td>
+<td>Autentica e permite solicitar recuperação de senha.</td>
+</tr>
+<tr>
+<td><code>/contribuicao</code></td>
+<td><code>ContribuicaoPage</code></td>
+<td>Envia uma contribuição para revisão.</td>
+</tr>
+<tr>
+<td><code>/guia-de-contribuicao</code></td>
+<td><code>GuiaContribuicaoPage</code></td>
+<td>Explica orientações para contribuir.</td>
+</tr>
+<tr>
+<td><code>/minhas-contribuicoes</code></td>
+<td><code>MinhasContribuicoesPage</code></td>
+<td>Lista os envios da conta atual.</td>
+</tr>
+<tr>
+<td><code>/minhas-contribuicoes/{id}</code></td>
+<td><code>MinhaContribuicaoPage</code></td>
+<td>Consulta, edita ou solicita a exclusão de um envio próprio.</td>
+</tr>
+<tr>
+<td><code>/moderacao</code></td>
+<td><code>ModeracaoPage</code></td>
+<td>Lista contribuições para revisão.</td>
+</tr>
+<tr>
+<td><code>/moderacao/contribuicoes/{id}</code></td>
+<td><code>ModeracaoContribuicaoPage</code></td>
+<td>Consulta e decide uma contribuição na moderação.</td>
+</tr>
+<tr>
+<td><code>/perfil</code></td>
+<td><code>PerfilPage</code></td>
+<td>Edita o perfil da pessoa autenticada.</td>
+</tr>
+<tr>
+<td><code>/admin/usuarios</code></td>
+<td><code>AdminUsuariosPage</code></td>
+<td>Gerencia contas conforme o perfil autorizado.</td>
+</tr>
+</tbody>
+</table>
+<p>O fallback de rota desconhecida abre a base de conhecimentos. A página inicial
+pode passar a disciplina selecionada para a base pela propriedade <code>state</code> do
+histórico do navegador.</p>
+<h2 id="estrutura-do-codigo">Estrutura do código<a class="headerlink" href="#estrutura-do-codigo" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>src/pages/</code>: telas compostas por fluxo ou rota.</li>
+<li><code>src/components/</code>: elementos reaproveitáveis, agrupados por área (<code>auth</code>,
+  <code>conteudos</code>, <code>contribuicoes</code>, <code>layout</code>, <code>moderacao</code> e <code>ui</code>).</li>
+<li><code>src/services/api.js</code>: cliente HTTP e tratamento padronizado de respostas.</li>
+<li><code>src/services/cursos.js</code>: normaliza a lista de cursos recebida pela interface.</li>
+<li><code>src/state/auth.js</code>: estado compartilhado de autenticação.</li>
+<li><code>src/state/theme.js</code>: estado e inicialização de tema claro/escuro.</li>
+<li><code>src/index.css</code> e CSS por componente ou página: tokens globais e estilos
+  específicos.</li>
+</ul>
+<p><code>PageLayout</code> compartilha cabeçalho, rodapé, largura de conteúdo e estrutura das
+páginas internas. A home usa o cabeçalho e o rodapé diretamente por ter
+composição visual própria.</p>
+<h2 id="integracao-com-a-api">Integração com a API<a class="headerlink" href="#integracao-com-a-api" title="Permanent link">&para;</a></h2>
+<p>O cliente HTTP usa <code>VITE_API_URL</code> como endereço base e, se a variável não
+existir, usa <code>http://127.0.0.1:8000/api/v1</code>. As funções <code>api.get</code>, <code>api.post</code>,
+<code>api.patch</code> e <code>api.delete</code> enviam e recebem JSON; quando existe token, o cliente
+adiciona <code>Authorization: Bearer &lt;token&gt;</code>.</p>
+<p>Exemplo de configuração local no PowerShell:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nv">$env:VITE_API_URL</span> <span class="p">=</span> <span class="s2">"http://127.0.0.1:8000/api/v1"</span>
 </code></pre></div>
-<h2 id="verificar-os-backups">Verificar os backups<a class="headerlink" href="#verificar-os-backups" title="Permanent link">&para;</a></h2>
-<p>Confira os logs do serviço. Uma execução bem-sucedida deve exibir
-<code>Backup completed</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">docker</span> <span class="n">compose</span> <span class="n">logs</span> <span class="n">db-backup</span>
-</code></pre></div>
-<p>Para listar os arquivos disponíveis, do mais recente ao mais antigo:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">Get-ChildItem</span> <span class="p">.\</span><span class="n">backups</span><span class="p">\*.</span><span class="n">dump</span> <span class="p">|</span> <span class="nb">Sort-Object</span> <span class="n">LastWriteTime</span> <span class="n">-Descending</span> <span class="p">|</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>  <span class="nb">Format-Table</span> <span class="n">Name</span><span class="p">,</span> <span class="n">Length</span><span class="p">,</span> <span class="n">LastWriteTime</span>
-</code></pre></div>
-<p>Para executar um backup imediatamente, recrie o serviço <code>db-backup</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">docker</span> <span class="n">compose</span> <span class="n">up</span> <span class="n">-d</span> <span class="p">-</span><span class="n">-force-recreate</span> <span class="n">db-backup</span>
-</code></pre></div>
-<p>Confira os logs novamente para confirmar que a execução terminou com
-<code>Backup completed</code>.</p>
-<p>Para verificar se um arquivo pode ser lido e listar sua estrutura, substitua
-<code>NOME_DO_ARQUIVO.dump</code> por um arquivo existente na pasta <code>backups/</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">docker</span> <span class="n">compose</span> <span class="n">exec</span> <span class="n">db-backup</span> <span class="n">pg_restore</span> <span class="p">-</span><span class="n">-list</span> <span class="p">/</span><span class="n">backups</span><span class="p">/</span><span class="n">NOME_DO_ARQUIVO</span><span class="p">.</span><span class="n">dump</span>
-</code></pre></div>
-<p>Essa verificação não altera o banco. Se os logs indicarem <code>Backup failed</code>,
-nenhum arquivo novo será mantido. Como os arquivos antigos continuam sujeitos
-à retenção de 7 dias, copie periodicamente <code>backups/</code> para um local seguro,
-como um HD externo ou armazenamento em nuvem. A pasta é ignorada pelo Git e
-não deve ser enviada ao repositório.</p>
-<h2 id="restaurar-um-backup">Restaurar um backup<a class="headerlink" href="#restaurar-um-backup" title="Permanent link">&para;</a></h2>
-<blockquote>
-<p><strong>Atenção:</strong> a restauração substitui o conteúdo atual do banco <code>unb_core</code>
-pelos dados do arquivo escolhido. Antes de restaurar, confirme o nome do
-arquivo e, se necessário, faça uma cópia externa do backup.</p>
-</blockquote>
-<p>Pare o backend, informe o nome do arquivo e execute o serviço de restauração:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">docker</span> <span class="n">compose</span> <span class="n">stop</span> <span class="n">backend</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nv">$env:RESTORE_FILE</span> <span class="p">=</span> <span class="s2">"NOME_DO_ARQUIVO.dump"</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">docker</span> <span class="n">compose</span> <span class="n">run</span> <span class="p">-</span><span class="n">-rm</span> <span class="n">db-restore</span>
-</code></pre></div>
-<p>Substitua <code>NOME_DO_ARQUIVO.dump</code> por um arquivo existente em <code>backups/</code>.
-Antes de substituir o banco, o serviço cria um backup de segurança do estado
-atual, com o nome <code>unb_core-before-restore-*.dump</code>.</p>
-<p>Só inicie o backend novamente se a restauração terminar com <code>Restore completed</code>
-e sem erros anteriores:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nb">Remove-Item</span> <span class="n">Env</span><span class="p">:</span><span class="n">RESTORE_FILE</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="n">docker</span> <span class="n">compose</span> <span class="nb">start </span><span class="n">backend</span>
-</code></pre></div>
-<p>Se o arquivo não existir ou <code>RESTORE_FILE</code> não estiver definido, a restauração
-é cancelada. Para instruções de inicialização dos serviços, consulte
-<a href="../como-rodar/">Como rodar o projeto</a>.</p>
+<p>Uma resposta HTTP de erro vira <code>ApiError</code>, com mensagem, código, status e
+identificador quando disponíveis. Se uma requisição falha por falta de
+conexão, o cliente reporta que não foi possível conectar. Requisições
+canceladas por troca de tela não são tratadas como falha de conexão.</p>
+<p>Quando a API responde <code>401</code> para uma requisição que enviou token, o cliente
+limpa a sessão, emite o evento de sessão expirada e as telas atualizam o estado
+de autenticação. O cliente também mantém <code>AbortController</code> em consultas de
+telas que podem ser desmontadas ou atualizadas antes da resposta.</p>
+<p>As rotas, permissões e respostas da API estão em <a href="../../backend/api/">Rotas do backend</a>.</p>
+<h2 id="sessao-e-tema">Sessão e tema<a class="headerlink" href="#sessao-e-tema" title="Permanent link">&para;</a></h2>
+<ul>
+<li>A sessão recebida no login é armazenada em <code>localStorage</code> sob a chave
+  <code>unb-core-session</code>.</li>
+<li>Na inicialização, o estado de autenticação verifica o campo <code>exp</code> do JWT e
+  descarta tokens expirados. A API continua sendo a autoridade final para
+  autenticar cada requisição.</li>
+<li>O estado de sessão é compartilhado entre componentes por
+  <code>useSyncExternalStore</code>.</li>
+<li>O tema escolhido é guardado em <code>localStorage</code> sob <code>unb-core-tema</code>. Se não
+  houver escolha salva, a interface segue a preferência do sistema operacional.</li>
+<li>O tema ativo fica no atributo <code>data-theme</code> do elemento <code>&lt;html&gt;</code>; os estilos
+  leem os tokens CSS correspondentes.</li>
+</ul>
+<h2 id="componentes-compartilhados">Componentes compartilhados<a class="headerlink" href="#componentes-compartilhados" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>SiteHeader</code>, <code>Navigation</code> e <code>SiteFooter</code>: estrutura de navegação do site.</li>
+<li><code>PageLayout</code>: estrutura comum às telas internas.</li>
+<li><code>DisciplinaBusca</code>: busca de disciplina por nome ou código.</li>
+<li><code>ConteudoCard</code>, <code>ConteudoDetalhe</code>, <code>ConteudoCorpo</code> e <code>TipoBadge</code>: apresentação
+  de materiais acadêmicos.</li>
+<li><code>Button</code>, <code>SearchInput</code>, <code>EmptyState</code>, <code>StatusBadge</code> e <code>ErrorMessage</code>:
+  elementos de interface compartilhados. <code>ErrorMessage</code> usa <code>role="alert"</code> para
+  expor erros às tecnologias assistivas.</li>
+<li><code>DecisaoModal</code> e <code>JustificativaInput</code>: controles do fluxo de moderação.</li>
+</ul>
+<p>Detalhes de cores, tipografia, tema e outros tokens estão em
+<a href="../design-system/">Design system</a>. Para instalar e executar o frontend, veja
+<a href="../../como-rodar/">Como rodar o projeto</a>.</p>
 
 
 
@@ -1211,7 +1663,7 @@ e sem erros anteriores:</p>
       <nav class="md-footer__inner md-grid" aria-label="Rodapé" >
         
           
-          <a href="../como-rodar/" class="md-footer__link md-footer__link--prev" aria-label="Anterior: Como rodar o projeto">
+          <a href="../../backend/banco-de-dados/" class="md-footer__link md-footer__link--prev" aria-label="Anterior: Banco de dados">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -1221,20 +1673,20 @@ e sem erros anteriores:</p>
                 Anterior
               </span>
               <div class="md-ellipsis">
-                Como rodar o projeto
+                Banco de dados
               </div>
             </div>
           </a>
         
         
           
-          <a href="../Sprint/Sprint01/" class="md-footer__link md-footer__link--next" aria-label="Próximo: Sprint 01">
+          <a href="../design-system/" class="md-footer__link md-footer__link--next" aria-label="Próximo: Design system">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Próximo
               </span>
               <div class="md-ellipsis">
-                Sprint 01
+                Design system
               </div>
             </div>
             <div class="md-footer__button md-icon">
@@ -1271,10 +1723,10 @@ e sem erros anteriores:</p>
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.top", "navigation.footer", "search.highlight", "search.suggest", "content.code.copy", "content.tabs.link"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "Mais 1 nesta p\u00e1gina", "search.result.more.other": "Mais # nesta p\u00e1gina", "search.result.none": "Nenhum resultado encontrado", "search.result.one": "1 resultado encontrado", "search.result.other": "# resultados encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.top", "navigation.footer", "search.highlight", "search.suggest", "content.code.copy", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "Mais 1 nesta p\u00e1gina", "search.result.more.other": "Mais # nesta p\u00e1gina", "search.result.none": "Nenhum resultado encontrado", "search.result.one": "1 resultado encontrado", "search.result.other": "# resultados encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>
